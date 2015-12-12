@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>MapEx Widget by rvalitov</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">MapEx Widget</h1>
+      <h2 class="project-tagline">This is an advanced version of Yootheme&#39;s Map Widget (Widgetkit2). It adds access to the original Google Map object which can be used, for example, to support responsive behavior or correct visualization in UIKit modal dialog.</h2>
+      <a href="https://github.com/rvalitov/widgetkit-map-ex" class="btn">View on GitHub</a>
+      <a href="https://github.com/rvalitov/widgetkit-map-ex/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/rvalitov/widgetkit-map-ex/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview</h1>
+
+<p><strong>MapEx</strong> is an advanced Map widget for <a href="https://yootheme.com/widgetkit">Yootheme Widgetkit2</a>. After installation it becomes available in the Widgets list as a "native" widget and can be used with any <a href="https://yootheme.com/themes">Warp 7 theme</a>. This widget is based on the original Yootheme's <a href="http://yootheme.com/demo/widgetkit/joomla/index.php/home/map">Map widget</a> and adds just a very compact modification to it, so that it can be easily upgraded (if necessary) when a new version of the original widget will be available. In order to use extra features of this widget you will have to use Javascript code (examples below).</p>
+
+<h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<p>This widget adds access to the original <a href="https://developers.google.com/maps/documentation/javascript/reference#Map">Google Map object</a> that is used in creation of the map. So, the user may change and/or modify the object as he needs from any web page using Javascript. All other behavior, styling and features of the original <a href="http://yootheme.com/demo/widgetkit/joomla/index.php/home/map">Map widget</a> are preserved.</p>
+
+<h2>
+<a id="use-cases-or-why-its-better-than-original-map" class="anchor" href="#use-cases-or-why-its-better-than-original-map" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use cases or why it's better than original Map?</h2>
+
+<p>Usually the user may want to use the object to add new features or fix problems of the original Map Widget such as:</p>
+
+<ul>
+<li>
+<strong>Responsive behavior</strong> - the map will automatically adjust (pan &amp; zoom) if the user changes the window size or orientation (on mobile devices). Responsive behavior is not available in the original <a href="http://yootheme.com/demo/widgetkit/joomla/index.php/home/map">Map widget</a>, e.g. <a href="https://yootheme.com/component/answers/question/52808">post in Yootheme forum</a>.</li>
+<li>
+<strong>Center map</strong> - you can put an arbitrary center of the map. This feature is not available in the original <a href="http://yootheme.com/demo/widgetkit/joomla/index.php/home/map">Map widget</a>, problem exists since 2013, e.g. posts at Yootheme forum: <a href="https://yootheme.com/component/answers/question/75957">post#1</a>, <a href="https://yootheme.com/component/answers/question/52808">post#2</a>
+</li>
+<li>
+<strong>Correct visualization</strong> of the widget if it's displayed inside the <a href="http://getuikit.com/docs/modal.html">UIKit modal dialog</a>. There's a problem with the original <a href="http://yootheme.com/demo/widgetkit/joomla/index.php/home/map">Map widget</a> when the widget is not rendered correctly when displayed inside the modal dialog: the map tiles are not rendered completely or partly, so the widget is not visible properly. This MapEx widget fixes this issue.</li>
+</ul>
+
+<h1>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h1>
+
+<p>We use "clean" and "neat" approach according to the official Yootheme's manual:</p>
+
+<ul>
+<li><a href="http://yootheme.com/widgetkit/documentation/customizing/custom-widget-plugin">Custom widgetkit plugin</a></li>
+<li>
+<a href="https://yootheme.com/widgetkit/documentation/customizing/where-to-store-your-customizations">Where to store your customizations</a>
+Such approach allows you to:</li>
+<li>keep original Yootheme's Widgetkit source files</li>
+<li>preserve original Yootheme's functionality</li>
+<li>safely do updates to Yootheme's files (download new versions of Widgetkit 2), keeping our new widget (modifications won't be overwritten during update process)</li>
+</ul>
+
+<p>The installation is very simple. You just need to copy the folder <em>map_ex</em> to <em>/templates/THEME-NAME/widgetkit/widgets/</em>, so that you will have a folder <em>/templates/THEME-NAME/widgetkit/widgets/map_ex</em>. The <em>THEME-NAME</em> is a folder of your theme, e.g. it can be <em>yoo_vida</em>, <em>yoo_finch</em>, etc. After copying you should reload the widgetkit control panel page, so that the widget will appear in the list:</p>
+
+<h3>
+<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+
+<p>Thanks Lucas for showing a trick how to refresh Map Widget with jQuery.</p>
+
+<h3>
+<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+
+<p>Having trouble with MapEx Widget? Check out our <a href="https://help.github.com/pages">documentation</a> or e-mail me: <a href="mailto:ramilvalitov@gmail.com">ramilvalitov@gmail.com</a>.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/rvalitov/widgetkit-map-ex">MapEx Widget</a> is maintained by <a href="https://github.com/rvalitov">rvalitov</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
