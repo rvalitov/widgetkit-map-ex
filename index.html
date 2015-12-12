@@ -51,15 +51,33 @@
 
 <ul>
 <li><a href="http://yootheme.com/widgetkit/documentation/customizing/custom-widget-plugin">Custom widgetkit plugin</a></li>
-<li>
-<a href="https://yootheme.com/widgetkit/documentation/customizing/where-to-store-your-customizations">Where to store your customizations</a>
-Such approach allows you to:</li>
+<li><a href="https://yootheme.com/widgetkit/documentation/customizing/where-to-store-your-customizations">Where to store your customizations</a></li>
+</ul>
+
+<p>Such approach allows you to:</p>
+
+<ul>
 <li>keep original Yootheme's Widgetkit source files</li>
 <li>preserve original Yootheme's functionality</li>
 <li>safely do updates to Yootheme's files (download new versions of Widgetkit 2), keeping our new widget (modifications won't be overwritten during update process)</li>
 </ul>
 
-<p>The installation is very simple. You just need to copy the folder <em>map_ex</em> to <em>/templates/THEME-NAME/widgetkit/widgets/</em>, so that you will have a folder <em>/templates/THEME-NAME/widgetkit/widgets/map_ex</em>. The <em>THEME-NAME</em> is a folder of your theme, e.g. it can be <em>yoo_vida</em>, <em>yoo_finch</em>, etc. After copying you should reload the widgetkit control panel page, so that the widget will appear in the list:</p>
+<p>The installation is very simple. You just need to copy the folder <em>map_ex</em> to <em>/templates/THEME-NAME/widgetkit/widgets/</em>, so that you will have a folder <em>/templates/THEME-NAME/widgetkit/widgets/map_ex</em>. The <em>THEME-NAME</em> is a folder of your theme, e.g. it can be <em>yoo_vida</em>, <em>yoo_finch</em>, etc. </p>
+
+<h1>
+<a id="setup-and-usage" class="anchor" href="#setup-and-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setup and usage</h1>
+
+<h2>
+<a id="configure-the-widget" class="anchor" href="#configure-the-widget" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configure the widget</h2>
+
+<p>After successful installation you should see the MapEx widget in the widgetkit control panel page, so that you can select it from the list:
+<img src="https://raw.githubusercontent.com/rvalitov/widgetkit-map-ex/master/images/widgets-list.jpeg" alt="MapEx widget"></p>
+
+<p>You should configure the widget as usual, e.g. the <a href="http://yootheme.com/demo/widgetkit/joomla/index.php/home/map">Yootheme documentation</a> can be useful.</p>
+
+<p>If you want to use the advanced features of the MapEx, then you should add a unique id to the widget. In order to keep things simple, the id is the HTML class of the widget:
+<img src="https://raw.githubusercontent.com/rvalitov/widgetkit-map-ex/master/images/unique-id.jpeg" alt="Unique id">
+This string can be arbitrary (you don't have to create corresponding CSS classes) and should be unique among the MapEx widgets. </p>
 
 <h3>
 <a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
