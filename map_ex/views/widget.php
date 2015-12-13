@@ -86,6 +86,7 @@ jQuery(document).ready(function($){
 					$('#'+box_id).on({  
 						'show.uk.modal': function(){  
 							var map = jQuery('#<?php echo $settings['map_id']?>', '#'+box_id).first().get(0);
+							google.maps.event.trigger(map, 'resize');
 							<?php if (!empty($settings['map_center'])):?>
 							item.setCenter(new google.maps.LatLng(<?php echo $settings['map_center']?>));
 							item.panTo(new google.maps.LatLng(<?php echo $settings['map_center']?>));
@@ -100,7 +101,6 @@ jQuery(document).ready(function($){
 							console.log('[MapEx] auto zoom performed to level <?php echo $settings['zoom']?> for id#<?php echo $settings['map_id']?>');
 							<?php endif;?>
 						
-							google.maps.event.trigger(map, 'resize');
 							<?php if ($settings['debug_output']):?>
 							console.log('[MapEx] modal fix performed for id'+modal_id);
 							<?php endif;?>
