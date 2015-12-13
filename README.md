@@ -10,6 +10,11 @@ Or why it's better than original Map provided by Yootheme?
 * **Access to the original [Google Map object](https://developers.google.com/maps/documentation/javascript/reference#Map)** - Javascript object that is used in creation of the map. So, the user may change and/or modify the object as he needs from any web page using Javascript which provides vast opportunities for Javascript programmers to customize the map using native [Google Map API](https://developers.google.com/maps/documentation/javascript/tutorial).
 * **Backward compatibility** - all other behavior, styling and features of the original [Map widget](http://yootheme.com/demo/widgetkit/joomla/index.php/home/map) are preserved.
 
+# Supported platforms
+* The code is based on Widgetkit 2.5.0, however it should work with any Widgetkit 2.4.x and later.
+* Joomla 3.4.x or later required
+I didn't test it with Wordpress.
+
 # Installation
 ## Installation Overview
 We use "clean" and "neat" approach according to the official Yootheme's manual:
