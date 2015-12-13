@@ -1,18 +1,25 @@
 <?php
+/*
+MapEx plugin for Widgetkit 2.
+Author: Ramil Valitov
+E-mail: ramilvalitov@gmail.com
+Web: http://www.valitov.me/
+Git: https://github.com/rvalitov/widgetkit-map-ex
+*/
 
 return array(
 
-    'name' => 'widget/map',
+    'name' => 'widget/map_ex',
 
     'main' => 'YOOtheme\\Widgetkit\\Widget\\Widget',
 
     'config' => array(
 
-        'name'  => 'map',
-        'label' => 'Map',
+        'name'  => 'map_ex',
+        'label' => 'MapEx',
         'core'  => true,
-        'icon'  => 'plugins/widgets/map/widget.svg',
-        'view'  => 'plugins/widgets/map/views/widget.php',
+        'icon'  => 'plugins/widgets/map_ex/widget.svg',
+        'view'  => 'plugins/widgets/map_ex/views/widget.php',
         'item'  => array('title', 'content', 'media'),
         'fields' => array(
             array('name' => 'location')
@@ -31,6 +38,11 @@ return array(
             'draggable'               => true,
             'directions'              => false,
             'disabledefaultui'        => false,
+			'responsive'        	  => true,
+			'modal_fix'	        	  => true,
+			'map_center'        	  => '',
+			'debug_output'        	  => false,
+			
 
             'styler_invert_lightness' => false,
             'styler_hue'              => '',
@@ -67,11 +79,12 @@ return array(
     'events' => array(
 
         'init.site' => function($event, $app) {
-            $app['scripts']->add('widgetkit-maps', 'plugins/widgets/map/assets/maps.js', array('uikit'));
+			//We replace the original Map widget js file with ours. It must be done to avoid issues with multiple loading of Google Map API JS libraies.
+            $app['scripts']->add('widgetkit-maps', 'plugins/widgets/map_ex/assets/maps.js', array('uikit'));
         },
 
         'init.admin' => function($event, $app) {
-            $app['angular']->addTemplate('map.edit', 'plugins/widgets/map/views/edit.php', true);
+            $app['angular']->addTemplate('map_ex.edit', 'plugins/widgets/map_ex/views/edit.php', true);
         }
 
     )

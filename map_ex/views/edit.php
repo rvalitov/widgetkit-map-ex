@@ -136,6 +136,35 @@
                         <label><input type="checkbox" ng-model="widget.data['draggable']"> {{'Move map on drag' | trans}}</label>
                     </div>
                 </div>
+				
+				<h3 class="wk-form-heading">{{'MapEx Settings' | trans}}</h3>
+				<div class="uk-form-row">
+                    <span class="uk-form-label">{{'Responsive' | trans}}</span>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <label><input type="checkbox" ng-model="widget.data['responsive']"> {{'Adjust map on window resize and orientation change' | trans}}</label>
+                    </div>
+                </div>
+				
+				<div class="uk-form-row">
+                    <span class="uk-form-label">{{'Modal dialog fix' | trans}}</span>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <label><input type="checkbox" ng-model="widget.data['modal_fix']"> {{'Correct visualization if widget displayed inside modal' | trans}}</label>
+                    </div>
+                </div>
+				
+				<div class="uk-form-row">
+                    <label class="uk-form-label" for="wk-height" title="Coordinates of a point that will be a center of the map, e.g. -34.23, 151.0023. Leave blank if not required.">{{'Map Center Point' | trans}}</label>
+                    <div class="uk-form-controls">
+                        <input id="wk-height" class="uk-form-width-medium" type="text" ng-model="widget.data['map_center']">
+                    </div>
+                </div>
+				
+				<div class="uk-form-row">
+                    <span class="uk-form-label">{{'Debug output' | trans}}</span>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <label><input type="checkbox" ng-model="widget.data['debug_output']"> {{'Extra messages output to browser console' | trans}}</label>
+                    </div>
+                </div>
 
             </li>
             <li>
