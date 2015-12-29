@@ -141,28 +141,28 @@
 				<div class="uk-form-row">
                     <span class="uk-form-label">{{'Responsive' | trans}}</span>
                     <div class="uk-form-controls uk-form-controls-text">
-                        <label><input type="checkbox" ng-model="widget.data['responsive']"> {{'Adjust map on window resize and orientation change' | trans}}</label>
+                        <label><input type="checkbox" ng-model="widget.data['responsive']"> {{'Adjust map on window resize and orientation change' | trans}}<span  data-uk-tooltip title="If checked, then the map will automatically pan and zoom to the Map Center Point (see below) every time the window is resized or when orientation of the device changes (e.g. for smartphones or tablets). Note, that panning and zooming is done to the initial position of the map, i.e. if the user was interacting with the map and changed its position or zooming level, then this changes will be lost."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></label>
                     </div>
                 </div>
 				
 				<div class="uk-form-row">
                     <span class="uk-form-label">{{'Modal dialog fix' | trans}}</span>
                     <div class="uk-form-controls uk-form-controls-text">
-                        <label><input type="checkbox" ng-model="widget.data['modal_fix']"> {{'Correct visualization if widget displayed inside modal' | trans}}</label>
+                        <label><input type="checkbox" ng-model="widget.data['modal_fix']"> {{'Correct visualization inside modal' | trans}}<span  data-uk-tooltip title="If checked, then the widget will automatically try to find the UIKit modal dialog inside of which the MapEx is located. Then it adds some code to the webpage that displays the map correctly and fixes a corresponding problem of the original Map widget. Besides, the MapEx always resets the map to its default position and zoom level every time the modal is displayed, e.g. if the user opens a modal, changes the map position or zoom level, closes the modal and then opens the modal again, the map will be reset to its initial configuration. It's a useful feature, because the widget will always show the intended part of a map. If the check box is set and the MapEx is not inside a modal, then it doesn't affect the visualization."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></label>
                     </div>
                 </div>
 				
 				<div class="uk-form-row">
-                    <label class="uk-form-label" for="wk-height" title="Coordinates of a point that will be a center of the map, e.g. -34.23, 151.0023. Leave blank if not required.">{{'Map Center Point' | trans}}</label>
+                    <label class="uk-form-label" for="wk-height">{{'Map Center Point' | trans}}</label>
                     <div class="uk-form-controls">
-                        <input id="wk-height" class="uk-form-width-medium" type="text" ng-model="widget.data['map_center']">
+                        <input id="wk-height" class="uk-form-width-medium" type="text" ng-model="widget.data['map_center']"><span data-uk-tooltip title="If set (not blank), then the map will be displayed in a way that this point will be located right in the center of the map. The center point is defined by its coordinates, e.g. -34.23456, 12.15672. Leave this field blank if you don't want to have such functionality."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span>
                     </div>
                 </div>
 				
 				<div class="uk-form-row">
                     <span class="uk-form-label">{{'Debug output' | trans}}</span>
                     <div class="uk-form-controls uk-form-controls-text">
-                        <label><input type="checkbox" ng-model="widget.data['debug_output']"> {{'Extra messages output to browser console' | trans}}</label>
+                        <label><input type="checkbox" ng-model="widget.data['debug_output']"> {{'Extra messages output to browser console' | trans}}<span data-uk-tooltip title="if checked, then the MapEx will print some debug and status information to the browser's console window. This option should be off by default and is intended to be used for investigating problems with the widget."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></label>
                     </div>
                 </div>
 

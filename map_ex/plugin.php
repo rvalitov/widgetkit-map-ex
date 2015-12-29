@@ -85,6 +85,9 @@ return array(
 
         'init.admin' => function($event, $app) {
             $app['angular']->addTemplate('map_ex.edit', 'plugins/widgets/map_ex/views/edit.php', true);
+			//Adding tooltip:
+			$app['scripts']->add('uikit-tooltip', 'vendor/assets/uikit/js/components/tooltip.min.js', array('uikit'));
+			$app['styles']->add('uikit-tooltip', 'https://cdnjs.cloudflare.com/ajax/libs/uikit/2.24.3/css/components/tooltip.min.css', array('uikit'));
         }
 
     )
