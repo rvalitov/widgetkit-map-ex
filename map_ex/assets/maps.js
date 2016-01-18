@@ -26,7 +26,7 @@ WidgetkitMaps=[];
         return s || (s = t.Deferred(), window.wkInitializeGoogleMapsApi = s.resolve, t.getScript("//maps.google.com/maps/api/js?sensor=true&callback=wkInitializeGoogleMapsApi")), s.promise()
     };
     t(function() {
-        t('script[type="widgetkit/map"]').each(function() {
+        t('script[type="widgetkit/map_ex"]').each(function() {
             var i = t(this),
                 r = t("<div></div>").attr(i.data()),
                 s = JSON.parse(this.innerHTML);
@@ -72,11 +72,24 @@ WidgetkitMaps=[];
                 }), h.html('<span style="color:#000;"><span style="color:blue;">&#8627;</span> Get directions</span>'), a.append(h), a.setHref = function(t, e) {
                     this.attr("href", "http://maps.google.com/?daddr=" + t + "," + e)
                 }, i.controls[google.maps.ControlPosition.TOP_RIGHT].push(a[0])), p.length && s.marker && (p.forEach(function(t, e) {
-                    var r, o = new google.maps.Marker({
+					var mapOptions={
                         position: new google.maps.LatLng(t.lat, t.lng),
                         map: i,
                         title: t.title
-                    });
+                    };
+					/*adding custom pin image*/
+					if (t.pin.length>0){
+						var img={};
+						img['url']=t.pin;
+						/*adding anchor*/
+						if ( (typeof t.anchor_x == 'number') && (typeof t.anchor_y == 'number') ){
+							img['anchor']=new google.maps.Point(t.anchor_x, t.anchor_y);
+							// The origin for this image is (0, 0).
+							img['origin']=new google.maps.Point(0,0);
+						}
+						mapOptions['icon']=img;
+					}
+                    var r, o = new google.maps.Marker(mapOptions);
                     l.push(o), s.marker > 1 && (r = new google.maps.InfoWindow({
                         content: t.content,
                         maxWidth: s.popup_max_width ? parseInt(s.popup_max_width, 10) : 300

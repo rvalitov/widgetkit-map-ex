@@ -21,7 +21,10 @@ foreach ($items as $i => $item) {
             'lat'     => $item['location']['lat'],
             'lng'     => $item['location']['lng'],
             'title'   => $item['title'],
-            'content' => ''
+            'content' => '',
+			'pin'	=> '',
+			'anchor_x'	=> '',
+			'anchor_y'	=> ''
         );
 
         if (($item['title'] && $settings['title']) ||
@@ -29,6 +32,37 @@ foreach ($items as $i => $item) {
             ($item['media'] && $settings['media'])) {
                 $marker['content'] = $app->convertUrls($this->render('plugins/widgets/' . $widget->getConfig('name')  . '/views/_content.php', compact('item', 'settings')));
         }
+		if ($settings['pin_type']==''){
+			$pinoverride=false;
+			if (strlen($item['custom_pin_path'])>0){
+				$marker['pin']=trim($item['custom_pin_path']);
+				$pinoverride=true;
+			}
+			else
+				$marker['pin']=trim($settings['custom_pin_path']);
+			
+			if (strlen($marker['pin'])>0){
+				//Checking for absolute URL
+				if ( (substr($marker['pin'], 0, 7) != 'http://') && (substr($marker['pin'], 0, 8) != 'https://') && (substr($marker['pin'], 0, 2) != '//') && (strlen($marker['pin'])>2) )
+					//We must remove the starting '/' if it exists, because JURI::base() already has it set.
+					if (substr($marker['pin'], 0, 1) != '/')
+						$marker['pin']=JURI::base().$marker['pin'];
+					else
+						$marker['pin']=JURI::base().substr($marker['pin'], 1);
+				
+				if ( ($pinoverride) && (is_numeric($item['custom_pin_anchor_x'])) && (is_numeric($item['custom_pin_anchor_y'])) )
+				{
+					$marker['anchor_x']=intval($item['custom_pin_anchor_x']);
+					$marker['anchor_y']=intval($item['custom_pin_anchor_y']);
+				}
+				else
+					if ( (!$pinoverride) && (is_numeric($settings['custom_pin_anchor_x'])) && (is_numeric($settings['custom_pin_anchor_y'])) )
+					{
+						$marker['anchor_x']=intval($settings['custom_pin_anchor_x']);
+						$marker['anchor_y']=intval($settings['custom_pin_anchor_y']);
+					}
+			}
+		}
 
         $markers[] = $marker;
     }
@@ -39,7 +73,7 @@ $settings['map_id'] = $map_id;
 $settings['map_center'] = trim($settings['map_center']);
 ?>
 
-<script type="widgetkit/map" data-id="<?php echo $map_id;?>" data-class="<?php echo $settings['class']; ?> uk-img-preserve" data-style="width:<?php echo $width?>;height:<?php echo $height?>;">
+<script type="widgetkit/map_ex" data-id="<?php echo $map_id;?>" data-class="<?php echo $settings['class']; ?> uk-img-preserve" data-style="width:<?php echo $width?>;height:<?php echo $height?>;">
     <?php echo json_encode($settings) ?>
 </script>
 

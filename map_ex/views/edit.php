@@ -8,6 +8,7 @@
                 <li><a href="#">{{'Media' | trans}}</a></li>
                 <li><a href="#">{{'Content' | trans}}</a></li>
                 <li><a href="#">{{'General' | trans}}</a></li>
+				<li><a href="#">{{'About' | trans}}</a></li>
             </ul>
         </div>
 
@@ -116,6 +117,33 @@
                     </div>
                 </div>
 
+				<div class="uk-form-row" ng-if="widget.data['marker'] > 0">
+                    <label class="uk-form-label" for="wk-pin_type">{{'Marker Pin Icon' | trans}}</label><span  data-uk-tooltip style="float: left; margin-top: 5px;" title="Select a type of pin that will be used in map markers."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span>
+                    <div class="uk-form-controls">
+                        <select id="wk-pin_type" class="uk-form-width-medium" ng-model="widget.data['pin_type']">
+                            <option value="default">{{'Default' | trans}}</option>
+                            <option value="">{{'Custom' | trans}}</option>
+                        </select>
+                    </div>
+                </div>
+				
+				<div class="uk-form-row" ng-if="widget.data['pin_type'] == ''">
+                    <label class="uk-form-label">{{'Image' | trans}}</label><span  data-uk-tooltip style="float: left; margin-top: 5px;" title="Path to an image file that will be used as a custom pin icon. PNG and SVG image formats are recommended. This setting sets the default icon for all map markers (elements). If this field is left empty, then a default icon will be used. You can set a unique icon for any map marker: you can do this by setting a 'Custom Pin Image' field in the 'Content Settings' tab. This field is visible and available only if you use 'Custom' content source type. The 'Custom Pin Image' field has a higher priority and if set will override the value of this setting."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span>
+                    <div class="uk-form-controls">
+                        <field-media title="item.title" media="widget.data.custom_pin_path"></field-media>
+					</div>
+				</div>
+								
+				<div class="uk-form-row" ng-if="widget.data['pin_type'] == ''">
+					<label class="uk-form-label">{{'Anchor' | trans}}</label><span  data-uk-tooltip style="float: left; margin-top: 5px;" title="The anchor is a place where the icon's hotspot is located. The position is defined in pixels and is relative to the the image's dimensions, so that the bottom left corner of the image is a zero-point (0,0); axes have standard orientation: the X to the right; Y to the top. If the position is empty then the bottom center of the image is set as the anchor."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span>
+                    <div class="uk-form-controls">
+                        <label><input class="uk-form-width-small" type="text" ng-model="widget.data['custom_pin_anchor_x']"> {{'X (px)' | trans}}</label>
+                        <p class="uk-form-controls-condensed">
+                            <label><input class="uk-form-width-small" type="text" ng-model="widget.data['custom_pin_anchor_y']"> {{'Y (px)' | trans}}</label>
+                        </p>
+                    </div>					
+				</div>
+				
                 <div class="uk-form-row">
                     <span class="uk-form-label">{{'Cluster Markers' | trans}}</span>
                     <div class="uk-form-controls uk-form-controls-text">
@@ -406,6 +434,54 @@
                         <input id="wk-class" class="uk-form-width-medium" type="text" ng-model="widget.data['class']">
                     </div>
                 </div>
+
+            </li>
+			<li>
+
+                <h3 class="wk-form-heading">{{'About' | trans}}</h3>
+
+                <table class="uk-table uk-table-striped">
+					<tr>
+						<td>
+							Widget Name
+						</td>
+						<td>
+							MapEx
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Version
+						</td>
+						<td>
+							1.2
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Build Date
+						</td>
+						<td>
+							18.01.2016
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Author
+						</td>
+						<td>
+							<a href="https://valitov.me" target="_blank">Ramil Valitov</a>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Website
+						</td>
+						<td>
+							<a href="https://github.com/rvalitov/widgetkit-map-ex" target="_blank">https://github.com/rvalitov/widgetkit-map-ex</a>
+						</td>
+					</tr>
+				</table>
 
             </li>
         </ul>

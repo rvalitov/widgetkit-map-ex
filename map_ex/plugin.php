@@ -22,7 +22,22 @@ return array(
         'view'  => 'plugins/widgets/map_ex/views/widget.php',
         'item'  => array('title', 'content', 'media'),
         'fields' => array(
-            array('name' => 'location')
+            array('name' => 'location'),
+			array(
+                'type' => 'media',
+                'name' => 'custom_pin_path',
+                'label' => 'Custom Pin Image'
+            ),
+			array(
+                'type' => 'text',
+                'name' => 'custom_pin_anchor_x',
+                'label' => 'Custom Pin Anchor X (px)'
+            ),
+			array(
+                'type' => 'text',
+                'name' => 'custom_pin_anchor_y',
+                'label' => 'Custom Pin Anchor Y (px)'
+            )
         ),
         'settings' => array(
             'width'                   => 'auto',
@@ -42,6 +57,11 @@ return array(
 			'modal_fix'	        	  => true,
 			'map_center'        	  => '',
 			'debug_output'        	  => false,
+			//Extra parameters:
+			'pin_type'            		=> 'default',
+			'custom_pin_path'			=> '',
+			'custom_pin_anchor_x'		=> '',
+			'custom_pin_anchor_y'		=> '',
 			
 
             'styler_invert_lightness' => false,
