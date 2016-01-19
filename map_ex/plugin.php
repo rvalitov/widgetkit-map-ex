@@ -108,6 +108,10 @@ return array(
 			//Adding tooltip:
 			$app['scripts']->add('uikit-tooltip', 'vendor/assets/uikit/js/components/tooltip.min.js', array('uikit'));
 			$app['styles']->add('uikit-tooltip', 'https://cdnjs.cloudflare.com/ajax/libs/uikit/2.24.3/css/components/tooltip.min.css', array('uikit'));
+			//Marked:
+			$app['scripts']->add('marked', 'plugins/widgets/map_ex/assets/marked.min.js', array('uikit'));
+			//Updater:
+			$app['scripts']->add('map_ex.updater', 'plugins/widgets/map_ex/assets/updater.js', array('map_ex'));
         }
 
     )

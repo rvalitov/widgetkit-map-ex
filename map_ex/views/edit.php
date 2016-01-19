@@ -440,48 +440,56 @@
 
                 <h3 class="wk-form-heading">{{'About' | trans}}</h3>
 
-                <table class="uk-table uk-table-striped">
-					<tr>
-						<td>
-							Widget Name
-						</td>
-						<td>
-							MapEx
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Version
-						</td>
-						<td>
-							1.2
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Build Date
-						</td>
-						<td>
-							18.01.2016
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Author
-						</td>
-						<td>
-							<a href="https://valitov.me" target="_blank">Ramil Valitov</a>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Website
-						</td>
-						<td>
-							<a href="https://github.com/rvalitov/widgetkit-map-ex" target="_blank">https://github.com/rvalitov/widgetkit-map-ex</a>
-						</td>
-					</tr>
-				</table>
+				<div class="uk-grid">
+					<div class="uk-text-center uk-width-medium-1-3" id="logo-widgetkit-map-ex">
+					</div>
+					<div class="uk-width-medium-2-3">
+						<table class="uk-table uk-table-striped">
+							<tr>
+								<td>
+									Widget Name
+								</td>
+								<td id="name-widgetkit-map-ex">
+									N/A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Version
+								</td>
+								<td id="version-widgetkit-map-ex">
+									N/A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Build Date
+								</td>
+								<td id="build-widgetkit-map-ex">
+									N/A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Author
+								</td>
+								<td>
+									<a href="https://valitov.me" target="_blank">Ramil Valitov</a>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Website
+								</td>
+								<td id="website-widgetkit-map-ex">
+									N/A
+								</td>
+							</tr>
+						</table>
+						<div id="update-widgetkit-map-ex" class="uk-text-center">
+						</div>
+					</div>
+				<div>
 
             </li>
         </ul>

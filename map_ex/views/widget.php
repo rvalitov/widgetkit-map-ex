@@ -73,7 +73,7 @@ $settings['map_id'] = $map_id;
 $settings['map_center'] = trim($settings['map_center']);
 ?>
 
-<script type="widgetkit/map_ex" data-id="<?php echo $map_id;?>" data-class="<?php echo $settings['class']; ?> uk-img-preserve" data-style="width:<?php echo $width?>;height:<?php echo $height?>;">
+<script type="widgetkit/map" data-id="<?php echo $map_id;?>" data-class="<?php echo $settings['class']; ?> uk-img-preserve" data-style="width:<?php echo $width?>;height:<?php echo $height?>;">
     <?php echo json_encode($settings) ?>
 </script>
 

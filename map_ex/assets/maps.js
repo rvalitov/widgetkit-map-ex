@@ -26,7 +26,7 @@ WidgetkitMaps=[];
         return s || (s = t.Deferred(), window.wkInitializeGoogleMapsApi = s.resolve, t.getScript("//maps.google.com/maps/api/js?sensor=true&callback=wkInitializeGoogleMapsApi")), s.promise()
     };
     t(function() {
-        t('script[type="widgetkit/map_ex"]').each(function() {
+        t('script[type="widgetkit/map"]').each(function() {
             var i = t(this),
                 r = t("<div></div>").attr(i.data()),
                 s = JSON.parse(this.innerHTML);
