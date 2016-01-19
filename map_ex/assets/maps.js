@@ -90,7 +90,7 @@ WidgetkitMaps=[];
 						mapOptions['icon']=img;
 					}
                     var r, o = new google.maps.Marker(mapOptions);
-                    l.push(o), s.marker > 1 && (r = new google.maps.InfoWindow({
+                    l.push(o), s.marker >= 1 && (r = new google.maps.InfoWindow({
                         content: t.content,
                         maxWidth: s.popup_max_width ? parseInt(s.popup_max_width, 10) : 300
                     }), google.maps.event.addListener(o, "click", function() {
@@ -356,7 +356,7 @@ WidgetkitMaps=[];
         var e = [];
         e.push("background-image:url(" + this.url_ + ");");
         var i = this.backgroundPosition_ ? this.backgroundPosition_ : "0 0";
-        e.push("background-position:" + i + ";"), "object" == typeof this.anchor_ ? (e.push("number" == typeof this.anchor_[0] && this.anchor_[0] > 0 && this.anchor_[0] < this.height_ ? "height:" + (this.height_ - this.anchor_[0]) + "px; padding-top:" + this.anchor_[0] + "px;" : "height:" + this.height_ + "px; line-height:" + this.height_ + "px;"), e.push("number" == typeof this.anchor_[1] && this.anchor_[1] > 0 && this.anchor_[1] < this.width_ ? "width:" + (this.width_ - this.anchor_[1]) + "px; padding-left:" + this.anchor_[1] + "px;" : "width:" + this.width_ + "px; text-align:center;")) : e.push("height:" + this.height_ + "px; line-height:" + this.height_ + "px; width:" + this.width_ + "px; text-align:center;");
+        e.push("background-position:" + i + ";"), "object" == typeof this.anchor_ ? ("number" == typeof this.anchor_[0] && this.anchor_[0] > 0 && this.anchor_[0] < this.height_ ? e.push("height:" + (this.height_ - this.anchor_[0]) + "px; padding-top:" + this.anchor_[0] + "px;") : e.push("height:" + this.height_ + "px; line-height:" + this.height_ + "px;"), "number" == typeof this.anchor_[1] && this.anchor_[1] > 0 && this.anchor_[1] < this.width_ ? e.push("width:" + (this.width_ - this.anchor_[1]) + "px; padding-left:" + this.anchor_[1] + "px;") : e.push("width:" + this.width_ + "px; text-align:center;")) : e.push("height:" + this.height_ + "px; line-height:" + this.height_ + "px; width:" + this.width_ + "px; text-align:center;");
         var r = this.textColor_ ? this.textColor_ : "black",
             s = this.textSize_ ? this.textSize_ : 11;
         return e.push("cursor:pointer; top:" + t.y + "px; left:" + t.x + "px; color:" + r + "; position:absolute; font-size:" + s + "px; font-family:Arial,sans-serif; font-weight:bold"), e.join("")
