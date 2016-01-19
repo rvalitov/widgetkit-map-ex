@@ -23,7 +23,7 @@ WidgetkitMaps=[];
         t.getMarkerClusterer().extend(r, google.maps.OverlayView), this.styles_ = e, this.padding_ = i || 0, this.cluster_ = t, this.center_ = null, this.map_ = t.getMap(), this.div_ = null, this.sums_ = null, this.visible_ = !1, this.setMap(this.map_)
     }
     var s, o = function() {
-        return s || (s = t.Deferred(), window.wkInitializeGoogleMapsApi = s.resolve, t.getScript("//maps.google.com/maps/api/js?sensor=true&callback=wkInitializeGoogleMapsApi")), s.promise()
+        return s || (s = t.Deferred(), window.wkInitializeGoogleMapsApi = s.resolve, t.getScript("//maps.google.com/maps/api/js?callback=wkInitializeGoogleMapsApi")), s.promise()
     };
     t(function() {
         t('script[type="widgetkit/map"]').each(function() {
