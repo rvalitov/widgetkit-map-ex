@@ -1,17 +1,21 @@
 function checkWidgetUpdate($){
-	/* Widget specific settings */
+	/* General settings */
+	var git_url='https://github.com/rvalitov/';
+	var api_url='https://api.github.com/repos/rvalitov/';
+	var infotimeout=5000;
+	
+	/* Start of widget specific settings */
 	var distr_name='widgetkit-map-ex';
 	var widget_name='MapEx';
 	var widget_version='v1.3';
 	/*CAUTION: the month is zero-based*/
-	var widget_date=printNiceDate(new Date(2016,0,19));
+	var widget_date=printNiceDate(new Date(2016,0,22));
 	var widget_logo='https://raw.githubusercontent.com/rvalitov/widgetkit-map-ex/master/images/mapex-logo.png';
+	var widget_wiki=git_url+distr_name+'/wiki';
+	var widget_website=git_url+distr_name;
+	/* End of widget specific settings */
 	
-	/* General settings */
-	var git_url='https://github.com/rvalitov/';
-	var api_url='https://api.github.com/repos/rvalitov/';
 	var widget_update_tag='#update-'+distr_name;
-	var infotimeout=5000;
 	
 	(function ($) {
 		/**
@@ -30,8 +34,7 @@ function checkWidgetUpdate($){
 			if (!isChild)
 			{
 				(window.waitUntilExists_Intervals = window.waitUntilExists_Intervals || {})[this.selector] =
-					window.setInterval(function () { $this.waitUntilExists(handler, shouldRunHandlerOnce, true); }, 500)
-				;
+					window.setInterval(function () { $this.waitUntilExists(handler, shouldRunHandlerOnce, true); }, 500);
 			}
 			else if (shouldRunHandlerOnce && $elements.length)
 			{
@@ -39,7 +42,7 @@ function checkWidgetUpdate($){
 			}
 
 			return $this;
-		}
+		};
 	}(jQuery));
 	
 	/* Filing the about info */
@@ -53,7 +56,7 @@ function checkWidgetUpdate($){
 	});
 	$('#website-'+distr_name).waitUntilExists(function(){
 		$(this).empty();
-		$(this).append('<a href="'+git_url+distr_name+'" target="_blank">'+git_url+distr_name+'</a>');
+		$(this).append('<a href="'+widget_website+'" target="_blank">'+widget_website+'<i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a>');
 	});
 	$('#version-'+distr_name).waitUntilExists(function(){
 		$(this).empty();
@@ -63,33 +66,44 @@ function checkWidgetUpdate($){
 		$(this).empty();
 		$(this).append('<img class="uk-width-1-1" src="'+widget_logo+'" style="max-width:300px;">');
 	});
+	$('#wiki-'+distr_name).waitUntilExists(function(){
+		$(this).empty();
+		$(this).append('<a href="'+widget_wiki+'" target="_blank">'+widget_wiki+'<i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a>');
+	});
 	
 	function isNewVersionAvailable(vCurrent,vRemote){
-		if ( (typeof vCurrent != 'string') || (typeof vRemote != 'string') || (vCurrent.length<4) || (vRemote.length<4) )
+		if ( (typeof vCurrent != 'string') || (typeof vRemote != 'string') || (vCurrent.length<4) || (vRemote.length<4) ){
 			return false;
+		}
 		var vC=vCurrent.substr(1).split('.');
 		var vR=vRemote.substr(1).split('.');
 		var vSize=Math.max(vC.length,vR.length);
 		
 		for (var i=0; i<vSize; i++){
 			var vPartC,vPartR;
-			if (i<vC.length)
+			if (i<vC.length){
 				vPartC=vC[i];
-			else
+			}
+			else{
 				vPartC=0;
+			}
 			
-			if (i<vR.length)
+			if (i<vR.length){
 				vPartR=vR[i];
-			else
+			}
+			else{
 				vPartR=0;
-			if (parseInt(vPartR)>parseInt(vPartC))
+			}
+			if (parseInt(vPartR,10)>parseInt(vPartC,10)){
 				return true;
+			}
 		}
 		return false;
 	}
 	function printNiceDate(MyDate,dateSeparator){
-		if (typeof dateSeparator!='string')
+		if (typeof dateSeparator!='string'){
 			dateSeparator='/';
+		}
 		return ('0' + MyDate.getDate()).slice(-2) + dateSeparator + ('0' + (MyDate.getMonth()+1)).slice(-2) + dateSeparator + MyDate.getFullYear();
 	}
 	function failedToUpdate(){
@@ -104,14 +118,16 @@ function checkWidgetUpdate($){
 			'type' : "GET",
 			'dataType' : 'json',
 			success: function (data, textStatus, jqXHR){
-				if (data)
-					if (isNewVersionAvailable(widget_version,data['tag_name'])){
-						var date_remote = Date.parse(data['published_at']);
-						if (date_remote>0)
+				if (data){
+					if (isNewVersionAvailable(widget_version,data.tag_name)){
+						var date_remote = Date.parse(data.published_at);
+						if (date_remote>0){
 							date_remote=printNiceDate(new Date(date_remote));
-						else
+						}
+						else {
 							date_remote='Unknown';
-						var modaltext='<div class="uk-modal-header"><h1>'+widget_name+' widget update details</h1></div><div class="uk-overflow-container"><div class="uk-width-1-1 uk-text-center"><img class="uk-width-1-2" src="'+widget_logo+'"></div><table class="uk-table"><tr><th></th><th>Local (installed)</th><th>Remote (available)</th></tr><tr><td>Version</td><td>'+widget_version+'</td><td>'+data['tag_name']+'</td></tr><tr><td>Build date</td><td>'+widget_date+'</td><td>'+date_remote+'</td></tr></table><hr><h2>Release information:</h2>'+marked(data['body']).replace(/(\r|\n)/gm,'')+'<hr><h2>How to update?</h2><ul><li>You can download the new version <a href="'+data['html_url']+'">here<i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a>.</li><li>Installation instructions are available <a href="'+git_url+distr_name+'">here<i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a></li></ul></div>';
+						}
+						var modaltext='<div class="uk-modal-header"><h1>'+widget_name+' widget update details</h1></div><div class="uk-overflow-container"><div class="uk-width-1-1 uk-text-center"><img class="uk-width-1-2" src="'+widget_logo+'"></div><table class="uk-table"><tr><th></th><th>Local (installed)</th><th>Remote (available)</th></tr><tr><td>Version</td><td>'+widget_version+'</td><td>'+data.tag_name+'</td></tr><tr><td>Build date</td><td>'+widget_date+'</td><td>'+date_remote+'</td></tr></table><hr><h2>Release information:</h2>'+marked(data.body).replace(/(\r|\n)/gm,'')+'<hr><h2>How to update?</h2><ul><li>You can download the new version <a href="'+data.html_url+'">here<i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a>.</li><li>Installation instructions are available <a href="'+git_url+distr_name+'">here<i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a></li></ul></div>';
 						var infotext='<a onclick=\'UIkit.modal.alert("'+modaltext.replace(/"/g,'\\"')+'",{"center":true});\'><i class="uk-icon-info-circle uk-margin-small-right"></i>A new version of '+widget_name+' widget is available! Read more</a>';
 						UIkit.notify(infotext, {'timeout':infotimeout,'pos':'top-center','status':'info'});
 						$(widget_update_tag).waitUntilExists(function(){
@@ -119,13 +135,16 @@ function checkWidgetUpdate($){
 							$(this).append('<div class="uk-panel uk-panel-box uk-alert-danger"><h2 class="uk-text-center"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>This widget is outdated!</h2><h4 class="uk-text-center">A new version is available. Please, update.</h4><button type="button" class="uk-button" onclick=\'UIkit.modal.alert("'+modaltext.replace(/"/g,'\\"')+'",{"center":true});\'><i class="uk-icon uk-icon-info-circle uk-margin-small-right"></i>Update details</button></div>');
 						});
 					}
-					else
+					else{
 						$(widget_update_tag).waitUntilExists(function(){
 							$(this).empty();
 							$(this).append('<div class="uk-panel uk-panel-box uk-alert-success"><p class="uk-text-center"><i class="uk-icon uk-icon-check uk-margin-small-right"></i>Your version of the widget is up to date!</p></div>');
 						});
-				else
+					}
+				}
+				else{
 					failedToUpdate();
+				}
 			},
 			error: function (jqXHR, textStatus, errorThrown ){
 				failedToUpdate();

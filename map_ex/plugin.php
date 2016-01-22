@@ -42,9 +42,12 @@ return array(
         'settings' => array(
             'width'                   => 'auto',
             'height'                  => 400,
-            'maptypeid'               => 'roadmap',
+            'maptypeid'               => 'styled',
             'maptypecontrol'          => false,
+			
+			//Left for backward compatibility with original Yootheme's Map widget:
             'mapctrl'                 => true,
+			
             'zoom'                    => 9,
             'marker'                  => 2,
             'markercluster'           => false,
@@ -53,16 +56,33 @@ return array(
             'draggable'               => true,
             'directions'              => false,
             'disabledefaultui'        => false,
-			'responsive'        	  => true,
-			'modal_fix'	        	  => true,
-			'map_center'        	  => '',
-			'debug_output'        	  => false,
+			
 			//Extra parameters:
+			'maptypecontrol_style'      => 'dropdown_menu',
+			'maptype_name'      		=> 'Styled',
+			'show_styled'      			=> true,
+			'show_roadmap'     			=> true,
+			'show_satellite'      		=> true,
+			'show_hybrid'      			=> false,
+			'show_terrain'      		=> false,
+			'styling_mode'      		=> '',
+			'styling_json'      		=> '',
+			'zoomcontrol'               => true,
+			//Not working in the current Google Maps API:
+			'zoom_style'         		=> '',
+			'streetviewcontrol'         => true,
+			'rotatecontrol'             => true,
+			'directionstext'            => 'Get directions',
+			//Not working in the current Google Maps API:
+			'scalecontrol'              => false,
 			'pin_type'            		=> 'default',
 			'custom_pin_path'			=> '',
 			'custom_pin_anchor_x'		=> '',
 			'custom_pin_anchor_y'		=> '',
-			
+			'responsive'        	  => true,
+			'modal_fix'	        	  => true,
+			'map_center'        	  => '',
+			'debug_output'        	  => false,
 
             'styler_invert_lightness' => false,
             'styler_hue'              => '',

@@ -14,9 +14,7 @@ $height  = $settings['height'] == 'auto' ? '300px' : ((int)$settings['height']).
 
 // Markers
 foreach ($items as $i => $item) {
-
     if (isset($item['location']) && $item['location']) {
-
         $marker = array(
             'lat'     => $item['location']['lat'],
             'lng'     => $item['location']['lng'],
@@ -70,7 +68,13 @@ foreach ($items as $i => $item) {
 
 $settings['markers'] = $markers;
 $settings['map_id'] = $map_id;
-$settings['map_center'] = trim($settings['map_center']);
+if (!empty($settings['map_center'])){
+	$center=explode(',',$settings['map_center']);
+	if ( (sizeof($center)==2) && (is_numeric($center[0])) && (is_numeric($center[1])) ){
+		$settings['center_lat'] = $center[0];
+		$settings['center_lng'] = $center[1];
+	}
+}
 ?>
 
 <script type="widgetkit/map" data-id="<?php echo $map_id;?>" data-class="<?php echo $settings['class']; ?> uk-img-preserve" data-style="width:<?php echo $width?>;height:<?php echo $height?>;">
@@ -82,14 +86,7 @@ $settings['map_center'] = trim($settings['map_center']);
 jQuery(document).ready(function($){
 	function checkWidgetkitMaps() {
 		var item=getWidgetkitMap("<?php echo $settings['map_id']?>");
-		if (item) {		   
-			<?php if (!empty($settings['map_center'])):?>
-			item.setCenter(new google.maps.LatLng(<?php echo $settings['map_center']?>));
-			<?php if ($settings['debug_output']):?>
-			console.log('[MapEx] map centered to <?php echo $settings['map_center']?> for id#<?php echo $settings['map_id']?>');
-			<?php endif;?>
-			<?php endif;?>
-			
+		if (item) {
 			<?php if ($settings['responsive']):?>
 			google.maps.event.addDomListener(window, 'resize', function() {			
 				<?php if (!empty($settings['map_center'])):?>
@@ -108,7 +105,7 @@ jQuery(document).ready(function($){
 			<?php endif;?>
 			<?php endif;?>
 			
-			<?php if ($settings['modal_fix']):?>
+			<?php if ( ($settings['modal_fix']) && (!empty($settings['map_center'])) ):?>
 			var modal_id='#<?php echo $settings['map_id']?>';
 			var modal_dialog=$(modal_id).closest('.uk-modal');
 			if (modal_dialog){
