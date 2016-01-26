@@ -1,4 +1,5 @@
-![MapEx widget logo](https://raw.githubusercontent.com/rvalitov/widgetkit-map-ex/master/images/mapex-logo.png)
+![MapEx widget logo](https://raw.githubusercontent.com/wiki/rvalitov/widgetkit-map-ex/images/mapex-logo.png)
+
 # Overview
 **MapEx** is an advanced Map widget for [Yootheme Widgetkit2](https://yootheme.com/widgetkit). After installation it becomes available in the Widgets list as a "native" widget and can be used as any other widget.
 
