@@ -134,7 +134,7 @@
                 </div>
 				
 				<div class="uk-form-row" ng-if="widget.data.maptypecontrol == '1'">
-                    <span class="uk-form-label" for="wk-maptypecontrol_style">{{'Type Control Design' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="This option defines the appearance of the type controls. The controls can show as buttons in a horizontal bar or a single button control allowing you to select the map type via a dropdown menu. The default behavior means that the optimal visual style is chosen depedning on the screen size."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <span class="uk-form-label" for="wk-maptypecontrol_style">{{'Type Control Design' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="This option defines the appearance of the type controls. The controls can show as buttons in a horizontal bar or a single button control allowing you to select the map type via a dropdown menu. The default behavior means that the optimal visual style is chosen depending on the screen size."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls">
                         <select id="wk-maptypecontrol_style" class="uk-form-width-medium" ng-model="widget.data['maptypecontrol_style']">
                             <option value="">{{'Default' | trans}}</option>
