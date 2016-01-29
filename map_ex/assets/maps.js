@@ -103,7 +103,7 @@ var WidgetkitMaps = WidgetkitMaps || [];
                         title: t.title
                     };
 					/*adding custom pin image*/
-					if (t.pin.length>0){
+					if ( (typeof t.pin !== 'undefined') && (t.pin.length>0) ) {
 						var img={};
 						img['url']=t.pin;
 						/*adding anchor*/
@@ -140,7 +140,6 @@ var WidgetkitMaps = WidgetkitMaps || [];
 					), {
                     name: ( ((typeof s.maptype_name == 'string') && (s.maptype_name.trim().length>0)) ? s.maptype_name : "Styled")
                 });
-				console.log(u);
                 i.mapTypes.set("STYLED", u), "STYLED" == s.maptypeid.toUpperCase() && i.setMapTypeId("STYLED")
             })
         })
