@@ -7,7 +7,7 @@ function checkWidgetUpdate($){
 	/* Start of widget specific settings */
 	var distr_name='widgetkit-map-ex';
 	var widget_name='MapEx';
-	var widget_version='v1.4';
+	var widget_version='v1.4.1';
 	/*CAUTION: the month is zero-based*/
 	var widget_date=printNiceDate(new Date(2016,0,29));
 	var widget_logo='https://raw.githubusercontent.com/wiki/rvalitov/widgetkit-map-ex/images/mapex-logo.png';
