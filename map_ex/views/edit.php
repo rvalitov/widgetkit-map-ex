@@ -281,6 +281,10 @@
 					<p class="uk-text-center"><i class="uk-icon uk-icon-info-circle uk-margin-small-right"></i>This section allows you to create your own uinque map type with custom styles. You can achieve sophisticated results, e.g. set individual colors for different elements (countries, roads, POI, etc.) and control their visibility.</p>
 				</div>
 				
+				<div class="uk-panel uk-panel-box uk-alert uk-alert-warning" ng-if="widget.data['maptypeid'] != 'styled'">
+					<p class="uk-text-center"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>The styles are applied only to a map type called "Styled" (see the "Map Type" option in the "Map" tab). You have another type of map selected. You should probably select the "Styled" map type if you want to use the styling.</p>
+				</div>
+				
 				<div class="uk-form-row">
                     <span class="uk-form-label">{{'Name' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="The label that will be displayed in the type controls to refer to your custom map style. If left empty, then the default value 'Styled' is used"><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls">
