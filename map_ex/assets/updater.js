@@ -7,15 +7,16 @@ function checkWidgetUpdate($){
 	/* Start of widget specific settings */
 	var distr_name='widgetkit-map-ex';
 	var widget_name='MapEx';
-	var widget_version='v1.4.1';
+	var widget_version='v1.4';
 	/*CAUTION: the month is zero-based*/
-	var widget_date=printNiceDate(new Date(2016,0,29));
+	var widget_date=printNiceDate(new Date(2016,0,30));
 	var widget_logo='https://raw.githubusercontent.com/wiki/rvalitov/widgetkit-map-ex/images/mapex-logo.png';
 	var widget_wiki=git_url+distr_name+'/wiki';
 	var widget_website=git_url+distr_name;
 	/* End of widget specific settings */
 	
 	var widget_update_tag='#update-'+distr_name;
+	var modaltext='';
 	
 	(function ($) {
 		/**
@@ -44,6 +45,10 @@ function checkWidgetUpdate($){
 			return $this;
 		};
 	}(jQuery));
+	
+	function showUpdateInfo(){
+		UIkit.modal.alert(modaltext,{"center":true});
+	}
 	
 	/* Filing the about info */
 	$('#name-'+distr_name).waitUntilExists(function(){
@@ -127,16 +132,20 @@ function checkWidgetUpdate($){
 						else {
 							date_remote='Unknown';
 						}
-						var modaltext='<div class="uk-modal-header"><h1>'+widget_name+' widget update details</h1></div><div class="uk-overflow-container"><div class="uk-width-1-1 uk-text-center"><img class="uk-width-1-2" src="'+widget_logo+'"></div><table class="uk-table"><tr><th></th><th>Local (installed)</th><th>Remote (available)</th></tr><tr><td>Version</td><td>'+widget_version+'</td><td>'+data.tag_name+'</td></tr><tr><td>Build date</td><td>'+widget_date+'</td><td>'+date_remote+'</td></tr></table><hr><h2>Release information:</h2>'+marked(data.body)+'<hr><h2>How to update?</h2><ul><li>You can download the new version <a href="'+data.html_url+'">here<i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a>.</li><li>Installation instructions are available <a href="'+git_url+distr_name+'">here<i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a></li></ul></div>';
-						modaltext=modaltext.replace(/(\r|\n)/gm,'');
-						modaltext=modaltext.replace(/"/g,'\\"');
-						modaltext=modaltext.replace(/'/g,"\\'");
-						var infotext='<a onclick=\'UIkit.modal.alert("'+modaltext+'",{"center":true});\'><i class="uk-icon-info-circle uk-margin-small-right"></i>A new version of '+widget_name+' widget is available! Read more</a>';
-						UIkit.notify(infotext, {'timeout':infotimeout,'pos':'top-center','status':'info'});
-						$(widget_update_tag).waitUntilExists(function(){
-							$(this).empty();
-							$(this).append('<div class="uk-panel uk-panel-box uk-alert-danger"><h2 class="uk-text-center"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>This widget is outdated!</h2><h4 class="uk-text-center">A new version is available. Please, update.</h4><button type="button" class="uk-button" onclick=\'UIkit.modal.alert("'+modaltext+'",{"center":true});\'><i class="uk-icon uk-icon-info-circle uk-margin-small-right"></i>Update details</button></div>');
-						});
+							modaltext='<div class="uk-modal-header"><h1>'+widget_name+' widget update details</h1></div><div class="uk-overflow-container"><div class="uk-width-1-1 uk-text-center"><img class="uk-width-1-2" src="'+widget_logo+'"></div><table class="uk-table"><tr><th></th><th>Local (installed)</th><th>Remote (available)</th></tr><tr><td>Version</td><td>'+widget_version+'</td><td>'+data.tag_name+'</td></tr><tr><td>Build date</td><td>'+widget_date+'</td><td>'+date_remote+'</td></tr></table><hr><h2>Release information:</h2>'+marked(data.body)+'<hr><h2>How to update?</h2><ul><li>You can download the new version <a href="'+data.html_url+'">here<i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a>.</li><li>Installation instructions are available <a href="'+git_url+distr_name+'">here<i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a></li></ul></div>';
+							modaltext=modaltext.replace(/(\r|\n)/gm,'');
+							var infotext='<a id="info-'+distr_name+'"><i class="uk-icon-info-circle uk-margin-small-right"></i>A new version of '+widget_name+' widget is available! Read more</a>';
+							UIkit.notify(infotext, {'timeout':infotimeout,'pos':'top-center','status':'info'});
+							$('#info-'+distr_name).click(function(){
+								showUpdateInfo();
+							});
+							$(widget_update_tag).waitUntilExists(function(){
+								$(this).empty();
+								$(this).append('<div class="uk-panel uk-panel-box uk-alert-danger"><h2 class="uk-text-center"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>This widget is outdated!</h2><h4 class="uk-text-center">A new version is available. Please, update.</h4><button type="button" class="uk-button"><i class="uk-icon uk-icon-info-circle uk-margin-small-right"></i>Update details</button></div>');
+								$(this).find('button').click(function(){
+									showUpdateInfo();
+								});
+							});
 					}
 					else{
 						$(widget_update_tag).waitUntilExists(function(){
