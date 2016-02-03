@@ -120,7 +120,7 @@ return array(
 
         'init.site' => function($event, $app) {
 			//We replace the original Map widget js file with ours. It must be done to avoid issues with multiple loading of Google Map API JS libraies.
-            $app['scripts']->add('widgetkit-maps', 'plugins/widgets/map_ex/assets/maps.js', array('uikit'));
+            $app['scripts']->add('widgetkit-map_ex', 'plugins/widgets/map_ex/assets/maps.js', array('uikit'));
         },
 
         'init.admin' => function($event, $app) {
