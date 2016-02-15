@@ -15,7 +15,13 @@ $debug_info = array();
 $debug_warning = array();
 $debug_error = array();
 
-array_push($debug_info,'Processing widget '.$widget_name.' (version '.$widget_version.')');
+$CMS=getJoomlaVersion();
+$isJoomla=true;
+if (!strlen($CMS)){
+	$CMS=getWPVersion();
+	$isJoomla=false;
+}
+array_push($debug_info,'Processing widget '.$widget_name.' (version '.$widget_version.') on '.$CMS.' with PHP '.@phpversion());
 array_push($debug_info,'Widget settings: '.print_r($settings,true));
 
 $markers = array();
@@ -57,11 +63,15 @@ foreach ($items as $i => $item) {
 			if (strlen($marker['pin'])>0){
 				//Checking for absolute URL
 				if ( (substr($marker['pin'], 0, 7) != 'http://') && (substr($marker['pin'], 0, 8) != 'https://') && (substr($marker['pin'], 0, 2) != '//') && (strlen($marker['pin'])>2) )
-					//We must remove the starting '/' if it exists, because JURI::base() already has it set.
-					if (substr($marker['pin'], 0, 1) != '/')
-						$marker['pin']=JURI::base().$marker['pin'];
+					if ($isJoomla){
+						//We must remove the starting '/' if it exists, because JURI::base() already has it set.
+						if (substr($marker['pin'], 0, 1) != '/')
+							$marker['pin']=JURI::base().$marker['pin'];
+						else
+							$marker['pin']=JURI::base().substr($marker['pin'], 1);
+					}
 					else
-						$marker['pin']=JURI::base().substr($marker['pin'], 1);
+						array_push($debug_warning,'Relative URLs for WordPress are not supported in this version of the widget. Please, specify a full URL manually for '.$marker['pin'].' - this is done in the settings of the widget.');
 
 				array_push($debug_info,'The final URL for the custom pin of the item#'.$item_id.' is '.$marker['pin']);
 				if ($settings['debug_output'])
