@@ -11,19 +11,6 @@ $map_id  = uniqid('wk-map-ex');
 
 require_once(__DIR__.'/debug.php');
 
-$debug_info = array();
-$debug_warning = array();
-$debug_error = array();
-
-$CMS=getJoomlaVersion();
-$isJoomla=true;
-if (!strlen($CMS)){
-	$CMS=getWPVersion();
-	$isJoomla=false;
-}
-array_push($debug_info,'Processing widget '.$widget_name.' (version '.$widget_version.') on '.$CMS.' with PHP '.@phpversion());
-array_push($debug_info,'Widget settings: '.print_r($settings,true));
-
 $markers = array();
 $width   = $settings['width']  == 'auto' ? 'auto'  : ((int)$settings['width']).'px';
 $height  = $settings['height'] == 'auto' ? '300px' : ((int)$settings['height']).'px';
@@ -117,18 +104,12 @@ if (!empty($settings['map_center'])){
 }
 ?>
 
-<script type="widgetkit/map" data-id="<?php echo $map_id;?>" data-class="<?php echo $settings['class']; ?> uk-img-preserve" data-style="width:<?php echo $width?>;height:<?php echo $height?>;">
+<script type="widgetkit/mapex" data-id="<?php echo $map_id;?>" data-class="<?php echo $settings['class']; ?> uk-img-preserve" data-style="width:<?php echo $width?>;height:<?php echo $height?>;">
     <?php echo json_encode($settings) ?>
 </script>
 
-<?php if ( ($settings['responsive']) || (!empty($settings['map_center'])) || ($settings['modal_fix']) || ($settings['debug_output']) ):?>
-<script>
-<?php if ($settings['debug_output']){
-	printJSDebugText($debug_info,1);
-	printJSDebugText($debug_warning,2);
-	printJSDebugText($debug_error,3);
-}?>
 <?php if ( ($settings['responsive']) || (!empty($settings['map_center'])) || ($settings['modal_fix']) ):?>
+<script>
 jQuery(document).ready(function($){
 	function checkWidgetkitMaps() {
 		var item=getWidgetkitMap("<?php echo $settings['map_id']?>");
@@ -204,6 +185,50 @@ jQuery(document).ready(function($){
 	}
 	setTimeout(checkWidgetkitMaps,1000);
 });
+</script>
 <?php endif;?>
+
+<?php if ($settings['debug_output']):?>
+<script>
+	<?php
+	printJSDebugText($debug_info,1);
+	printJSDebugText($debug_warning,2);
+	printJSDebugText($debug_error,3);
+	?>
+	jQuery(document).ready(function($){
+		var countAPILoaded=0;
+		var isUsingMap=false;
+		var srcFirstAPI='';
+		$("script").each(function() {
+			var srcAPI=$(this).attr("src");
+			if ( (srcAPI) && (srcAPI.indexOf('/maps.google.com/')>0) ) {
+				console.info('<?php echo '['.$widget_name.' #'.$widget_id.'] '; ?>Found Google Maps API loading script: '+srcAPI);
+				if (countAPILoaded==0)
+					srcFirstAPI=srcAPI;
+				countAPILoaded++;
+			}
+			if ( (srcAPI) && (srcAPI.indexOf('wkInitializeGoogleMapsApi')>0) )
+				isUsingMap=true;
+		});
+		switch(countAPILoaded){
+			case 0:
+				console.error('<?php echo '['.$widget_name.' #'.$widget_id.'] '; ?>No script found that loads Google Maps API. It\'s a fatal error. Possible reasons: invalid installation or conflict with other components, modules or plugins.');
+				break;
+			case 1:
+				console.info('<?php echo '['.$widget_name.' #'.$widget_id.'] '; ?>Single script detected that loads Google Maps API.');
+				if (srcFirstAPI.length>0)
+				if (srcFirstAPI.indexOf('wkInitializeGoogleMapsEx')>0)
+					console.info('<?php echo '['.$widget_name.' #'.$widget_id.'] '; ?>The Google Maps API loading script is correct.');
+				else
+					console.error('<?php echo '['.$widget_name.' #'.$widget_id.'] '; ?>The Google Maps API loading script is not correct. Some other component, module or plugin on your website overrides our script making this widget inactive.');
+				break;
+			default:
+				if (isUsingMap)
+					console.error('<?php echo '['.$widget_name.' #'.$widget_id.'] '; ?>We found out that you are using both MapEx and Map widget on the same page. This leads to conflicts and errors. You can use only MapEx or Map widget, but not both. You can convert all your Map widgets to MapEx widgets in the control panel.');
+				else
+					console.error('<?php echo '['.$widget_name.' #'.$widget_id.'] '; ?>Multiple scripts detected that try to load Google Maps API. This may cause unexpected behaviour or malfunction of the widget. Please, turn of other plugins that use Goolge Maps API to fix this error.');
+				break;
+		}
+	});
 </script>
 <?php endif;?>

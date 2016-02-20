@@ -10,6 +10,8 @@
 * **Map with markers** - the widget shows a map with optional markers on it.
 * **Styled map** - you can change the visual look of the map.
 * **Backward compatibility** - all other behavior, styling and features of the original [Map widget](http://yootheme.com/demo/widgetkit/joomla/index.php/home/map) are preserved.
+* **Use with your existing data** - you can easily convert your existing Map widgets into MapEx preserving all the data and options.
+* **Compatible with ZOO** - you can use MapEx with Yootheme's ZOO, [read more](https://github.com/rvalitov/widgetkit-map-ex/wiki/Using-MapEx-with-ZOO). 
 
 ### Unique Features
 The new features that the MapEx has and that are not available in the original Map widget:
@@ -26,10 +28,12 @@ The new features that the MapEx has and that are not available in the original M
 * **Access to the original [Google Map object](https://developers.google.com/maps/documentation/javascript/reference#Map)** - Javascript object that is used in creation of the map. So, the user may change and/or modify the object as he needs from any web page using Javascript which provides vast opportunities for Javascript programmers to customize the map using native [Google Map API](https://developers.google.com/maps/documentation/javascript/tutorial), [read more](https://github.com/rvalitov/widgetkit-map-ex/wiki/Working-with-Google-Map-object-(for-Javascript-programmers)).
 
 # Supported platforms
-* The latest code is based on Widgetkit 2.5.3, however it should work with any Widgetkit 2.4.x and later.
+* The latest code is based on Widgetkit 2.5.3, however it should work with any Widgetkit 2.4.x and later (recommended 2.5.0+).
 * Joomla 3.4.x or later required
 
-Widget should work with Wordpress 4.4.x (according to feedback from users; I can't test it personally, because I don't have the required subscription).
+Widget should work with Wordpress 4.4.x (according to feedback from users; I can't test it personally, because I don't have the required subscription). If you will face any problems using this widget on WordPress, you can contact me to make some changes to the code of this widget if necessary.
+
+**Read full system requirements [here](https://github.com/rvalitov/widgetkit-map-ex/wiki/System-requirements).** 
 
 # How to install?
 The installation procedure is described [here](https://github.com/rvalitov/widgetkit-map-ex/wiki/How-to-install).
@@ -42,6 +46,7 @@ Some issues about using the widget are available in the [Wiki area](https://gith
 * The code is based on the original [Map widget](http://yootheme.com/demo/widgetkit/joomla/index.php/home/map) by [Yootheme](http://yootheme.com/).
 * Logo designed by [Freepik](http://www.freepik.com/)
 * Special thanks to [Florian](https://yootheme.com/support/profile/florian), member of the Yootheme support team, for his [post](https://yootheme.com/support/question/80769) about the problem with the map widget displayed in a lightbox and the approach how to solve it.
+* Thanks to [Marco Rensch](https://github.com/marcorensch) for testing this widget with ZOO and [providing related instructions](https://github.com/rvalitov/widgetkit-map-ex/wiki/Using-MapEx-with-ZOO).
 
 # Feedback
 Your feedback is very appreciated. If you want to see new features in this module, please, post your ideas and feature requests in the [issue tracker](https://github.com/rvalitov/widgetkit-map-ex/issues).
