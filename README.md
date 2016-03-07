@@ -56,9 +56,14 @@ Your feedback is very appreciated. If you want to see new features in this modul
 # Donations
 This is a free project that I do in my spare time. If you find it useful, then you can support it by donating some amount of money. This will help to keep the project alive and making it better: develop new features, make new releases, fix bugs, update the [manuals](https://github.com/rvalitov/widgetkit-map-ex/wiki), and provide at least some minimal technical support (there's an [issue tracker here](https://github.com/rvalitov/widgetkit-map-ex/issues)).
 
-You can choose any payment gateway you prefer:
+You can choose any payment method you prefer:
 
-[![PayPal](https://raw.githubusercontent.com/wiki/rvalitov/widgetkit-map-ex/images/money/paypal.png)](https://www.paypal.me/valitov/15eur) [![WebMoney](https://raw.githubusercontent.com/wiki/rvalitov/widgetkit-map-ex/images/money/webmoney.png)](https://funding.wmtransfer.com/mapex-widget) [![YandexMoney](https://raw.githubusercontent.com/wiki/rvalitov/widgetkit-map-ex/images/money/yandex.png)](https://money.yandex.ru/to/410011424143476)
+Your Currency | Payment Method
+------------ | -------------
+Euro € | [![Card](https://img.shields.io/badge/EURO-Debit/Credit%20Card-6f202b.svg?style=flat)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BJJF3E6DBRYHA) [![PayPal](https://img.shields.io/badge/EURO-PayPal-blue.svg?style=flat)](https://www.paypal.me/valitov/15eur) [![WebMoney](https://img.shields.io/badge/EURO-WebMoney-00484f.svg?style=flat)](https://funding.wmtransfer.com/widgets-euro)
+USD $ | [![Card](https://img.shields.io/badge/USD-Debit/Credit%20Card-6f202b.svg?style=flat)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=B8VMNU7SEAU8J) [![PayPal](https://img.shields.io/badge/USD-PayPal-blue.svg?style=flat)](https://www.paypal.me/valitov/15usd) [![WebMoney](https://img.shields.io/badge/EURO-WebMoney-00484f.svg?style=flat)](https://funding.wmtransfer.com/widgets-usd)
+Russian Ruble ₽ | [![Card](https://img.shields.io/badge/RUB-Debit/Credit%20Card-6f202b.svg?style=flat)](https://money.yandex.ru/to/410011424143476) [![PayPal](https://img.shields.io/badge/RUB-PayPal-blue.svg?style=flat)](https://www.paypal.me/valitov/150rub) [![WebMoney](https://img.shields.io/badge/RUB-WebMoney-00484f.svg?style=flat)](https://funding.wmtransfer.com/widgets-rub) [![YandexMoney](https://img.shields.io/badge/RUB-YandexMoney-5b0d56.svg?style=flat)](https://money.yandex.ru/to/410011424143476)
+Other | [![Card](https://img.shields.io/badge/OTHER-Debit/Credit%20Card-6f202b.svg?style=flat)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BJJF3E6DBRYHA) [![PayPal](https://img.shields.io/badge/OTHER-PayPal-blue.svg?style=flat)](https://www.paypal.me/valitov) [![WebMoney](https://img.shields.io/badge/OTHER-WebMoney-00484f.svg?style=flat)](https://funding.wmtransfer.com/widgets-euro)
 
 # Support or Contact
 Having trouble with MapEx Widget? May be something has already been described in the [Wiki area](https://github.com/rvalitov/widgetkit-map-ex/wiki) or reported in the [issue tracker](https://github.com/rvalitov/widgetkit-map-ex/issues). If you don't find your problem there, then, please, add your issue there. 
