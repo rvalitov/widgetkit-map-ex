@@ -21,7 +21,7 @@ $debug_warning = array();
 $debug_error = array();
 
 $isJoomla=false;
-if ( (class_exists('JURI')) && (method_exists(JURI,'base')) )
+if ( (class_exists('JURI')) && (method_exists('JURI','base')) )
 	$isJoomla=true;
 
 if ($settings['debug_output']){
