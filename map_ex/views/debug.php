@@ -144,7 +144,7 @@ function getWPVersion(){
 		return "";
 	
 	$v='WordPress ';
-	if (preg_match_all("@.*public\s+\\\$wp_version\s*=\s*'.+';@",$f,$matches))
+	if (preg_match_all("@.*\\\$wp_version\s*=\s*'.+';@",$f,$matches))
 		$v.=explode("'",$matches[0][0],3)[1];
 	return trim($v);
 }
