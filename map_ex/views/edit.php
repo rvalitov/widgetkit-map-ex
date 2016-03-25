@@ -74,7 +74,10 @@
                         </select>
                     </div>
                 </div>
-				
+
+				<div class="uk-panel uk-panel-box uk-alert-warning" ng-if="!widget.data.map_center && widget.data.responsive">
+					<p class="uk-text-center"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>The Responsive feature is disabled, because you didn't set the Map Center Point.</p>
+				</div>
 				<div class="uk-form-row">
                     <span class="uk-form-label">{{'Responsive' | trans}}<span  data-uk-tooltip title="If checked, then the map will automatically pan and zoom to the Map Center Point (see below) every time the window is resized or when orientation of the device changes (e.g. for smartphones or tablets). Note, that panning and zooming is done to the initial position of the map, i.e. if the user was interacting with the map and changed its position or zooming level, then this changes will be lost."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls uk-form-controls-text">
@@ -89,20 +92,16 @@
                     </div>
                 </div>
 				
-				<div class="uk-form-row" ng-if="widget.data.map_center">
+				<div class="uk-panel uk-panel-box uk-alert-warning" ng-if="!widget.data.map_center && widget.data.modal_fix">
+					<p class="uk-text-center"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>The "Modal dialog fix" feature is disabled, because you didn't set the Map Center Point.</p>
+				</div>
+				<div class="uk-form-row">
                     <span class="uk-form-label">{{'Modal dialog fix' | trans}}<span  data-uk-tooltip title="If checked, the widget applies a fix for the problem of incorrect rendering inside UIKit modal dialogs. Besides, it resets the map to its default position and zoom level every time the modal is displayed, e.g. if the user opens a modal, changes the map position or zoom level, closes the modal and then opens the modal again, the map will be reset to its initial configuration."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls uk-form-controls-text">
-                        <label><input type="checkbox" ng-model="widget.data['modal_fix']" ng-checked="widget.data.map_center" ng-disabled="! widget.data.map_center"> {{'Correct visualization inside modal' | trans}}</label>
+                        <label><input type="checkbox" ng-model="widget.data['modal_fix']"> {{'Correct visualization inside modal' | trans}}</label>
                     </div>
                 </div>
-				
-				<div class="uk-form-row" ng-if="! widget.data.map_center">
-                    <span class="uk-form-label">{{'Modal dialog fix' | trans}}<span  data-uk-tooltip title="If checked, the widget applies a fix for the problem of incorrect rendering inside UIKit modal dialogs. Besides, it resets the map to its default position and zoom level every time the modal is displayed, e.g. if the user opens a modal, changes the map position or zoom level, closes the modal and then opens the modal again, the map will be reset to its initial configuration. <strong>You must set the 'Map Center Point' in order this feature to work.</strong>"><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
-                    <div class="uk-form-controls uk-form-controls-text">
-                        <label><input type="checkbox" disabled> {{'Correct visualization inside modal' | trans}}</label>
-                    </div>
-                </div>
-								
+											
                 <h3 class="wk-form-heading">{{'Controls' | trans}}</h3>
 
                 <div class="uk-form-row">

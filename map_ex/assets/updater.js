@@ -7,9 +7,9 @@ jQuery(document).ready(function($){
 	/* Start of widget specific settings */
 	var distr_name='widgetkit-map-ex';
 	var widget_name='MapEx';
-	var widget_version='v1.4.3';
+	var widget_version='v1.4.4';
 	/*CAUTION: the month is zero-based*/
-	var widget_date=printNiceDate(new Date(2016,01,20));
+	var widget_date=printNiceDate(new Date(2016,02,26));
 	var widget_logo='https://raw.githubusercontent.com/wiki/rvalitov/widgetkit-map-ex/images/mapex-logo.png';
 	var widget_wiki=git_url+distr_name+'/wiki';
 	var widget_website=git_url+distr_name;
