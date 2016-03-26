@@ -67,6 +67,7 @@ return array(
 			'show_terrain'      		=> false,
 			'styling_mode'      		=> '',
 			'styling_json'      		=> '',
+			'tiles_color'				=> '',
 			'zoomcontrol'               => true,
 			//Not working in the current Google Maps API:
 			'zoom_style'         		=> '',

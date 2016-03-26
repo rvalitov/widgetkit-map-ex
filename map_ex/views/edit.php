@@ -345,6 +345,12 @@
                     </div>
                 </div>
 
+				<div class="uk-form-row">
+                    <span class="uk-form-label" for="wk-tiles_color">{{'Tiles Background' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Color used for the background of the Map. This color will be visible when tiles have not yet loaded as the user pans. Example: #ff0000. The default value is empty that uses the default color of Google Maps (currently it's light grey)."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <div class="uk-form-controls">
+						<span><input id="wk-tiles_color" type="text" ng-model="widget.data['tiles_color']"></span>
+                    </div>
+                </div>
             </li>
             <li>
 

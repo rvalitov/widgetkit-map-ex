@@ -74,6 +74,8 @@ var WidgetkitMaps = WidgetkitMaps || [];
 					},
 					*/
                     disableDefaultUI: s.disabledefaultui,
+					/*adding custom tiles color*/
+					backgroundColor: s.tiles_color,
                     mapTypeControlOptions: {
                         style: m_style,
                         mapTypeIds: mTypes
