@@ -76,6 +76,8 @@ return array(
 			'directionstext'            => 'Get directions',
 			//Not working in the current Google Maps API:
 			'scalecontrol'              => false,
+			//Not implemented in the current widget:
+			'scale_units'               => '',
 			'pin_type'            		=> 'default',
 			'custom_pin_path'			=> '',
 			'custom_pin_anchor_x'		=> '',

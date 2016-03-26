@@ -187,6 +187,22 @@
                     </div>
                 </div>
 
+				<?php
+				/*
+				Currently not implemented, because Google doesn't support this feature natively. Various workarounds may not work in localized versions of Google Maps.
+				<div class="uk-form-row" ng-if="widget.data['scale_units']">
+                    <span class="uk-form-label" for="wk-scale_units">{{'Scale Units System' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Units system used in the Scale controls. By default, Google shows the scale in metric system. You may override this unit system by setting one explicitly: metric (distances are shown using kilometers) or imperial (distances are shown using miles)."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <div class="uk-form-controls">
+                        <select id="wk-scale_units" class="uk-form-width-medium" ng-model="widget.data['scale_units']">
+							<option value="">{{'Default' | trans}}</option>
+                            <option value="metric">{{'Metric (kilometers)' | trans}}</option>
+                            <option value="imperial">{{'Imperial (miles)' | trans}}</option>
+                        </select>
+                    </div>
+                </div>
+				*/
+				?>
+
                 <div class="uk-form-row">
                     <span class="uk-form-label">{{'Directions Controls' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Enables/disables the directions button that opens the Google Map in a new window for navigation and routing."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls uk-form-controls-text">
