@@ -63,9 +63,7 @@ var WidgetkitMaps = WidgetkitMaps || [];
 					streetViewControl: c_sv,
                     mapTypeId: google.maps.MapTypeId[s.maptypeid.toUpperCase()],
                     mapTypeControl: s.maptypecontrol,
-					/* Not working in the current Google Maps API:
 					scaleControl : c_sc,
-					*/
                     zoomControl: s.zoomcontrol,
 					/* Not working in the current Google Maps API:
 					zoomControlOptions: {

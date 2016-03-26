@@ -180,17 +180,12 @@
                     </div>
                 </div>
 				
-				<?php
-				/*
-				Not working in the current Google Maps API:
 				<div class="uk-form-row">
                     <span class="uk-form-label">{{'Scale Controls' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Enables/disables the Scale control that provides a simple map scale."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls uk-form-controls-text">
                         <label><input type="checkbox" ng-model="widget.data['scalecontrol']"> {{'Show the scale controls' | trans}}</label>
                     </div>
                 </div>
-				*/
-				?>
 
                 <div class="uk-form-row">
                     <span class="uk-form-label">{{'Directions Controls' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Enables/disables the directions button that opens the Google Map in a new window for navigation and routing."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
