@@ -8,12 +8,19 @@ Git: https://github.com/rvalitov/widgetkit-map-ex
 */
 
 $map_id  = uniqid('wk-map-ex');
+$map_id2 = substr($map_id,9);
 
 require_once(__DIR__.'/debug.php');
 
 $markers = array();
 $width   = $settings['width']  == 'auto' ? 'auto'  : ((int)$settings['width']).'px';
 $height  = $settings['height'] == 'auto' ? '300px' : ((int)$settings['height']).'px';
+
+$zoom_phone_portrait=$settings['zoom'];
+$zoom_phone_landscape=is_numeric($settings['zoom_phone_h']) ? $settings['zoom_phone_h'] : $zoom_phone_portrait;
+$zoom_tablet=is_numeric($settings['zoom_tablet']) ? $settings['zoom_tablet'] : $zoom_phone_landscape;
+$zoom_desktop=is_numeric($settings['zoom_desktop']) ? $settings['zoom_desktop'] : $zoom_tablet;
+$zoom_large=is_numeric($settings['zoom_large']) ? $settings['zoom_large'] : $zoom_desktop;
 
 // Markers
 $item_id=0;
@@ -95,6 +102,7 @@ foreach ($items as $i => $item) {
 
 $settings['markers'] = $markers;
 $settings['map_id'] = $map_id;
+$settings['map_id2'] = $map_id2;
 if (!empty($settings['map_center'])){
 	$center=explode(',',$settings['map_center']);
 	if ( (sizeof($center)==2) && (is_numeric($center[0])) && (is_numeric($center[1])) ){
@@ -108,74 +116,102 @@ if (!empty($settings['map_center'])){
     <?php echo json_encode($settings) ?>
 </script>
 
-<?php if ( ($settings['responsive']) || (!empty($settings['map_center'])) || ($settings['modal_fix']) ):?>
 <script>
+function getMapZoom<?php echo $map_id2;?>(){
+	if (window.outerWidth<=767)
+		if (Math.abs(window.orientation) === 90){
+			<?php if ($settings['debug_output'])
+			printJSDebugString('Detected Phone Landscape mode');
+			?>
+			return <?php echo $zoom_phone_landscape;?>;
+		}
+		else{
+			<?php if ($settings['debug_output'])
+			printJSDebugString('Detected Phone Portrait mode');
+			?>
+			return <?php echo $zoom_phone_portrait;?>;
+		}
+	else
+		if (window.outerWidth<=959){
+			<?php if ($settings['debug_output'])
+			printJSDebugString('Detected Tablet mode');
+			?>
+			return <?php echo $zoom_tablet;?>;
+		}
+		else{
+			<?php if ($settings['debug_output'])
+			printJSDebugString('Detected Large Screen mode');
+			?>
+			return <?php echo $zoom_large;?>;
+		}
+}
+
+function updateMap<?php echo $map_id2;?>(item){
+	<?php if (!empty($settings['map_center'])):?>
+	item.panTo(new google.maps.LatLng(<?php echo $settings['map_center']?>));
+	<?php if ($settings['debug_output'])
+		printJSDebugString('Auto pan performed to '.$settings['map_center']);
+	?>
+	<?php endif;?>
+
+	item.setZoom(getMapZoom<?php echo $map_id2;?>());
+	<?php if ($settings['debug_output'])
+		printJSDebugString('Auto zoom performed to level '.$settings['zoom']);
+	?>
+}
+
 jQuery(document).ready(function($){
 	function checkWidgetkitMaps() {
-		var item=getWidgetkitMap("<?php echo $settings['map_id']?>");
+		var item=getWidgetkitMap("<?php echo $map_id?>");
 		if (item) {
-			<?php if ($settings['responsive']):?>
-			google.maps.event.addDomListener(window, 'resize', function() {
-
-				<?php if (!empty($settings['map_center'])):?>
-				item.panTo(new google.maps.LatLng(<?php echo $settings['map_center']?>));
+			google.maps.event.addDomListener(window, 'resize', function(){
 				<?php if ($settings['debug_output'])
-					printJSDebugString('Auto pan performed to '.$settings['map_center']);
+					printJSDebugString('Window resize event captured, updating the map...');
 				?>
-				<?php endif;?>
-
-				item.setZoom(<?php echo $settings['zoom']?>);
+				updateMap<?php echo $map_id2;?>(item);
+			});
+			window.addEventListener("orientationchange", function () {
 				<?php if ($settings['debug_output'])
-					printJSDebugString('Auto zoom performed to level '.$settings['zoom']);
+					printJSDebugString('Screen orientation changed, updating the map...');
 				?>
+				updateMap<?php echo $map_id2;?>(item);
 			});
 			<?php if ($settings['debug_output'])
 				printJSDebugString('Responsive setup performed');
 			?>
-			<?php endif;//responsive?>
 
 			<?php if ( ($settings['modal_fix']) && (!empty($settings['map_center'])) ):?>
-			var modal_id='#<?php echo $settings['map_id']?>';
-			var modal_dialog=$(modal_id).closest('.uk-modal');
-			if (modal_dialog){
+			var modal_dialog=$('#<?php echo $map_id?>').closest('.uk-modal');
+			if (modal_dialog.length){
 				var box_id=modal_dialog.attr("id");
 				if (box_id){
 					<?php if ($settings['debug_output'])
-						printJSDebugString('Modal fix setup successfull for modal id'.modal_id);
+						printJSDebugString("'Modal fix setup successfull for modal id #'+box_id");
 					?>
 					$('#'+box_id).on({
 						'show.uk.modal': function(){
-							var map = jQuery('#<?php echo $settings['map_id']?>', '#'+box_id).first().get(0);
+							var map = jQuery('#<?php echo $map_id?>', '#'+box_id).first().get(0);
 							google.maps.event.trigger(map, 'resize');
+							updateMap<?php echo $map_id2;?>(item);
 							<?php if (!empty($settings['map_center'])):?>
 							item.setCenter(new google.maps.LatLng(<?php echo $settings['map_center']?>));
-							item.panTo(new google.maps.LatLng(<?php echo $settings['map_center']?>));
-							<?php if ($settings['debug_output']){
-								printJSDebugString('Map centered to '.$settings['map_center']);
-								printJSDebugString('Auto pan performed to '.$settings['map_center']);
-							}?>
-							<?php endif;//map_center?>
-
-							item.setZoom(<?php echo $settings['zoom']?>);
-							<?php if ($settings['debug_output'])
-								printJSDebugString('Auto zoom performed to level '.$settings['zoom']);
-							?>
+							<?php endif;?>
 
 							<?php if ($settings['debug_output'])
-								printJSDebugString('Modal fix performed for modal id'.modal_id);
+								printJSDebugString('Modal fix performed');
 							?>
 						}
 					});
 				}
 				<?php if ($settings['debug_output']):?>
 				else
-					<?php printJSDebugString('Failed to find modal with id'.modal_id,3);?>
+					<?php printJSDebugString('Found a related modal, but it seems to be invalid.',3);?>
 				<?php endif;?>
 
 			}
 			<?php if ($settings['debug_output']):?>
 			else
-				<?php printJSDebugString('Failed to find modal with id'.modal_id,3);?>
+				<?php printJSDebugString('There are no modals related to this widget. Modal fix option is ignored.');?>
 			<?php endif;?>
 
 			<?php endif;//modal fix?>
@@ -185,11 +221,8 @@ jQuery(document).ready(function($){
 	}
 	setTimeout(checkWidgetkitMaps,1000);
 });
-</script>
-<?php endif;?>
 
 <?php if ($settings['debug_output']):?>
-<script>
 	<?php
 	printJSDebugText($debug_info,1);
 	printJSDebugText($debug_warning,2);
@@ -230,5 +263,5 @@ jQuery(document).ready(function($){
 				break;
 		}
 	});
-</script>
 <?php endif;?>
+</script>

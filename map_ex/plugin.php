@@ -58,6 +58,10 @@ return array(
             'disabledefaultui'        => false,
 			
 			//Extra parameters:
+			'zoom_phone_h'				=> '',
+			'zoom_tablet'				=> '',
+			'zoom_desktop'				=> '',
+			'zoom_large'				=> '',
 			'maptypecontrol_style'      => 'dropdown_menu',
 			'maptype_name'      		=> 'Styled',
 			'show_styled'      			=> true,
@@ -82,7 +86,6 @@ return array(
 			'custom_pin_path'			=> '',
 			'custom_pin_anchor_x'		=> '',
 			'custom_pin_anchor_y'		=> '',
-			'responsive'        	  => true,
 			'modal_fix'	        	  => true,
 			'map_center'        	  => '',
 			'debug_output'        	  => false,

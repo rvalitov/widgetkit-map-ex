@@ -47,8 +47,31 @@
                     </div>
                 </div>
 
+				<div class="uk-panel uk-panel-box uk-alert-warning" ng-if="!widget.data.map_center">
+					<p class="uk-text-center"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>The Responsive feature is disabled, because you didn't set the Map Center Point. Please, set the Map Center Point, otherwise the widget may have unexpected behaviour.</p>
+				</div>
+								
 				<div class="uk-form-row">
-                    <span class="uk-form-label" for="wk-zoom">{{'Zoom Level' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Initial zoom level of the map. The higher numbers - the greater the zoom is (more detailed map). The value 0 corresponds to a map of the Earth fully zoomed out."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <span class="uk-form-label" for="wk-map_center">{{'Map Center Point' | trans}}<span data-uk-tooltip title="If set (not blank), then the map will be displayed in a way that this point will be located right in the center of the map. The center point is defined by its coordinates, e.g. -34.23456, 12.15672. Leave this field blank if you want to automatically set the best optimal center of the map. However, automatic approach may not always give the expected results."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <div class="uk-form-controls">
+                        <input id="wk-map_center" class="uk-form-width-medium" type="text" ng-model="widget.data['map_center']">
+                    </div>
+                </div>
+				
+				<div class="uk-panel uk-panel-box uk-alert-warning" ng-if="!widget.data.map_center && widget.data.modal_fix">
+					<p class="uk-text-center"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>The "Modal dialog fix" feature is disabled, because you didn't set the Map Center Point.</p>
+				</div>
+				<div class="uk-form-row">
+                    <span class="uk-form-label">{{'Modal dialog fix' | trans}}<span  data-uk-tooltip title="If checked, the widget applies a fix for the problem of incorrect rendering inside UIKit modal dialogs. Besides, it resets the map to its default position and zoom level every time the modal is displayed, e.g. if the user opens a modal, changes the map position or zoom level, closes the modal and then opens the modal again, the map will be reset to its initial configuration."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <label><input type="checkbox" ng-model="widget.data['modal_fix']"> {{'Correct visualization inside modal' | trans}}</label>
+                    </div>
+                </div>
+				
+				<h3 class="wk-form-heading">{{'Zoom' | trans}}</h3>
+				
+				<div class="uk-form-row">
+                    <span class="uk-form-label" for="wk-zoom">{{'Phone Portrait' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Initial zoom level of the map. The higher numbers - the greater the zoom is (more detailed map). The value 0 corresponds to a map of the Earth fully zoomed out."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls">
                         <select id="wk-zoom" class="uk-form-width-medium" ng-model="widget.data['zoom']">
                             <option value="0">0</option>
@@ -74,34 +97,123 @@
                         </select>
                     </div>
                 </div>
-
-				<div class="uk-panel uk-panel-box uk-alert-warning" ng-if="!widget.data.map_center && widget.data.responsive">
-					<p class="uk-text-center"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>The Responsive feature is disabled, because you didn't set the Map Center Point.</p>
-				</div>
-				<div class="uk-form-row">
-                    <span class="uk-form-label">{{'Responsive' | trans}}<span  data-uk-tooltip title="If checked, then the map will automatically pan and zoom to the Map Center Point (see below) every time the window is resized or when orientation of the device changes (e.g. for smartphones or tablets). Note, that panning and zooming is done to the initial position of the map, i.e. if the user was interacting with the map and changed its position or zooming level, then this changes will be lost."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
-                    <div class="uk-form-controls uk-form-controls-text">
-                        <label><input type="checkbox" ng-model="widget.data['responsive']"> {{'Adjust map on window resize and orientation change' | trans}}</label>
-                    </div>
-                </div>
 				
 				<div class="uk-form-row">
-                    <span class="uk-form-label" for="wk-map_center">{{'Map Center Point' | trans}}<span data-uk-tooltip title="If set (not blank), then the map will be displayed in a way that this point will be located right in the center of the map. The center point is defined by its coordinates, e.g. -34.23456, 12.15672. Leave this field blank if you want to automatically set the best optimal center of the map. However, automatic approach may not always give the expected results."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <span class="uk-form-label" for="wk-zoom_phone_h">{{'Phone Landscape' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Initial zoom level of the map. The higher numbers - the greater the zoom is (more detailed map). The value 0 corresponds to a map of the Earth fully zoomed out."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls">
-                        <input id="wk-map_center" class="uk-form-width-medium" type="text" ng-model="widget.data['map_center']">
+                        <select id="wk-zoom_phone_h" class="uk-form-width-medium" ng-model="widget.data['zoom_phone_h']">
+							<option value="">Inherit</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                        </select>
                     </div>
                 </div>
 				
-				<div class="uk-panel uk-panel-box uk-alert-warning" ng-if="!widget.data.map_center && widget.data.modal_fix">
-					<p class="uk-text-center"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>The "Modal dialog fix" feature is disabled, because you didn't set the Map Center Point.</p>
-				</div>
 				<div class="uk-form-row">
-                    <span class="uk-form-label">{{'Modal dialog fix' | trans}}<span  data-uk-tooltip title="If checked, the widget applies a fix for the problem of incorrect rendering inside UIKit modal dialogs. Besides, it resets the map to its default position and zoom level every time the modal is displayed, e.g. if the user opens a modal, changes the map position or zoom level, closes the modal and then opens the modal again, the map will be reset to its initial configuration."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
-                    <div class="uk-form-controls uk-form-controls-text">
-                        <label><input type="checkbox" ng-model="widget.data['modal_fix']"> {{'Correct visualization inside modal' | trans}}</label>
+                    <span class="uk-form-label" for="wk-zoom_tablet">{{'Tablet' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Initial zoom level of the map. The higher numbers - the greater the zoom is (more detailed map). The value 0 corresponds to a map of the Earth fully zoomed out."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <div class="uk-form-controls">
+                        <select id="wk-zoom_tablet" class="uk-form-width-medium" ng-model="widget.data['zoom_tablet']">
+							<option value="">Inherit</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                        </select>
                     </div>
                 </div>
-											
+				
+				<div class="uk-form-row">
+                    <span class="uk-form-label" for="wk-zoom_desktop">{{'Desktop' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Initial zoom level of the map. The higher numbers - the greater the zoom is (more detailed map). The value 0 corresponds to a map of the Earth fully zoomed out."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <div class="uk-form-controls">
+                        <select id="wk-zoom_desktop" class="uk-form-width-medium" ng-model="widget.data['zoom_desktop']">
+							<option value="">Inherit</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                        </select>
+                    </div>
+                </div>
+				
+				<div class="uk-form-row">
+                    <span class="uk-form-label" for="wk-zoom_large">{{'Large Screens' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Initial zoom level of the map. The higher numbers - the greater the zoom is (more detailed map). The value 0 corresponds to a map of the Earth fully zoomed out."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <div class="uk-form-controls">
+                        <select id="wk-zoom_large" class="uk-form-width-medium" ng-model="widget.data['zoom_large']">
+							<option value="">Inherit</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                        </select>
+                    </div>
+                </div>
+				
                 <h3 class="wk-form-heading">{{'Controls' | trans}}</h3>
 
                 <div class="uk-form-row">

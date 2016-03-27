@@ -55,7 +55,7 @@ var WidgetkitMaps = WidgetkitMaps || [];
                 Object.keys(s).forEach(function(t) {
                     isNaN(s[t]) || (s[t] = Number(s[t]))
                 }), n = ((typeof s.center_lat != 'undefined') && (typeof s.center_lng != 'undefined')) ? new google.maps.LatLng(s.center_lat, s.center_lng) : (p.length ? new google.maps.LatLng(p[0].lat, p[0].lng) : new google.maps.LatLng(-34.397, 150.644)), o = {
-                    zoom: parseInt(s.zoom, 10),
+                    zoom: (typeof window["getMapZoom"+s.map_id2] == 'function') ? (window["getMapZoom"+s.map_id2]()) : parseInt(s.zoom, 10),
                     center: n,
                     scrollwheel: s.zoomwheel,
                     draggable: s.draggable,
