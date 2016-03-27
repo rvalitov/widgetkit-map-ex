@@ -134,7 +134,7 @@ jQuery(document).ready(function($){
 						}
 							modaltext='<div class="uk-modal-header"><h1>'+widget_name+' widget update details</h1></div><div class="uk-overflow-container"><div class="uk-width-1-1 uk-text-center"><img class="uk-width-1-2" src="'+widget_logo+'"></div><table class="uk-table"><tr><th></th><th>Local (installed)</th><th>Remote (available)</th></tr><tr><td>Version</td><td>'+widget_version+'</td><td>'+data.tag_name+'</td></tr><tr><td>Build date</td><td>'+widget_date+'</td><td>'+date_remote+'</td></tr></table><hr><h2>Release information:</h2>'+marked(data.body)+'<hr><h2>How to update?</h2><ul><li>You can download the new version <a href="'+data.html_url+'">here<i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a>.</li><li>Installation instructions are available <a href="'+git_url+distr_name+'">here<i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a></li></ul></div>';
 							modaltext=modaltext.replace(/(\r|\n)/gm,'');
-							var infotext='<a id="info-'+distr_name+'"><i class="uk-icon-info-circle uk-margin-small-right"></i>A new version of '+widget_name+' widget is available! Read more</a>';
+							var infotext='<a id="info-'+distr_name+'"><i class="uk-icon-info-circle uk-margin-small-right"></i>New '+widget_name+' '+data.tag_name+' is available! Read more</a>';
 							UIkit.notify(infotext, {'timeout':infotimeout,'pos':'top-center','status':'info'});
 							$('#info-'+distr_name).click(function(){
 								showUpdateInfo();
