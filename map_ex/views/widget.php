@@ -10,6 +10,13 @@ Git: https://github.com/rvalitov/widgetkit-map-ex
 $map_id  = uniqid('wk-map-ex');
 $map_id2 = substr($map_id,9);
 
+global $debug_info;
+global $debug_warning;
+global $debug_error;
+global $isJoomla;
+global $widget_id;
+global $widget_name;
+
 require_once(__DIR__.'/debug.php');
 
 $markers = array();
@@ -185,9 +192,9 @@ jQuery(document).ready(function($){
 			if (modal_dialog.length){
 				var box_id=modal_dialog.attr("id");
 				if (box_id){
-					<?php if ($settings['debug_output'])
-						printJSDebugString("'Modal fix setup successfull for modal id #'+box_id");
-					?>
+					<?php if ($settings['debug_output']):?>
+						console.info('<?php echo '['.$widget_name.' #'.$widget_id.'] ';?>Modal fix setup successfull for modal id #'+box_id);
+					<?php endif;?>
 					$('#'+box_id).on({
 						'show.uk.modal': function(){
 							var map = jQuery('#<?php echo $map_id?>', '#'+box_id).first().get(0);

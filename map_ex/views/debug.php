@@ -24,45 +24,43 @@ $isJoomla=false;
 if ( (class_exists('JURI')) && (method_exists('JURI','base')) )
 	$isJoomla=true;
 
-if ($settings['debug_output']){
-	if ($isJoomla)
-		$CMS=getJoomlaVersion();
-	else
-		$CMS=getWPVersion();
+if ($isJoomla)
+	$CMS=getJoomlaVersion();
+else
+	$CMS=getWPVersion();
 
-	$wk_version=getWidgetkitVersion();
-	$php_version=@phpversion();
-	array_push($debug_info,'Processing widget '.$widget_name.' (version '.$widget_version.') on '.$CMS.' with Widgetkit '.$wk_version.' and PHP '.$php_version.'('.@php_sapi_name().')');
-	if (version_compare('5.3',$php_version)>0)
-		array_push($debug_error,'Your PHP is too old! Upgrade is strongly required! This widget may not work with your version of PHP.');
-	else
-		if (version_compare('5.6',$php_version)>0)
-			array_push($debug_warning,'Your PHP is quite old. Although this widget can work with your version of PHP, upgrade is recommended to the latest stable version of PHP.');
-		
-	if (version_compare('2.5.0',$wk_version)>0)
-		array_push($debug_warning,"Your Widgetkit version is quite old. Although this widget may work with your version of Widgetkit, upgrade is recommended to the latest stable version of Widgetkit. Besides, you may experience some issues of missing options in the settings of this widget if you don't upgrade.");
+$wk_version=getWidgetkitVersion();
+$php_version=@phpversion();
+array_push($debug_info,'Processing widget '.$widget_name.' (version '.$widget_version.') on '.$CMS.' with Widgetkit '.$wk_version.' and PHP '.$php_version.'('.@php_sapi_name().')');
+if (version_compare('5.3',$php_version)>0)
+	array_push($debug_error,'Your PHP is too old! Upgrade is strongly required! This widget may not work with your version of PHP.');
+else
+	if (version_compare('5.6',$php_version)>0)
+		array_push($debug_warning,'Your PHP is quite old. Although this widget can work with your version of PHP, upgrade is recommended to the latest stable version of PHP.');
+	
+if (version_compare('2.5.0',$wk_version)>0)
+	array_push($debug_warning,"Your Widgetkit version is quite old. Although this widget may work with your version of Widgetkit, upgrade is recommended to the latest stable version of Widgetkit. Besides, you may experience some issues of missing options in the settings of this widget if you don't upgrade.");
 
-	array_push($debug_info,'Host: '.@php_uname());
-	$ipath=dirname(dirname(__FILE__));
-	array_push($debug_info,'Widget installation path: '.$ipath);
-	if ($isJoomla)
-		if (preg_match_all('@.*\/administrator\/components\/com_widgetkit\/plugins\/widgets\/.+@',$ipath))
-			array_push($debug_info,'Installation path is correct');
-		else
-			array_push($debug_error,'Installation path is not correct, please fix it. Read more in the Wiki.');
+array_push($debug_info,'Host: '.@php_uname());
+$ipath=dirname(dirname(__FILE__));
+array_push($debug_info,'Widget installation path: '.$ipath);
+if ($isJoomla)
+	if (preg_match_all('@.*\/administrator\/components\/com_widgetkit\/plugins\/widgets\/.+@',$ipath))
+		array_push($debug_info,'Installation path is correct');
 	else
-		if (preg_match_all('@.*\/wp-content\/plugins\/widgetkit\/plugins\/widgets\/.+@',$ipath))
-			array_push($debug_info,'Installation path is correct');
-		else
-			array_push($debug_warning,'Installation path is not correct, please fix it. Read more in the Wiki.');
-
-	if ($isJoomla)
-		array_push($debug_info,'Detected CMS: Joomla');
+		array_push($debug_error,'Installation path is not correct, please fix it. Read more in the Wiki.');
+else
+	if (preg_match_all('@.*\/wp-content\/plugins\/widgetkit\/plugins\/widgets\/.+@',$ipath))
+		array_push($debug_info,'Installation path is correct');
 	else
-		array_push($debug_info,'Detected CMS: WordPress');
+		array_push($debug_warning,'Installation path is not correct, please fix it. Read more in the Wiki.');
 
-	array_push($debug_info,'Widget settings: '.print_r($settings,true));	
-}
+if ($isJoomla)
+	array_push($debug_info,'Detected CMS: Joomla');
+else
+	array_push($debug_info,'Detected CMS: WordPress');
+
+array_push($debug_info,'Widget settings: '.print_r($settings,true));	
 
 function ExtractWidgetInfo(){
 	global $widget_name;
