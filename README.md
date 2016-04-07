@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/Release-v1.4.4-green.svg?style=flat) ![Widgetkit](https://img.shields.io/badge/Widgetkit-v2.4.x+-green.svg?style=flat) ![Joomla](https://img.shields.io/badge/Joomla!-v3.4.x+-yellow.svg?style=flat) ![Wordpress](https://img.shields.io/badge/Wordpress-v4.4.x+-yellow.svg?style=flat)
+![Version](https://img.shields.io/badge/Release-v1.4.6-green.svg?style=flat) ![Widgetkit](https://img.shields.io/badge/Widgetkit-v2.4.x+-green.svg?style=flat) ![Joomla](https://img.shields.io/badge/Joomla!-v3.4.x+-yellow.svg?style=flat) ![Wordpress](https://img.shields.io/badge/Wordpress-v4.4.x+-yellow.svg?style=flat)
 
 ![MapEx widget logo](https://raw.githubusercontent.com/wiki/rvalitov/widgetkit-map-ex/images/mapex-logo.png)
 
@@ -30,7 +30,7 @@ The new features that the MapEx has and that are not available in the original M
 * **Access to the original [Google Map object](https://developers.google.com/maps/documentation/javascript/reference#Map)** - Javascript object that is used in creation of the map. So, the user may change and/or modify the object as he needs from any web page using Javascript which provides vast opportunities for Javascript programmers to customize the map using native [Google Map API](https://developers.google.com/maps/documentation/javascript/tutorial), [read more](https://github.com/rvalitov/widgetkit-map-ex/wiki/Working-with-Google-Map-object-(for-Javascript-programmers)).
 
 # Supported platforms
-* The latest code is based on Widgetkit 2.5.3, however it should work with any Widgetkit 2.4.x and later (recommended 2.5.0+).
+* The latest code is based on Widgetkit 2.5.3, however it should work with any Widgetkit 2.4.x and later (recommended 2.5.0+). Tested on Widgetkit 2.6.x, too.
 * Joomla 3.4.x or later required
 
 Widget should work with Wordpress 4.4.x (according to feedback from users; I can't test it personally, because I don't have the required subscription). If you will face any problems using this widget on WordPress, you can contact me to make some changes to the code of this widget if necessary.
