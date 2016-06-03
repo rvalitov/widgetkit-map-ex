@@ -430,7 +430,7 @@
 				</div>
 				
 				<div class="uk-form-row uk-text-center" ng-if="widget.data['styling_mode'] == 'json'">
-					<a href="http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/index.html" class="uk-button uk-button-primary uk-container-center" target="_blank">Launch the Styled Maps Wizard<i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a>
+					<a href="http://googlemaps.github.io/js-samples/styledmaps/wizard/index.html" class="uk-button uk-button-primary uk-container-center" target="_blank">Launch the Styled Maps Wizard<i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a>
 				</div>
 				
                 <div class="uk-form-row" ng-if="widget.data['styling_mode'] == ''">
