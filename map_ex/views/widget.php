@@ -196,42 +196,34 @@ jQuery(document).ready(function($){
 			<?php if ($settings['debug_output'])
 				printJSDebugString('Responsive setup performed');
 			?>
-
-			<?php if ( ($settings['modal_fix']) && (!empty($settings['map_center'])) ):?>
-			var modal_dialog=$('#<?php echo $map_id?>').closest('.uk-modal');
-			if (modal_dialog.length){
-				var box_id=modal_dialog.attr("id");
-				if (box_id){
-					<?php if ($settings['debug_output']):?>
-						console.info('<?php echo '['.$widget_name.' #'.$widget_id.'] ';?>Modal fix setup successfull for modal id #'+box_id);
-					<?php endif;?>
-					$('#'+box_id).on({
-						'show.uk.modal': function(){
-							var map = jQuery('#<?php echo $map_id?>', '#'+box_id).first().get(0);
-							google.maps.event.trigger(map, 'resize');
-							updateMap<?php echo $map_id2;?>(item);
-							<?php if (!empty($settings['map_center'])):?>
-							item.setCenter(new google.maps.LatLng(<?php echo $settings['map_center']?>));
-							<?php endif;?>
-
-							<?php if ($settings['debug_output'])
-								printJSDebugString('Modal fix performed');
-							?>
-						}
-					});
+			
+			<?php if (!empty($settings['map_center'])):?>
+			jQuery(document).on(
+				"display.uk.check",
+				function(event) {
+					var self = jQuery(event.target);
+					var map = self.find('[id^="wk-map-ex"]');
+					if(map.is(':visible')) {
+						map.each(
+							function() {
+								var id = jQuery(this).attr('id');
+								var item = getWidgetkitMap(id);
+								if(item) {
+									google.maps.event.trigger(item, "resize");
+									var sub_id = id.substring(9);
+									if(typeof window['updateMap' + sub_id] === 'function') {
+										window['updateMap' + sub_id](item);
+										<?php if ($settings['debug_output'])
+											printJSDebugString('Map updated on display.uk.check event.');
+										?>
+									}
+								}
+							}
+						);
+					}
 				}
-				<?php if ($settings['debug_output']):?>
-				else
-					<?php printJSDebugString('Found a related modal, but it seems to be invalid.',3);?>
-				<?php endif;?>
-
-			}
-			<?php if ($settings['debug_output']):?>
-			else
-				<?php printJSDebugString('There are no modals related to this widget. Modal fix option is ignored.');?>
-			<?php endif;?>
-
-			<?php endif;//modal fix?>
+			);
+			<?php endif;//uikit fix?>
 	   }
 	   else
 		   setTimeout(checkWidgetkitMaps,1000);

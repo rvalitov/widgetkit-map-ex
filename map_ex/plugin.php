@@ -86,7 +86,6 @@ return array(
 			'custom_pin_path'			=> '',
 			'custom_pin_anchor_x'		=> '',
 			'custom_pin_anchor_y'		=> '',
-			'modal_fix'	        	  => true,
 			'map_center'        	  => '',
 			'debug_output'        	  => false,
 

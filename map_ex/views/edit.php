@@ -46,25 +46,14 @@
                         </select>
                     </div>
                 </div>
-
+						
 				<div class="uk-panel uk-panel-box uk-alert-warning" ng-if="!widget.data.map_center">
-					<p class="uk-text-center"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>The Responsive feature is disabled, because you didn't set the Map Center Point. Please, set the Map Center Point, otherwise the widget may have unexpected behaviour.</p>
+					<p class="uk-text-center"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>Some important responsive and rendering features of this widget are disabled, because you didn't set the Map Center Point. Please, set the Map Center Point, otherwise the widget may have unexpected behaviour.</p>
 				</div>
-								
 				<div class="uk-form-row">
-                    <span class="uk-form-label" for="wk-map_center">{{'Map Center Point' | trans}}<span data-uk-tooltip title="If set (not blank), then the map will be displayed in a way that this point will be located right in the center of the map. The center point is defined by its coordinates, e.g. -34.23456, 12.15672. Leave this field blank if you want to automatically set the best optimal center of the map. However, automatic approach may not always give the expected results."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <span class="uk-form-label" for="wk-map_center">{{'Map Center Point' | trans}}<span data-uk-tooltip title="The map will be displayed in a way that this point will be located right in the center of the map. The center point is defined by its coordinates, e.g. -34.23456, 12.15672."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls">
                         <input id="wk-map_center" class="uk-form-width-medium" type="text" ng-model="widget.data['map_center']">
-                    </div>
-                </div>
-				
-				<div class="uk-panel uk-panel-box uk-alert-warning" ng-if="!widget.data.map_center && widget.data.modal_fix">
-					<p class="uk-text-center"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>The "Modal dialog fix" feature is disabled, because you didn't set the Map Center Point.</p>
-				</div>
-				<div class="uk-form-row">
-                    <span class="uk-form-label">{{'Modal dialog fix' | trans}}<span  data-uk-tooltip title="If checked, the widget applies a fix for the problem of incorrect rendering inside UIKit modal dialogs. Besides, it resets the map to its default position and zoom level every time the modal is displayed, e.g. if the user opens a modal, changes the map position or zoom level, closes the modal and then opens the modal again, the map will be reset to its initial configuration."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
-                    <div class="uk-form-controls uk-form-controls-text">
-                        <label><input type="checkbox" ng-model="widget.data['modal_fix']"> {{'Correct visualization inside modal' | trans}}</label>
                     </div>
                 </div>
 				
