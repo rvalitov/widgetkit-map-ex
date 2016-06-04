@@ -144,7 +144,7 @@ var WidgetkitMaps = WidgetkitMaps || [];
                 i.mapTypes.set("STYLED", u), "STYLED" == s.maptypeid.toUpperCase() && i.setMapTypeId("STYLED")
             })
         })
-    }), e.prototype.MARKER_CLUSTER_IMAGE_PATH_ = "http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/images/m", e.prototype.MARKER_CLUSTER_IMAGE_EXTENSION_ = "png", e.prototype.extend = function(t, e) {
+    }), e.prototype.MARKER_CLUSTER_IMAGE_PATH_ = "https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m", e.prototype.MARKER_CLUSTER_IMAGE_EXTENSION_ = "png", e.prototype.extend = function(t, e) {
         return function(t) {
             for (var e in t.prototype) this.prototype[e] = t.prototype[e];
             return this
