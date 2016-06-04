@@ -115,12 +115,13 @@ var WidgetkitMaps = WidgetkitMaps || [];
 						mapOptions['icon']=img;
 					}
                     var r, o = new google.maps.Marker(mapOptions);
+					var html_content=jQuery("#"+t.id).html();
                     l.push(o), s.marker >= 1 && (r = new google.maps.InfoWindow({
-                        content: t.content,
+                        content: html_content,
                         maxWidth: s.popup_max_width ? parseInt(s.popup_max_width, 10) : 300
                     }), google.maps.event.addListener(o, "click", function() {
-                        t.content && r.open(i, o), a && (a.setHref(t.lat, t.lng), a.show())
-                    }), 0 === e && (3 === s.marker && t.content && r.open(i, o), a && (a.setHref(t.lat, t.lng), a.show())))
+                        html_content && r.open(i, o), a && (a.setHref(t.lat, t.lng), a.show())
+                    }), 0 === e && (3 === s.marker && html_content && r.open(i, o), a && (a.setHref(t.lat, t.lng), a.show())))
                 }), i.panTo(n)), s.markercluster && (this.markerCluster = new e(i, l));
                 var u = new google.maps.StyledMapType( ( map_style.length > 0 ? JSON.parse(map_style) : [{
                     featureType: "all",

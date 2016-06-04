@@ -38,6 +38,7 @@ foreach ($items as $i => $item) {
             'lat'     => $item['location']['lat'],
             'lng'     => $item['location']['lng'],
             'title'   => $item['title'],
+			'id'      => $map_id+"-marker-"+$item_id,
             'content' => '',
 			'pin'	=> '',
 			'anchor_x'	=> '',
@@ -107,7 +108,6 @@ foreach ($items as $i => $item) {
 		array_push($debug_warning,'The location is missing for item#'.$item_id.'. This item will be ignored.');
 }
 
-$settings['markers'] = $markers;
 $settings['map_id'] = $map_id;
 $settings['map_id2'] = $map_id2;
 if (!empty($settings['map_center'])){
@@ -117,6 +117,16 @@ if (!empty($settings['map_center'])){
 		$settings['center_lng'] = $center[1];
 	}
 }
+?>
+
+<?php
+	//We must print the contents in HTML, not in JS. Such approach allows to use SEF urls.
+	for ($i=0; $i<sizeof($markers); $i++)
+		if (isset($markers[$i]['content'])){
+			echo '<div class="uk-hidden" id="'.$markers[$i]['id'].'">'.$markers[$i]['content'].'</div>';
+			unset($markers[$i]['content']);
+		}
+	$settings['markers'] = $markers;
 ?>
 
 <script type="widgetkit/mapex" data-id="<?php echo $map_id;?>" data-class="<?php echo $settings['class']; ?> uk-img-preserve" data-style="width:<?php echo $width?>;height:<?php echo $height?>;">
