@@ -50,7 +50,7 @@ return array(
 			
             'zoom'                    => 9,
             'marker'                  => 2,
-            'markercluster'           => false,
+            'markercluster'           => '',
             'popup_max_width'         => 300,
             'zoomwheel'               => true,
             'draggable'               => true,
@@ -88,6 +88,64 @@ return array(
 			'custom_pin_anchor_y'		=> '',
 			'map_center'        	  => '',
 			'debug_output'        	  => false,
+			'cluster_gridSize'				=> 60,
+			'cluster_maxZoom'				=> 0,
+			'cluster_minimumClusterSize'	=>	2,
+			'cluster1'						=> array(
+												'icon'=>'https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m1.png',
+												'height' => 'auto',
+												'width' => 'auto',
+												'textColor' => 'black',
+												'textSize' => 11,
+												'icon_anchor_x' => '',
+												'icon_anchor_y' => '',
+												'label_anchor_x' => '',
+												'label_anchor_y' => ''
+											),
+			'cluster2'						=> array(
+												'icon'=>'https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m2.png',
+												'height' => 'auto',
+												'width' => 'auto',
+												'textColor' => 'black',
+												'textSize' => 11,
+												'icon_anchor_x' => '',
+												'icon_anchor_y' => '',
+												'label_anchor_x' => '',
+												'label_anchor_y' => ''
+											),
+			'cluster3'						=> array(
+												'icon'=>'https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m3.png',
+												'height' => 'auto',
+												'width' => 'auto',
+												'textColor' => 'black',
+												'textSize' => 11,
+												'icon_anchor_x' => '',
+												'icon_anchor_y' => '',
+												'label_anchor_x' => '',
+												'label_anchor_y' => ''
+											),
+			'cluster4'						=> array(
+												'icon'=>'https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m4.png',
+												'height' => 'auto',
+												'width' => 'auto',
+												'textColor' => 'black',
+												'textSize' => 11,
+												'icon_anchor_x' => '',
+												'icon_anchor_y' => '',
+												'label_anchor_x' => '',
+												'label_anchor_y' => ''
+											),
+			'cluster5'						=> array(
+												'icon'=>'https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m5.png',
+												'height' => 'auto',
+												'width' => 'auto',
+												'textColor' => 'black',
+												'textSize' => 11,
+												'icon_anchor_x' => '',
+												'icon_anchor_y' => '',
+												'label_anchor_x' => '',
+												'label_anchor_y' => ''
+											),
 
             'styler_invert_lightness' => false,
             'styler_hue'              => '',
@@ -136,6 +194,8 @@ return array(
 			$app['scripts']->add('marked', 'plugins/widgets/map_ex/assets/marked.min.js', array('uikit'));
 			//Updater:
 			$app['scripts']->add('map_ex.updater', 'plugins/widgets/map_ex/assets/updater.js', array('uikit'));
+			//Helper functions:
+			$app['scripts']->add('map_ex.helper', 'plugins/widgets/map_ex/assets/helper.js', array('uikit'));
         }
 
     )

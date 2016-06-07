@@ -1,3 +1,6 @@
+/*
+This code is using a minfied version of https://github.com/googlemaps/js-marker-clusterer
+*/
 var WidgetkitMaps = WidgetkitMaps || [];
 ! function(t) {
     "use strict";
@@ -34,28 +37,28 @@ var WidgetkitMaps = WidgetkitMaps || [];
                 var i, o, n, a, h, p = s.markers,
                     l = [],
 					/*We add backward compatibility with orignial Yootheme's Map widget:*/
-					c_sv = (typeof s.streetviewcontrol == 'boolean' ? s.streetviewcontrol : s.mapctrl),
-					c_r = (typeof s.rotatecontrol == 'boolean' ? s.rotatecontrol : s.mapctrl),
-					c_sc = (typeof s.scalecontrol == 'boolean' ? s.scalecontrol : s.mapctrl),
-					m_style= ( ((typeof s.maptypecontrol_style == 'string') && (typeof google.maps.MapTypeControlStyle[s.maptypecontrol_style.toUpperCase()] != 'undefined')) ? google.maps.MapTypeControlStyle[s.maptypecontrol_style.toUpperCase()] : google.maps.MapTypeControlStyle.DROPDOWN_MENU),
-					z_style = ( ((typeof s.zoom_style == 'string') && (typeof google.maps.ZoomControlStyle[s.zoom_style.toUpperCase()] != 'undefined')) ? google.maps.ZoomControlStyle[s.zoom_style.toUpperCase()] : google.maps.ZoomControlStyle.DEFAULT),
-					map_style = ( ( (typeof s.styling_mode == 'string') && (s.styling_mode == 'json') && (typeof s.styling_json == 'string') ) ? s.styling_json : ''),
+					c_sv = (typeof s.streetviewcontrol === 'boolean' ? s.streetviewcontrol : s.mapctrl),
+					c_r = (typeof s.rotatecontrol === 'boolean' ? s.rotatecontrol : s.mapctrl),
+					c_sc = (typeof s.scalecontrol === 'boolean' ? s.scalecontrol : s.mapctrl),
+					m_style= ( ((typeof s.maptypecontrol_style === 'string') && (typeof google.maps.MapTypeControlStyle[s.maptypecontrol_style.toUpperCase()] != 'undefined')) ? google.maps.MapTypeControlStyle[s.maptypecontrol_style.toUpperCase()] : google.maps.MapTypeControlStyle.DROPDOWN_MENU),
+					z_style = ( ((typeof s.zoom_style === 'string') && (typeof google.maps.ZoomControlStyle[s.zoom_style.toUpperCase()] != 'undefined')) ? google.maps.ZoomControlStyle[s.zoom_style.toUpperCase()] : google.maps.ZoomControlStyle.DEFAULT),
+					map_style = ( ( (typeof s.styling_mode === 'string') && (s.styling_mode == 'json') && (typeof s.styling_json === 'string') ) ? s.styling_json : ''),
 					mTypes = [];
-				if (typeof s.show_styled == 'boolean' ? s.show_styled : true)
+				if (typeof s.show_styled === 'boolean' ? s.show_styled : true)
 					mTypes.push('STYLED');
-				if (typeof s.show_roadmap == 'boolean' ? s.show_roadmap : true)
+				if (typeof s.show_roadmap === 'boolean' ? s.show_roadmap : true)
 					mTypes.push(google.maps.MapTypeId.ROADMAP);
-				if (typeof s.show_satellite == 'boolean' ? s.show_satellite : true)
+				if (typeof s.show_satellite === 'boolean' ? s.show_satellite : true)
 					mTypes.push(google.maps.MapTypeId.SATELLITE);
-				if (typeof s.show_hybrid == 'boolean' ? s.show_hybrid : false)
+				if (typeof s.show_hybrid === 'boolean' ? s.show_hybrid : false)
 					mTypes.push(google.maps.MapTypeId.HYBRID);
-				if (typeof s.show_terrain == 'boolean' ? s.show_terrain : false)
+				if (typeof s.show_terrain === 'boolean' ? s.show_terrain : false)
 					mTypes.push(google.maps.MapTypeId.TERRAIN);
 				
                 Object.keys(s).forEach(function(t) {
                     isNaN(s[t]) || (s[t] = Number(s[t]))
                 }), n = ((typeof s.center_lat != 'undefined') && (typeof s.center_lng != 'undefined')) ? new google.maps.LatLng(s.center_lat, s.center_lng) : (p.length ? new google.maps.LatLng(p[0].lat, p[0].lng) : new google.maps.LatLng(-34.397, 150.644)), o = {
-                    zoom: (typeof window["getMapZoom"+s.map_id2] == 'function') ? (window["getMapZoom"+s.map_id2]()) : parseInt(s.zoom, 10),
+                    zoom: (typeof window["getMapZoom"+s.map_id2] === 'function') ? (window["getMapZoom"+s.map_id2]()) : parseInt(s.zoom, 10),
                     center: n,
                     scrollwheel: s.zoomwheel,
                     draggable: s.draggable,
@@ -94,7 +97,7 @@ var WidgetkitMaps = WidgetkitMaps || [];
                     fontWeight: 500,
                     boxShadow: "rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px",
                     index: 1
-                }), h.html('<span style="color:#000;"><span style="color:blue;">&#8627;</span> '+(typeof s.directionstext == 'string' ? s.directionstext : 'Get directions')+'</span>'), a.append(h), a.setHref = function(t, e) {
+                }), h.html('<span style="color:#000;"><span style="color:blue;">&#8627;</span> '+(typeof s.directionstext === 'string' ? s.directionstext : 'Get directions')+'</span>'), a.append(h), a.setHref = function(t, e) {
                     this.attr("href", "http://maps.google.com/?daddr=" + t + "," + e)
                 }, i.controls[google.maps.ControlPosition.TOP_RIGHT].push(a[0])), p.length && s.marker && (p.forEach(function(t, e) {
 					var mapOptions={
@@ -107,7 +110,7 @@ var WidgetkitMaps = WidgetkitMaps || [];
 						var img={};
 						img['url']=t.pin;
 						/*adding anchor*/
-						if ( (typeof t.anchor_x == 'number') && (typeof t.anchor_y == 'number') ){
+						if ( (typeof t.anchor_x === 'number') && (typeof t.anchor_y === 'number') ){
 							img['anchor']=new google.maps.Point(t.anchor_x, t.anchor_y);
 							// The origin for this image is (0, 0).
 							img['origin']=new google.maps.Point(0,0);
@@ -122,7 +125,59 @@ var WidgetkitMaps = WidgetkitMaps || [];
                     }), google.maps.event.addListener(o, "click", function() {
                         html_content && r.open(i, o), a && (a.setHref(t.lat, t.lng), a.show())
                     }), 0 === e && (3 === s.marker && html_content && r.open(i, o), a && (a.setHref(t.lat, t.lng), a.show())))
-                }), i.panTo(n)), s.markercluster && (this.markerCluster = new e(i, l));
+                }), i.panTo(n)), s.markercluster && (this.markerCluster = new e(i, l, (s.markercluster=='custom') ? 
+					{ 
+						'gridSize' : s.cluster_gridSize,
+						'maxZoom' : s.cluster_maxZoom,
+						'minimumClusterSize' : s.cluster_minimumClusterSize,
+						'styles' : [
+										{
+											'url': s.cluster1.icon,
+											'height': s.cluster1.height,
+											'width': s.cluster1.width,
+											'anchor': ((typeof s.cluster1.label_anchor_x  === 'number') && (typeof s.cluster1.label_anchor_y === 'number' )) ? [s.cluster1.label_anchor_y, s.cluster1.label_anchor_x] : null,
+											'iconAnchor': ((typeof s.cluster1.icon_anchor_x === 'number') && (typeof s.cluster1.icon_anchor_y === 'number' )) ? [s.cluster1.icon_anchor_x, s.cluster1.icon_anchor_y] : null,
+											'textColor': s.cluster1.textColor,
+											'textSize': s.cluster1.textSize
+										},
+										{
+											'url': s.cluster2.icon,
+											'height': s.cluster2.height,
+											'width': s.cluster2.width,
+											'anchor': ((typeof s.cluster2.label_anchor_x  === 'number') && (typeof s.cluster2.label_anchor_y === 'number' )) ? [s.cluster2.label_anchor_y, s.cluster2.label_anchor_x] : null,
+											'iconAnchor': ((typeof s.cluster2.icon_anchor_x === 'number') && (typeof s.cluster2.icon_anchor_y === 'number' )) ? [s.cluster2.icon_anchor_x, s.cluster2.icon_anchor_y] : null,
+											'textColor': s.cluster2.textColor,
+											'textSize': s.cluster2.textSize
+										},
+										{
+											'url': s.cluster3.icon,
+											'height': s.cluster3.height,
+											'width': s.cluster3.width,
+											'anchor': ((typeof s.cluster3.label_anchor_x  === 'number') && (typeof s.cluster3.label_anchor_y === 'number' )) ? [s.cluster3.label_anchor_y, s.cluster3.label_anchor_x] : null,
+											'iconAnchor': ((typeof s.cluster3.icon_anchor_x === 'number') && (typeof s.cluster3.icon_anchor_y === 'number' )) ? [s.cluster3.icon_anchor_x, s.cluster3.icon_anchor_y] : null,
+											'textColor': s.cluster3.textColor,
+											'textSize': s.cluster3.textSize
+										},
+										{
+											'url': s.cluster4.icon,
+											'height': s.cluster4.height,
+											'width': s.cluster4.width,
+											'anchor': ((typeof s.cluster4.label_anchor_x  === 'number') && (typeof s.cluster4.label_anchor_y === 'number' )) ? [s.cluster4.label_anchor_y, s.cluster4.label_anchor_x] : null,
+											'iconAnchor': ((typeof s.cluster4.icon_anchor_x === 'number') && (typeof s.cluster4.icon_anchor_y === 'number' )) ? [s.cluster4.icon_anchor_x, s.cluster4.icon_anchor_y] : null,
+											'textColor': s.cluster4.textColor,
+											'textSize': s.cluster4.textSize
+										},
+										{
+											'url': s.cluster5.icon,
+											'height': s.cluster5.height,
+											'width': s.cluster5.width,
+											'anchor': ((typeof s.cluster5.label_anchor_x  === 'number') && (typeof s.cluster5.label_anchor_y === 'number' )) ? [s.cluster5.label_anchor_y, s.cluster5.label_anchor_x] : null,
+											'iconAnchor': ((typeof s.cluster5.icon_anchor_x === 'number') && (typeof s.cluster5.icon_anchor_y === 'number' )) ? [s.cluster5.icon_anchor_x, s.cluster5.icon_anchor_y] : null,
+											'textColor': s.cluster5.textColor,
+											'textSize': s.cluster5.textSize
+										}
+									]
+					} : null ));
                 var u = new google.maps.StyledMapType( ( map_style.length > 0 ? JSON.parse(map_style) : [{
                     featureType: "all",
                     elementType: "all",
@@ -139,7 +194,7 @@ var WidgetkitMaps = WidgetkitMaps || [];
                     }]
 					}]
 					), {
-                    name: ( ((typeof s.maptype_name == 'string') && (s.maptype_name.trim().length>0)) ? s.maptype_name : "Styled")
+                    name: ( ((typeof s.maptype_name === 'string') && (s.maptype_name.trim().length>0)) ? s.maptype_name : "Styled")
                 });
                 i.mapTypes.set("STYLED", u), "STYLED" == s.maptypeid.toUpperCase() && i.setMapTypeId("STYLED")
             })
@@ -352,7 +407,14 @@ var WidgetkitMaps = WidgetkitMaps || [];
         })
     }, r.prototype.getPosFromLatLng_ = function(t) {
         var e = this.getProjection().fromLatLngToDivPixel(t);
-        return e.x -= parseInt(this.width_ / 2, 10), e.y -= parseInt(this.height_ / 2, 10), e
+		if (this.iconAnchor_ && typeof this.iconAnchor_ === 'object' && this.iconAnchor_.length === 2) {
+			e.x -= this.iconAnchor_[0];
+			e.y -= this.iconAnchor_[1];
+		} else {
+			e.x -= parseInt(this.width_ / 2, 10);
+			e.y -= parseInt(this.height_ / 2, 10);
+		}
+        return e;
     }, r.prototype.draw = function() {
         if (this.visible_) {
             var t = this.getPosFromLatLng_(this.center_);
@@ -376,14 +438,46 @@ var WidgetkitMaps = WidgetkitMaps || [];
         var t = Math.max(0, this.sums_.index - 1);
         t = Math.min(this.styles_.length - 1, t);
         var e = this.styles_[t];
-        this.url_ = e.url, this.height_ = e.height, this.width_ = e.width, this.textColor_ = e.textColor, this.anchor_ = e.anchor, this.textSize_ = e.textSize, this.backgroundPosition_ = e.backgroundPosition
+        this.url_ = e.url;
+		this.height_ = e.height;
+		this.width_ = e.width;
+		this.textColor_ = e.textColor;
+		this.anchor_ = e.anchor;
+		this.iconAnchor_ = e.iconAnchor;
+		this.textSize_ = e.textSize;
+		this.backgroundPosition_ = e.backgroundPosition;
     }, r.prototype.setCenter = function(t) {
         this.center_ = t
     }, r.prototype.createCss = function(t) {
         var e = [];
         e.push("background-image:url(" + this.url_ + ");");
         var i = this.backgroundPosition_ ? this.backgroundPosition_ : "0 0";
-        e.push("background-position:" + i + ";"), "object" == typeof this.anchor_ ? ("number" == typeof this.anchor_[0] && this.anchor_[0] > 0 && this.anchor_[0] < this.height_ ? e.push("height:" + (this.height_ - this.anchor_[0]) + "px; padding-top:" + this.anchor_[0] + "px;") : e.push("height:" + this.height_ + "px; line-height:" + this.height_ + "px;"), "number" == typeof this.anchor_[1] && this.anchor_[1] > 0 && this.anchor_[1] < this.width_ ? e.push("width:" + (this.width_ - this.anchor_[1]) + "px; padding-left:" + this.anchor_[1] + "px;") : e.push("width:" + this.width_ + "px; text-align:center;")) : e.push("height:" + this.height_ + "px; line-height:" + this.height_ + "px; width:" + this.width_ + "px; text-align:center;");
+        e.push("background-position:" + i + ";");
+		if (this.anchor_ && typeof this.anchor_ === 'object' && this.anchor_.length === 2) {
+			if (typeof this.anchor_[0] === 'number' && this.anchor_[0] > 0 &&
+				this.anchor_[0] < this.height_) {
+			  e.push('height:' + (this.height_ - this.anchor_[0]) +
+				  'px; padding-top:' + this.anchor_[0] + 'px;');
+			} else if (typeof this.anchor_[0] === 'number' && this.anchor_[0] < 0 &&
+				-this.anchor_[0] < this.height_) {
+			  e.push('height:' + this.height_ + 'px; line-height:' + (this.height_ + this.anchor_[0]) +
+				  'px;');
+			} else {
+			  e.push('height:' + this.height_ + 'px; line-height:' + this.height_ +
+				  'px;');
+			}
+			if (typeof this.anchor_[1] === 'number' && this.anchor_[1] > 0 &&
+				this.anchor_[1] < this.width_) {
+			  e.push('width:' + (this.width_ - this.anchor_[1]) +
+				  'px; padding-left:' + this.anchor_[1] + 'px;');
+			} else {
+			  e.push('width:' + this.width_ + 'px; text-align:center;');
+			}
+		} else {
+			e.push('height:' + this.height_ + 'px; line-height:' +
+				this.height_ + 'px; width:' + this.width_ + 'px; text-align:center;');
+		}
+		
         var r = this.textColor_ ? this.textColor_ : "black",
             s = this.textSize_ ? this.textSize_ : 11;
         return e.push("cursor:pointer; top:" + t.y + "px; left:" + t.x + "px; color:" + r + "; position:absolute; font-size:" + s + "px; font-family:Arial,sans-serif; font-weight:bold"), e.join("")

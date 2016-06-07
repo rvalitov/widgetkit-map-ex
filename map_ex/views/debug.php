@@ -60,8 +60,6 @@ if ($isJoomla)
 else
 	array_push($debug_info,'Detected CMS: WordPress');
 
-array_push($debug_info,'Widget settings: '.print_r($settings,true));	
-
 function ExtractWidgetInfo(){
 	global $widget_name;
 	global $widget_version;

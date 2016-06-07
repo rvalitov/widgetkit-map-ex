@@ -6,6 +6,7 @@
                 <li><a href="#">{{'Map' | trans}}</a></li>
                 <li><a href="#">{{'Style' | trans}}</a></li>
                 <li><a href="#">{{'Media' | trans}}</a></li>
+				<li><a href="#">{{'Marker Clustering' | trans}}</a></li>
                 <li><a href="#">{{'Content' | trans}}</a></li>
                 <li><a href="#">{{'General' | trans}}</a></li>
 				<li><a href="#">{{'About' | trans}}</a></li>
@@ -62,27 +63,7 @@
 				<div class="uk-form-row">
                     <span class="uk-form-label" for="wk-zoom">{{'Phone Portrait' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Initial zoom level of the map. The higher numbers - the greater the zoom is (more detailed map). The value 0 corresponds to a map of the Earth fully zoomed out."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls">
-                        <select id="wk-zoom" class="uk-form-width-medium" ng-model="widget.data['zoom']">
-                            <option value="0">0</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            <option value="13">13</option>
-                            <option value="14">14</option>
-                            <option value="15">15</option>
-                            <option value="16">16</option>
-                            <option value="17">17</option>
-                            <option value="18">18</option>
-                            <option value="19">19</option>
+                        <select id="wk-zoom" class="uk-form-width-medium" ng-options="optionvalue for optionvalue in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19] track by optionvalue" ng-model="widget.data['zoom']">
                         </select>
                     </div>
                 </div>
@@ -373,15 +354,8 @@
                         <p class="uk-form-controls-condensed">
                             <label><input class="uk-form-width-small" type="text" ng-model="widget.data['custom_pin_anchor_y']"> {{'Y (px)' | trans}}</label>
                         </p>
-                    </div>					
-				</div>
-				
-                <div class="uk-form-row">
-                    <span class="uk-form-label">{{'Cluster Markers' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Sometimes you need to display a large number of locations or markers. Naively plotting thousands of markers on a map can quickly lead to a degraded user experience. Too many markers on the map cause both visual overload and sluggish interaction with the map. To overcome this poor performance, clustering simplifies your data visualization by consolidating data that are nearby each other on the map in an aggregate form."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
-                    <div class="uk-form-controls uk-form-controls-text">
-                        <label><input type="checkbox" ng-model="widget.data['markercluster']"> {{'Group markers on zoom out' | trans}}</label>
                     </div>
-                </div>
+				</div>
 
             </li>
             <li>
@@ -572,6 +546,145 @@
                 </div>
 
             </li>
+						
+			<li>
+				<h3 class="wk-form-heading">{{'Markers Clustering Manager' | trans}}</h3>
+				
+				<div class="uk-panel uk-panel-box uk-alert">
+					<p class="uk-text-center"><i class="uk-icon uk-icon-info-circle uk-margin-small-right"></i>Sometimes you need to display a large number of locations or markers. Naively plotting thousands of markers on a map can quickly lead to a degraded user experience. Too many markers on the map cause both visual overload and sluggish interaction with the map. To overcome this poor performance, clustering simplifies your data visualization by consolidating data that are nearby each other on the map in an aggregate form.</p>
+				</div>
+				
+                <div class="uk-form-row">
+                    <span class="uk-form-label" for="wk-cluster_type">{{'Clustering Mode' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Defines how clustering will work. If enabled, there are 2 modes: 'Simple' mode mimics the standard behaviour of standard Map widget; 'Advanced' - is a superior mode that gives a full control of the clustering."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <div class="uk-form-controls">
+                        <select id="wk-cluster_type" class="uk-form-width-medium" ng-model="widget.data['markercluster']">
+                            <option value="">{{'None' | trans}}</option>
+                            <option value="default">{{'Simple' | trans}}</option>
+							<option value="custom">{{'Advanced' | trans}}</option>
+                        </select>
+                    </div>
+                </div>
+				
+				<h3 class="wk-form-heading" ng-if="widget.data['markercluster']=='custom'">{{'Clustering Options' | trans}}</h3>
+				
+				<div class="uk-form-row" ng-if="widget.data['markercluster']=='custom'">
+					<span class="uk-form-label" for="wk-cluster_gridSize">{{'Grid Size' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="The grid size of a cluster in pixels. The higher values join the markers into clusters more condensed, therefore resulting in a lower number of total clusters. The default value is 60."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <div class="uk-form-controls">
+						<select id="wk-cluster_gridSize" class="uk-form-width-medium" ng-options="optionvalue for optionvalue in [20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140] track by optionvalue" ng-model="widget.data['cluster_gridSize']">
+                        </select>
+                    </div>
+				</div>
+				
+				<div class="uk-form-row" ng-if="widget.data['markercluster']=='custom'">
+                    <span class="uk-form-label" for="wk-cluster_maxZoom">{{'Max Zoom Level' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="The maximum zoom level that a marker can be part of a cluster."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <div class="uk-form-controls">
+                        <select id="wk-cluster_maxZoom" class="uk-form-width-medium" ng-options="optionvalue for optionvalue in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19] track by optionvalue" ng-model="widget.data['cluster_maxZoom']">
+                        </select>
+                    </div>
+                </div>
+				
+				<div class="uk-form-row" ng-if="widget.data['markercluster']=='custom'">
+                    <span class="uk-form-label" for="wk-cluster_minimumClusterSize">{{'Minimum Markers' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="The minimum number of markers to be in a cluster before the markers are hidden and a count is shown."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <div class="uk-form-controls">
+                        <select id="wk-cluster_minimumClusterSize" class="uk-form-width-medium" ng-options="optionvalue for optionvalue in [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20] track by optionvalue" ng-model="widget.data['cluster_minimumClusterSize']">
+                        </select>
+                    </div>
+                </div>
+				
+				<h3 class="wk-form-heading" ng-if="widget.data['markercluster']=='custom'">{{'Cluster Markers' | trans}}</h3>
+				
+				<div class="uk-panel uk-panel-box uk-alert" ng-if="widget.data['markercluster']=='custom'">
+					<p class="uk-text-center"><i class="uk-icon uk-icon-info-circle uk-margin-small-right"></i>Below are the settings that control the marker clustering. All clusters are divided into 5 levels (groups) according to the number of markers inside the cluster, where level #1 represent clusters with smallest number of markers and level #5 - clusters with huge number of markers.</p>
+				</div>
+				
+				<!-- This is the container of the toggling elements -->
+				<div class="uk-tab-center" ng-if="widget.data['markercluster']=='custom'">
+					<ul class="uk-tab" data-uk-switcher="{connect:'#mapex-clusters'}">
+						<li><a href="">Marker Options</a></li>
+						<li><a href="">Marker Library</a></li>
+					</ul>
+				</div>
+
+				<!-- This is the container of the content items -->
+				<ul id="mapex-clusters" class="uk-switcher uk-margin" ng-if="widget.data['markercluster']=='custom'">
+					<li>
+						<h3 class="uk-text-center">Marker Options</h3>
+						
+						<hr ng-repeat-start="value in [widget.data['cluster1'],widget.data['cluster2'],widget.data['cluster3'],widget.data['cluster4'],widget.data['cluster5']] track by $index">
+						<h4>Cluster Marker Level #{{($index+1)| number:0}}</h4>
+				
+						<div class="uk-form-row">
+							<span class="uk-form-label">{{'Icon' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Path to an image file that will be used as a cluster's icon. PNG and SVG image formats are recommended."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+							<div class="uk-form-controls">
+								<field-media title="item.title" id="cluster-{{$index+1}}-icon" media="value['icon']" options="value['options']"></field-media>
+							</div>
+						</div>
+						
+						<div class="uk-form-row">
+							<span class="uk-form-label">{{'Image' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Set the width and height of the image in pixels. Use 'auto' for auto size."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+							<div class="uk-form-controls">
+								<label><input class="uk-form-width-small" id="cluster-{{$index+1}}-width" type="text" ng-model="value['width']"> {{'Width (px)' | trans}}</label>
+								<p class="uk-form-controls-condensed">
+									<label><input class="uk-form-width-small" id="cluster-{{$index+1}}-height" type="text" ng-model="value['height']"> {{'Height (px)' | trans}}</label>
+								</p>
+							</div>
+						</div>
+						
+						<div class="uk-form-row">
+							<span class="uk-form-label">{{'Icon Anchor' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="The anchor is a place where the icon's hotspot is located. The position is defined in pixels and is relative to the the image's dimensions, so that the upper left corner of the image is a zero-point (0,0); axes have the following orientation: the X to the right; Y to the bottom. If the position is empty then the center of the image is set as the anchor."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+							<div class="uk-form-controls">
+								<label><input class="uk-form-width-small" id="cluster-{{$index+1}}-icon_x" type="text" ng-model="value['icon_anchor_x']"> {{'X (px)' | trans}}</label>
+								<p class="uk-form-controls-condensed">
+									<label><input class="uk-form-width-small" id="cluster-{{$index+1}}-icon_y" type="text" ng-model="value['icon_anchor_y']"> {{'Y (px)' | trans}}</label>
+								</p>
+							</div>
+						</div>
+
+						<div class="uk-form-row">
+							<span class="uk-form-label">{{'Label Anchor' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="The anchor is a place where the text label is located. The position is defined in pixels and is relative to the the image's dimensions. A positive value sets the offset relative to the top/left side of the image; negative value - relative to the right/bottom side of the image; zero - means to use center/middle position. If the absolute value of the offset must be less than corresponding image's dimension, otherwise such value is considered to be invalid and is ignored."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+							<div class="uk-form-controls">
+								<label><input class="uk-form-width-small" id="cluster-{{$index+1}}-label_x" type="text" ng-model="value['label_anchor_x']"> {{'X (px)' | trans}}</label>
+								<p class="uk-form-controls-condensed">
+									<label><input class="uk-form-width-small" id="cluster-{{$index+1}}-label_y" type="text" ng-model="value['label_anchor_y']"> {{'Y (px)' | trans}}</label>
+								</p>
+							</div>
+						</div>
+						
+						<div class="uk-form-row">
+							<span class="uk-form-label">{{'Text Size' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="The size of text label of the cluster marker in pixels. The default value is 11."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+							<div class="uk-form-controls">
+								<label><select class="uk-form-width-medium" id="cluster-{{$index+1}}-size" ng-options="optionvalue for optionvalue in [5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30] track by optionvalue" ng-model="value.textSize">
+								</select> {{'(px)' | trans}}</label>
+							</div>
+						</div>
+
+						<div class="uk-form-row">
+							<span class="uk-form-label">{{'Text Color' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Color of text of the cluster marker. Example: #ff0000. Standard HTML color names are also valid. The default value is black."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+							<div class="uk-form-controls">
+								<span><input type="text" id="cluster-{{$index+1}}-color" ng-model="value['textColor']"></span>
+							</div>
+						</div>
+						
+						<span ng-repeat-end></span>
+					</li>
+					<li>
+						<h3 class="uk-text-center">Marker Library</h3>
+						<div class="uk-panel uk-panel-box uk-alert">
+							<p class="uk-text-center"><i class="uk-icon uk-icon-info-circle uk-margin-small-right"></i>You can load a predefined set of markers from our collection that are ready for use in your project. Activating any set will overwrite all the settings on the "Marker Options" tab. You may check our collection from time to time to see newly added items.</p>
+						</div>
+
+						<div class="uk-text-center">
+							<button onclick="loadClusterCollections()"><i class="uk-icon uk-icon-download uk-margin-small-right"></i>Retrieve active collection from Internet</button>
+						</div>
+						
+						<div class="uk-grid uk-grid-width-medium-1-2" id="cluster-collection">
+						</div>
+				
+					</li>
+				</ul>
+
+			</li>
+			
             <li>
 
                 <h3 class="wk-form-heading">{{'Text' | trans}}</h3>

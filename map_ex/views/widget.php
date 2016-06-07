@@ -117,6 +117,26 @@ if (!empty($settings['map_center'])){
 		$settings['center_lng'] = $center[1];
 	}
 }
+
+//Checking the sizes of cluster images
+if ($settings['markercluster']=='custom')
+	for ($i=1;$i<=5;$i++){
+		if (!is_numeric($settings['cluster'.$i]['width']))
+			$settings['cluster'.$i]['width']=($settings['cluster'.$i]['options']['width'] > 0) ? intval($settings['cluster'.$i]['options']['width']) : 53;
+		else
+			$settings['cluster'.$i]['width']=intval($settings['cluster'.$i]['width']);
+		if (!is_numeric($settings['cluster'.$i]['height']))
+			$settings['cluster'.$i]['height']=($settings['cluster'.$i]['options']['height'] > 0) ? intval($settings['cluster'.$i]['options']['height']) : 53;
+		else
+			$settings['cluster'.$i]['height']=intval($settings['cluster'.$i]['height']);
+		
+		$settings['cluster'.$i]['textSize']=is_numeric($settings['cluster'.$i]['textSize']) ? intval($settings['cluster'.$i]['textSize']) : 11;
+		$settings['cluster'.$i]['icon_anchor_x']=is_numeric($settings['cluster'.$i]['icon_anchor_x']) ? intval($settings['cluster'.$i]['icon_anchor_x']) : '';
+		$settings['cluster'.$i]['icon_anchor_y']=is_numeric($settings['cluster'.$i]['icon_anchor_y']) ? intval($settings['cluster'.$i]['icon_anchor_y']) : '';
+		$settings['cluster'.$i]['label_anchor_x']=is_numeric($settings['cluster'.$i]['label_anchor_x']) ? intval($settings['cluster'.$i]['label_anchor_x']) : '';
+		$settings['cluster'.$i]['label_anchor_y']=is_numeric($settings['cluster'.$i]['label_anchor_y']) ? intval($settings['cluster'.$i]['label_anchor_y']) : '';
+	}
+	
 ?>
 
 <?php
@@ -127,6 +147,8 @@ if (!empty($settings['map_center'])){
 			unset($markers[$i]['content']);
 		}
 	$settings['markers'] = $markers;
+	
+	array_push($debug_info,'Widget settings: '.print_r($settings,true));
 ?>
 
 <script type="widgetkit/mapex" data-id="<?php echo $map_id;?>" data-class="<?php echo $settings['class']; ?> uk-img-preserve" data-style="width:<?php echo $width?>;height:<?php echo $height?>;">
