@@ -631,7 +631,7 @@
 						</div>
 						
 						<div class="uk-form-row">
-							<span class="uk-form-label">{{'Icon Anchor' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="The anchor is a place where the icon's hotspot is located. The position is defined in pixels and is relative to the the image's dimensions, so that the upper left corner of the image is a zero-point (0,0); axes have the following orientation: the X to the right; Y to the bottom. If the position is empty then the center of the image is set as the anchor."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+							<span class="uk-form-label">{{'Icon Anchor' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="The anchor is a place where the icon's hotspot is located. The position is defined in pixels and is relative to the the image's dimensions, so that the upper left corner of the image is a zero-point (0,0); axes have the following orientation: the X to the right; Y to the bottom. If the position is zero then the center of the image is set as the anchor."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
 							<div class="uk-form-controls">
 								<label><input class="uk-form-width-small" id="cluster-{{$index+1}}-icon_x" type="text" ng-model="value['icon_anchor_x']"> {{'X (px)' | trans}}</label>
 								<p class="uk-form-controls-condensed">
@@ -641,7 +641,7 @@
 						</div>
 
 						<div class="uk-form-row">
-							<span class="uk-form-label">{{'Label Anchor' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="The anchor is a place where the text label is located. The position is defined in pixels and is relative to the the image's dimensions. A positive value sets the offset relative to the top/left side of the image; negative value - relative to the right/bottom side of the image; zero - means to use center/middle position. If the absolute value of the offset must be less than corresponding image's dimension, otherwise such value is considered to be invalid and is ignored."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+							<span class="uk-form-label">{{'Label Anchor' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="The anchor is a place where the text label is located. The position is defined in pixels and is relative to the the image's dimensions. A positive value sets the offset relative to the top/left side of the image; negative value - relative to the right/bottom side of the image; zero - means to use center/middle position. The absolute value of the offset must be less than corresponding image's dimension, otherwise such value is considered to be invalid and is ignored."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
 							<div class="uk-form-controls">
 								<label><input class="uk-form-width-small" id="cluster-{{$index+1}}-label_x" type="text" ng-model="value['label_anchor_x']"> {{'X (px)' | trans}}</label>
 								<p class="uk-form-controls-condensed">
