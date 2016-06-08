@@ -77,34 +77,25 @@ jQuery(document).ready(function($){
 	});
 	
 	function isNewVersionAvailable(vCurrent,vRemote){
-		if ( (typeof vCurrent != 'string') || (typeof vRemote != 'string') || (vCurrent.length<4) || (vRemote.length<4) ){
+		if (typeof vCurrent + typeof vRemote != 'stringstring')
 			return false;
-		}
-		var vC=vCurrent.substr(1).split('.');
-		var vR=vRemote.substr(1).split('.');
-		var vSize=Math.max(vC.length,vR.length);
-		
-		for (var i=0; i<vSize; i++){
-			var vPartC,vPartR;
-			if (i<vC.length){
-				vPartC=vC[i];
-			}
-			else{
-				vPartC=0;
-			}
+    
+		left=vCurrent.replace(/^\D/,'');
+		right=vRemote.replace(/^\D/,'');
+		var a = left.split('.')
+		,   b = right.split('.')
+		,   i = 0, len = Math.max(a.length, b.length);
 			
-			if (i<vR.length){
-				vPartR=vR[i];
-			}
-			else{
-				vPartR=0;
-			}
-			if (parseInt(vPartR,10)>parseInt(vPartC,10)){
+		for (; i < len; i++) {
+			if ((a[i] && !b[i] && parseInt(a[i]) > 0) || (parseInt(a[i]) > parseInt(b[i]))) {
+				return false;
+			} else if ((b[i] && !a[i] && parseInt(b[i]) > 0) || (parseInt(a[i]) < parseInt(b[i]))) {
 				return true;
 			}
 		}
 		return false;
 	}
+
 	function printNiceDate(MyDate,dateSeparator){
 		if (typeof dateSeparator!='string'){
 			dateSeparator='/';
