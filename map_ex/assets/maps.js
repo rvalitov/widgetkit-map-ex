@@ -130,53 +130,7 @@ var WidgetkitMaps = WidgetkitMaps || [];
 						'gridSize' : s.cluster_gridSize,
 						'maxZoom' : s.cluster_maxZoom,
 						'minimumClusterSize' : s.cluster_minimumClusterSize,
-						'styles' : [
-										{
-											'url': s.cluster1.icon,
-											'height': s.cluster1.height,
-											'width': s.cluster1.width,
-											'anchor': ((typeof s.cluster1.label_anchor_x  === 'number') && (typeof s.cluster1.label_anchor_y === 'number' )) ? [s.cluster1.label_anchor_y, s.cluster1.label_anchor_x] : null,
-											'iconAnchor': ((typeof s.cluster1.icon_anchor_x === 'number') && (typeof s.cluster1.icon_anchor_y === 'number' )) ? [s.cluster1.icon_anchor_x, s.cluster1.icon_anchor_y] : null,
-											'textColor': s.cluster1.textColor,
-											'textSize': s.cluster1.textSize
-										},
-										{
-											'url': s.cluster2.icon,
-											'height': s.cluster2.height,
-											'width': s.cluster2.width,
-											'anchor': ((typeof s.cluster2.label_anchor_x  === 'number') && (typeof s.cluster2.label_anchor_y === 'number' )) ? [s.cluster2.label_anchor_y, s.cluster2.label_anchor_x] : null,
-											'iconAnchor': ((typeof s.cluster2.icon_anchor_x === 'number') && (typeof s.cluster2.icon_anchor_y === 'number' )) ? [s.cluster2.icon_anchor_x, s.cluster2.icon_anchor_y] : null,
-											'textColor': s.cluster2.textColor,
-											'textSize': s.cluster2.textSize
-										},
-										{
-											'url': s.cluster3.icon,
-											'height': s.cluster3.height,
-											'width': s.cluster3.width,
-											'anchor': ((typeof s.cluster3.label_anchor_x  === 'number') && (typeof s.cluster3.label_anchor_y === 'number' )) ? [s.cluster3.label_anchor_y, s.cluster3.label_anchor_x] : null,
-											'iconAnchor': ((typeof s.cluster3.icon_anchor_x === 'number') && (typeof s.cluster3.icon_anchor_y === 'number' )) ? [s.cluster3.icon_anchor_x, s.cluster3.icon_anchor_y] : null,
-											'textColor': s.cluster3.textColor,
-											'textSize': s.cluster3.textSize
-										},
-										{
-											'url': s.cluster4.icon,
-											'height': s.cluster4.height,
-											'width': s.cluster4.width,
-											'anchor': ((typeof s.cluster4.label_anchor_x  === 'number') && (typeof s.cluster4.label_anchor_y === 'number' )) ? [s.cluster4.label_anchor_y, s.cluster4.label_anchor_x] : null,
-											'iconAnchor': ((typeof s.cluster4.icon_anchor_x === 'number') && (typeof s.cluster4.icon_anchor_y === 'number' )) ? [s.cluster4.icon_anchor_x, s.cluster4.icon_anchor_y] : null,
-											'textColor': s.cluster4.textColor,
-											'textSize': s.cluster4.textSize
-										},
-										{
-											'url': s.cluster5.icon,
-											'height': s.cluster5.height,
-											'width': s.cluster5.width,
-											'anchor': ((typeof s.cluster5.label_anchor_x  === 'number') && (typeof s.cluster5.label_anchor_y === 'number' )) ? [s.cluster5.label_anchor_y, s.cluster5.label_anchor_x] : null,
-											'iconAnchor': ((typeof s.cluster5.icon_anchor_x === 'number') && (typeof s.cluster5.icon_anchor_y === 'number' )) ? [s.cluster5.icon_anchor_x, s.cluster5.icon_anchor_y] : null,
-											'textColor': s.cluster5.textColor,
-											'textSize': s.cluster5.textSize
-										}
-									]
+						'styles' : s.clusterstyles
 					} : null ));
                 var u = new google.maps.StyledMapType( ( map_style.length > 0 ? JSON.parse(map_style) : [{
                     featureType: "all",
@@ -199,7 +153,7 @@ var WidgetkitMaps = WidgetkitMaps || [];
                 i.mapTypes.set("STYLED", u), "STYLED" == s.maptypeid.toUpperCase() && i.setMapTypeId("STYLED")
             })
         })
-    }), e.prototype.MARKER_CLUSTER_IMAGE_PATH_ = "https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m", e.prototype.MARKER_CLUSTER_IMAGE_EXTENSION_ = "png", e.prototype.extend = function(t, e) {
+    }), e.prototype.MARKER_CLUSTER_IMAGE_PATH_ = "https://raw.githubusercontent.com/rvalitov/cluster-markers/master/images/standard/m", e.prototype.MARKER_CLUSTER_IMAGE_EXTENSION_ = "png", e.prototype.extend = function(t, e) {
         return function(t) {
             for (var e in t.prototype) this.prototype[e] = t.prototype[e];
             return this
@@ -454,30 +408,22 @@ var WidgetkitMaps = WidgetkitMaps || [];
         var i = this.backgroundPosition_ ? this.backgroundPosition_ : "0 0";
         e.push("background-position:" + i + ";");
 		if (this.anchor_ && typeof this.anchor_ === 'object' && this.anchor_.length === 2) {
-			if (typeof this.anchor_[0] === 'number' && this.anchor_[0] > 0 &&
-				this.anchor_[0] < this.height_) {
-			  e.push('height:' + (this.height_ - this.anchor_[0]) +
-				  'px; padding-top:' + this.anchor_[0] + 'px;');
-			} else if (typeof this.anchor_[0] === 'number' && this.anchor_[0] < 0 &&
-				-this.anchor_[0] < this.height_) {
-			  e.push('height:' + this.height_ + 'px; line-height:' + (this.height_ + this.anchor_[0]) +
-				  'px;');
-			} else {
-			  e.push('height:' + this.height_ + 'px; line-height:' + this.height_ +
-				  'px;');
-			}
-			if (typeof this.anchor_[1] === 'number' && this.anchor_[1] > 0 &&
-				this.anchor_[1] < this.width_) {
-			  e.push('width:' + (this.width_ - this.anchor_[1]) +
-				  'px; padding-left:' + this.anchor_[1] + 'px;');
-			} else {
-			  e.push('width:' + this.width_ + 'px; text-align:center;');
-			}
-		} else {
-			e.push('height:' + this.height_ + 'px; line-height:' +
-				this.height_ + 'px; width:' + this.width_ + 'px; text-align:center;');
-		}
-		
+			if (typeof this.anchor_[0] === 'number' && this.anchor_[0] > 0 && this.anchor_[0] < this.height_)
+				/*Small trick: we add line-height normal here because otherwise it may inherit css of the website template*/
+				e.push('height:' + (this.height_ - this.anchor_[0]) + 'px; padding-top:' + this.anchor_[0] + 'px;line-height:normal;');
+			else 
+				if (typeof this.anchor_[0] === 'number' && this.anchor_[0] < 0 && - this.anchor_[0] < this.height_)
+					e.push('height:' + this.height_ + 'px; line-height:' + (this.height_ + this.anchor_[0]) + 'px;');
+				else
+					e.push('height:' + this.height_ + 'px; line-height:' + this.height_ + 'px;');
+			if (typeof this.anchor_[1] === 'number' && this.anchor_[1] > 0 && this.anchor_[1] < this.width_)
+				e.push('width:' + (this.width_ - this.anchor_[1]) + 'px; padding-left:' + this.anchor_[1] + 'px;');
+			else
+				e.push('width:' + this.width_ + 'px; text-align:center;');
+		} 
+		else
+			e.push('height:' + this.height_ + 'px; line-height:' + this.height_ + 'px; width:' + this.width_ + 'px; text-align:center;');
+
         var r = this.textColor_ ? this.textColor_ : "black",
             s = this.textSize_ ? this.textSize_ : 11;
         return e.push("cursor:pointer; top:" + t.y + "px; left:" + t.x + "px; color:" + r + "; position:absolute; font-size:" + s + "px; font-family:Arial,sans-serif; font-weight:bold"), e.join("")

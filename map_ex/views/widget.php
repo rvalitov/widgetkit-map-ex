@@ -118,24 +118,36 @@ if (!empty($settings['map_center'])){
 	}
 }
 
+$settings['clusterstyles']=[];
 //Checking the sizes of cluster images
-if ($settings['markercluster']=='custom')
-	for ($i=1;$i<=5;$i++){
-		if (!is_numeric($settings['cluster'.$i]['width']))
-			$settings['cluster'.$i]['width']=($settings['cluster'.$i]['options']['width'] > 0) ? intval($settings['cluster'.$i]['options']['width']) : 53;
-		else
-			$settings['cluster'.$i]['width']=intval($settings['cluster'.$i]['width']);
-		if (!is_numeric($settings['cluster'.$i]['height']))
-			$settings['cluster'.$i]['height']=($settings['cluster'.$i]['options']['height'] > 0) ? intval($settings['cluster'.$i]['options']['height']) : 53;
-		else
-			$settings['cluster'.$i]['height']=intval($settings['cluster'.$i]['height']);
-		
-		$settings['cluster'.$i]['textSize']=is_numeric($settings['cluster'.$i]['textSize']) ? intval($settings['cluster'.$i]['textSize']) : 11;
-		$settings['cluster'.$i]['icon_anchor_x']=is_numeric($settings['cluster'.$i]['icon_anchor_x']) ? intval($settings['cluster'.$i]['icon_anchor_x']) : '';
-		$settings['cluster'.$i]['icon_anchor_y']=is_numeric($settings['cluster'.$i]['icon_anchor_y']) ? intval($settings['cluster'.$i]['icon_anchor_y']) : '';
-		$settings['cluster'.$i]['label_anchor_x']=is_numeric($settings['cluster'.$i]['label_anchor_x']) ? intval($settings['cluster'.$i]['label_anchor_x']) : '';
-		$settings['cluster'.$i]['label_anchor_y']=is_numeric($settings['cluster'.$i]['label_anchor_y']) ? intval($settings['cluster'.$i]['label_anchor_y']) : '';
-	}
+if ($settings['markercluster']=='custom'){
+	$styles=[];
+	
+	for ($i=0; $i<sizeof($settings['clusters']); $i++)
+		if ( (isset($settings['clusters'][$i]['icon'])) && ($settings['clusters'][$i]['icon']) ){
+			$cstyle=[];
+			$cstyle['url']=$settings['clusters'][$i]['icon'];
+			
+			if (!is_numeric($settings['clusters'][$i]['width']))
+				$cstyle['width']=($settings['clusters'][$i]['options']['width'] > 0) ? intval($settings['clusters'][$i]['options']['width']) : 53;
+			else
+				$cstyle['width']=intval($settings['clusters'][$i]['width']);
+			if (!is_numeric($settings['clusters'][$i]['height']))
+				$cstyle['height']=($settings['clusters'][$i]['options']['height'] > 0) ? intval($settings['clusters'][$i]['options']['height']) : 53;
+			else
+				$cstyle['height']=intval($settings['clusters'][$i]['height']);
+			
+			$cstyle['textSize']=is_numeric($settings['clusters'][$i]['textSize']) ? intval($settings['clusters'][$i]['textSize']) : 11;
+			$cstyle['textColor']=($settings['clusters'][$i]['textColor']) ? $settings['clusters'][$i]['textColor'] : 'black';
+			if ( (is_numeric($settings['clusters'][$i]['icon_anchor_x'])) && (is_numeric($settings['clusters'][$i]['icon_anchor_y'])) )
+				$cstyle['iconAnchor']=[intval($settings['clusters'][$i]['icon_anchor_x']), intval($settings['clusters'][$i]['icon_anchor_y'])];
+			//X and Y are inversed:
+			$cstyle['anchor']=[is_numeric($settings['clusters'][$i]['label_anchor_y']) ? intval($settings['clusters'][$i]['label_anchor_y']) : 0, is_numeric($settings['clusters'][$i]['label_anchor_x']) ? intval($settings['clusters'][$i]['label_anchor_x']) : 0];
+
+			array_push($styles,$cstyle);
+		}
+	$settings['clusterstyles']=$styles;
+}
 	
 ?>
 

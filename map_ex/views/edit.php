@@ -594,7 +594,7 @@
 				<h3 class="wk-form-heading" ng-if="widget.data['markercluster']=='custom'">{{'Cluster Markers' | trans}}</h3>
 				
 				<div class="uk-panel uk-panel-box uk-alert" ng-if="widget.data['markercluster']=='custom'">
-					<p class="uk-text-center"><i class="uk-icon uk-icon-info-circle uk-margin-small-right"></i>Below are the settings that control the marker clustering. All clusters are divided into 5 levels (groups) according to the number of markers inside the cluster, where level #1 represent clusters with smallest number of markers and level #5 - clusters with huge number of markers.</p>
+					<p class="uk-text-center"><i class="uk-icon uk-icon-info-circle uk-margin-small-right"></i>Each cluster belongs to one of the levels (groups) defined below. Levels differ by density: the more items a cluster contains, the higher level ID this cluster belongs to. You must define at least 1 cluster level.</p>
 				</div>
 				
 				<!-- This is the container of the toggling elements -->
@@ -610,13 +610,19 @@
 					<li>
 						<h3 class="uk-text-center">Marker Options</h3>
 						
-						<hr ng-repeat-start="value in [widget.data['cluster1'],widget.data['cluster2'],widget.data['cluster3'],widget.data['cluster4'],widget.data['cluster5']] track by $index">
+						<span class="cluster-level" ng-repeat-start="value in widget.data['clusters'] track by $index">&nbsp;</span>
+						
+						<div>
+						<hr>
 						<h4>Cluster Marker Level #{{($index+1)| number:0}}</h4>
 				
+						<div class="uk-panel uk-panel-box uk-alert-warning" ng-if="!value['icon']">
+							<p class="uk-text-center"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>This level is ignored, because you didn't specify the icon to use.</p>
+						</div>
 						<div class="uk-form-row">
 							<span class="uk-form-label">{{'Icon' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="Path to an image file that will be used as a cluster's icon. PNG and SVG image formats are recommended."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
 							<div class="uk-form-controls">
-								<field-media title="item.title" id="cluster-{{$index+1}}-icon" media="value['icon']" options="value['options']"></field-media>
+								<field-media id="cluster-{{$index+1}}-icon" media="value['icon']" options="value['options']"></field-media>
 							</div>
 						</div>
 						
@@ -631,7 +637,7 @@
 						</div>
 						
 						<div class="uk-form-row">
-							<span class="uk-form-label">{{'Icon Anchor' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="The anchor is a place where the icon's hotspot is located. The position is defined in pixels and is relative to the the image's dimensions, so that the upper left corner of the image is a zero-point (0,0); axes have the following orientation: the X to the right; Y to the bottom. If the position is zero then the center of the image is set as the anchor."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+							<span class="uk-form-label">{{'Icon Anchor' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="The anchor is a place where the icon's hotspot is located. The position is defined in pixels and is relative to the the image's dimensions, so that the upper left corner of the image is a zero-point (0,0); axes have the following orientation: the X to the right; Y to the bottom. If any of the values is empty then the center of the image is set as the anchor."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
 							<div class="uk-form-controls">
 								<label><input class="uk-form-width-small" id="cluster-{{$index+1}}-icon_x" type="text" ng-model="value['icon_anchor_x']"> {{'X (px)' | trans}}</label>
 								<p class="uk-form-controls-condensed">
@@ -665,7 +671,23 @@
 							</div>
 						</div>
 						
-						<span ng-repeat-end></span>
+						<div class="uk-text-right">
+							<button class="uk-button uk-button-danger uk-margin-top" onclick="UIkit.notify('Cluster level removed', {'timeout':3000,'pos':'top-center','status':'info'});" ng-click="widget.data['clusters'].splice({{$index}},1)"><i class="uk-icon uk-icon-minus-circle uk-margin-small-right"></i>Remove Level</button>
+						</div>
+						
+						</div>
+						<span ng-repeat-end>&nbsp;</span>
+						
+						
+						<hr>
+						<div class="uk-margin-top uk-grid uk-grid-width-1-2">
+							<div>
+								<button id="mapex-add-level" class="uk-button uk-button-success" onclick="UIkit.notify('New cluster level added', {'timeout':3000,'pos':'top-center','status':'info'});" ng-click="widget.data['clusters'].push({'icon':'','width':'auto','height':'auto','icon_anchor_x':0,'icon_anchor_y':0,'label_anchor_x':0,'label_anchor_y':0,'textSize':10,'textColor':'black'})"><i class="uk-icon uk-icon-plus-circle uk-margin-small-right"></i>Add Level</button>
+							</div>
+							<div class="uk-text-right">
+								<button id="mapex-clear-levels" class="uk-button uk-button-danger" ng-click="widget.data['clusters']=[]"><i class="uk-icon uk-icon-trash uk-margin-small-right"></i>Remove all levels</button>
+							</div>
+						</div>
 					</li>
 					<li>
 						<h3 class="uk-text-center">Marker Library</h3>
@@ -674,10 +696,10 @@
 						</div>
 
 						<div class="uk-text-center">
-							<button onclick="loadClusterCollections()"><i class="uk-icon uk-icon-download uk-margin-small-right"></i>Retrieve active collection from Internet</button>
+							<button class="uk-button" onclick="loadClusterCollections()"><i class="uk-icon uk-icon-download uk-margin-small-right"></i>Retrieve active collection from Internet</button>
 						</div>
 						
-						<div class="uk-grid uk-grid-width-medium-1-2" id="cluster-collection">
+						<div class="uk-grid uk-grid-width-medium-1-2 uk-margin-top" id="cluster-collection">
 						</div>
 				
 					</li>

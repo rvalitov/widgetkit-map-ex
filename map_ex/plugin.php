@@ -91,61 +91,7 @@ return array(
 			'cluster_gridSize'				=> 60,
 			'cluster_maxZoom'				=> 0,
 			'cluster_minimumClusterSize'	=>	2,
-			'cluster1'						=> array(
-												'icon'=>'https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m1.png',
-												'height' => 'auto',
-												'width' => 'auto',
-												'textColor' => 'black',
-												'textSize' => 11,
-												'icon_anchor_x' => '',
-												'icon_anchor_y' => '',
-												'label_anchor_x' => '',
-												'label_anchor_y' => ''
-											),
-			'cluster2'						=> array(
-												'icon'=>'https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m2.png',
-												'height' => 'auto',
-												'width' => 'auto',
-												'textColor' => 'black',
-												'textSize' => 11,
-												'icon_anchor_x' => '',
-												'icon_anchor_y' => '',
-												'label_anchor_x' => '',
-												'label_anchor_y' => ''
-											),
-			'cluster3'						=> array(
-												'icon'=>'https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m3.png',
-												'height' => 'auto',
-												'width' => 'auto',
-												'textColor' => 'black',
-												'textSize' => 11,
-												'icon_anchor_x' => '',
-												'icon_anchor_y' => '',
-												'label_anchor_x' => '',
-												'label_anchor_y' => ''
-											),
-			'cluster4'						=> array(
-												'icon'=>'https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m4.png',
-												'height' => 'auto',
-												'width' => 'auto',
-												'textColor' => 'black',
-												'textSize' => 11,
-												'icon_anchor_x' => '',
-												'icon_anchor_y' => '',
-												'label_anchor_x' => '',
-												'label_anchor_y' => ''
-											),
-			'cluster5'						=> array(
-												'icon'=>'https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m5.png',
-												'height' => 'auto',
-												'width' => 'auto',
-												'textColor' => 'black',
-												'textSize' => 11,
-												'icon_anchor_x' => '',
-												'icon_anchor_y' => '',
-												'label_anchor_x' => '',
-												'label_anchor_y' => ''
-											),
+			'clusters'						=> [],
 
             'styler_invert_lightness' => false,
             'styler_hue'              => '',

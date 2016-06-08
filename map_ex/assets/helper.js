@@ -1,3 +1,55 @@
+/**
+ * AngularHelper : Contains methods that help using angular without being in the scope of an angular controller or directive
+ */
+var AngularHelper = (function () {
+    var AngularHelper = function () { };
+
+    /**
+     * ApplicationName : Default application name for the helper
+     */
+    var defaultApplicationName = "widgetkit";
+
+    /**
+         * Compile : Compile html with the rootScope of an application
+         *  and replace the content of a target element with the compiled html
+         * @$targetDom : The dom in which the compiled html should be placed
+         * @htmlToCompile : The html to compile using angular
+         * @applicationName : (Optionnal) The name of the application (use the default one if empty)
+         */
+    AngularHelper.Compile = function ($targetDom, htmlToCompile, applicationName) {
+        var $injector = angular.injector(["ng", applicationName || defaultApplicationName]);
+
+        $injector.invoke(["$compile", "$rootScope", function ($compile, $rootScope) {
+                        //Get the scope of the target, use the rootScope if it does not exists
+            var $scope = $targetDom.html(htmlToCompile).scope();
+            $compile($targetDom)($scope || $rootScope);
+            $rootScope.$digest();
+        }]);
+   }
+
+    return AngularHelper;
+})();
+
+function showMapExInfo(caption,text){
+	var id='mapex-dialog-'+ jQuery.now();
+	jQuery('#'+id).empty();
+	jQuery(document.body).prepend('<div class="uk-modal" id="'+id+'"><div class="uk-modal-dialog"><div class="uk-modal-header"><h3>'+caption+'</h3></div><div class="uk-overflow-container">'+text+'</div><div class="uk-modal-footer"><button class="uk-button uk-modal-close">OK</button></div></div></div>');
+	
+	/*We force to open links in new window*/
+	jQuery('#'+id+' a').attr('target','_blank');
+	
+	jQuery('#'+id).on({
+		'hide.uk.modal': function(){
+			jQuery('#'+id).remove();
+		}
+	});
+
+	var modal = UIkit.modal('#'+id);
+	
+	if ( !modal.isActive() )
+		modal.show();
+}
+	
 function loadClusterCollections(){	
 	var tagsToReplace = {
 		'&': '&amp;',
@@ -38,9 +90,9 @@ function loadClusterCollections(){
 						for (var i=0;i<data.length;i++){
 							/*Validation test*/
 							var is_valid=true;
-							if ( ('name' in data[i]) && ('info' in data[i]) ) {
-								for (var k=1;k<=5;k++)
-									if ( (!(('icon'+k) in data[i])) || (!(('color'+k) in data[i])) || (!(('width'+k) in data[i])) || (!(('height'+k) in data[i])) || (!(('size'+k) in data[i])) || (!(('icon_x'+k) in data[i])) || (!(('icon_y'+k) in data[i])) || (!(('label_x'+k) in data[i])) || (!(('label_y'+k) in data[i])) || (typeof data[i]['width'+k] !== 'number') || (typeof data[i]['height'+k] !== 'number') || (typeof data[i]['size'+k] !== 'number') || ((typeof data[i]['icon_x'+k] !== 'number')&&(data[i]['icon_x'+k]!='')) || ((typeof data[i]['icon_y'+k] !== 'number')&&(data[i]['icon_y'+k]!='')) || ((typeof data[i]['label_x'+k] !== 'number')&&(data[i]['label_x'+k]!='')) || ((typeof data[i]['label_y'+k] !== 'number')&&(data[i]['label_y'+k]!='')) || (typeof data[i]['size'+k] !== 'number') || (data[i]['size'+k]<1) || (data[i]['width'+k]<1) || (data[i]['height'+k]<1) || (!ValidURL(data[i]['icon'+k])) ){
+							if ( ('name' in data[i]) && ('levels' in data[i]) && ('info' in data[i]) && (typeof data[i]['name'] === 'string') && (typeof data[i]['levels'] === 'object') && (typeof data[i]['info'] === 'string') && (data[i]['info'].length<=2000) && (data[i]['levels'].length>=1) ) {
+								for (var k=0;k<data[i]['levels'].length;k++)
+									if ( (!('icon' in data[i]['levels'][k])) || (!('color' in data[i]['levels'][k])) || (!('width' in data[i]['levels'][k])) || (!('height' in data[i]['levels'][k])) || (!('size' in data[i]['levels'][k])) || (!('icon_x' in data[i]['levels'][k])) || (!('icon_y' in data[i]['levels'][k])) || (!('label_x' in data[i]['levels'][k])) || (!('label_y' in data[i]['levels'][k])) || (typeof data[i]['levels'][k]['width'] !== 'number') || (typeof data[i]['levels'][k]['height'] !== 'number') || (typeof data[i]['levels'][k]['size'] !== 'number') || ((typeof data[i]['levels'][k]['icon_x'] !== 'number')&&(data[i]['levels'][k]['icon_x']!='')) || ((typeof data[i]['levels'][k]['icon_y'] !== 'number')&&(data[i]['levels'][k]['icon_y']!='')) || ((typeof data[i]['levels'][k]['label_x'] !== 'number')&&(data[i]['levels'][k]['label_x']!='')) || ((typeof data[i]['levels'][k]['label_y'] !== 'number')&&(data[i]['levels'][k]['label_y']!='')) || (typeof data[i]['levels'][k]['size'] !== 'number') || (data[i]['levels'][k]['size']<1) || (data[i]['levels'][k]['width']<1) || (data[i]['levels'][k]['height']<1) || (!ValidURL(data[i]['levels'][k]['icon'])) ){
 										is_valid=false;
 										break;
 									}
@@ -50,23 +102,34 @@ function loadClusterCollections(){
 							
 							if (is_valid)
 							{
-								var tags='<div><h4 class="uk-text-center">#'+(i+1)+'. '+safe_tags_replace(data[i].name);
+								var name;
+								if (data[i].name.length>64)
+									name=data[i].name.substring(0,61)+'...';
+								else
+									name=data[i].name;
+								var tags='<div class="uk-panel uk-panel-box"><h4 class="uk-text-center">#'+(i+1)+'. '+safe_tags_replace(name);
 								if ( (data[i]['info']) && (data[i]['info'].trim().length>0) )
-									tags+='<i class="uk-icon uk-icon-info-circle uk-margin-small-left" style="color:#ffb105;cursor:pointer;" onclick="UIkit.modal.alert(\''+data[i]['info'].replace('"','&quot;').replace("'","&#39;")+'\',{\'center\':true});"></i>';
-								tags+='</h4><div class="uk-grid uk-grid-width-1-5">';
-								for (var k=1;k<=5;k++)
-									tags+='<div class="uk-text-center"><div><img src="'+data[i]['icon'+k]+'"></div><small>Level '+k+'</small></div>';
-								tags+='</div><div class="uk-text-center"><button onclick="UIkit.modal.alert(\'Selected collection was activated!\',{\'center\':true});';
-								for (var k=1;k<=5;k++){
-									tags+='jQuery(\'#cluster-'+k+'-color\').val(\''+data[i]['color'+k]+'\').trigger(\'change\');';
-									tags+='jQuery(\'#cluster-'+k+'-icon input\').val(\''+data[i]['icon'+k]+'\').trigger(\'change\');';
-									tags+='jQuery(\'#cluster-'+k+'-width\').val(\''+data[i]['width'+k]+'\').trigger(\'change\');';
-									tags+='jQuery(\'#cluster-'+k+'-height\').val(\''+data[i]['height'+k]+'\').trigger(\'change\');';
-									tags+='jQuery(\'#cluster-'+k+'-size\').val(\''+data[i]['size'+k]+'\').trigger(\'change\');';
-									tags+='jQuery(\'#cluster-'+k+'-icon_x\').val(\''+data[i]['icon_x'+k]+'\').trigger(\'change\');';
-									tags+='jQuery(\'#cluster-'+k+'-icon_y\').val(\''+data[i]['icon_y'+k]+'\').trigger(\'change\');';
-									tags+='jQuery(\'#cluster-'+k+'-label_x\').val(\''+data[i]['label_x'+k]+'\').trigger(\'change\');';
-									tags+='jQuery(\'#cluster-'+k+'-label_y\').val(\''+data[i]['label_y'+k]+'\').trigger(\'change\');';
+									tags+='<i class="uk-icon uk-icon-info-circle uk-margin-small-left" style="color:#ffb105;cursor:pointer;" onclick="showMapExInfo(\''+name.replace(/"/g,'&quot;').replace(/'/g,'&#39;')+'\',\''+data[i]['info'].replace(/"/g,'&quot;').replace(/'/g,"\\'")+'\');"></i>';
+								tags+='</h4><div class="uk-grid uk-grid-width-1-'+Math.min(5,data[i]['levels'].length)+'">';
+								for (var k=0;k<data[i]['levels'].length;k++)
+									tags+='<div class="uk-text-center"><div><img src="'+data[i]['levels'][k]['icon']+'"></div><small>Level '+(k+1)+'</small></div>';
+								/*
+								It's quite difficult to mess with angularjs when you add code with ng-click that must be compiled dynamically in the scope. So, it's better to emulate user input in to fill in the data when a collection is activated.
+								*/
+								tags+='</div><div class="uk-text-center"><button class="uk-button uk-button-success" onclick="UIkit.modal.alert(\'Selected collection was activated!\',{\'center\':true});';
+								tags+='jQuery(\'#mapex-clear-levels\').click();';
+								for (var k=0;k<data[i]['levels'].length;k++){
+									tags+='jQuery(\'#mapex-add-level\').click();';
+									var id=k+1;
+									tags+='jQuery(\'#cluster-'+id+'-color\').val(\''+data[i]['levels'][k]['color']+'\').trigger(\'change\');';
+									tags+='jQuery(\'#cluster-'+id+'-icon input\').val(\''+data[i]['levels'][k]['icon']+'\').trigger(\'change\');';
+									tags+='jQuery(\'#cluster-'+id+'-width\').val(\''+data[i]['levels'][k]['width']+'\').trigger(\'change\');';
+									tags+='jQuery(\'#cluster-'+id+'-height\').val(\''+data[i]['levels'][k]['height']+'\').trigger(\'change\');';
+									tags+='jQuery(\'#cluster-'+id+'-size\').val(\''+data[i]['levels'][k]['size']+'\').trigger(\'change\');';
+									tags+='jQuery(\'#cluster-'+id+'-icon_x\').val(\''+data[i]['levels'][k]['icon_x']+'\').trigger(\'change\');';
+									tags+='jQuery(\'#cluster-'+id+'-icon_y\').val(\''+data[i]['levels'][k]['icon_y']+'\').trigger(\'change\');';
+									tags+='jQuery(\'#cluster-'+id+'-label_x\').val(\''+data[i]['levels'][k]['label_x']+'\').trigger(\'change\');';
+									tags+='jQuery(\'#cluster-'+id+'-label_y\').val(\''+data[i]['levels'][k]['label_y']+'\').trigger(\'change\');';
 								}
 								tags+='"><i class="uk-icon uk-icon-check uk-margin-small-right"></i>Activate Collection</button></div></div>';
 								$('#cluster-collection').append(tags);
@@ -80,7 +143,7 @@ function loadClusterCollections(){
 							for (var k=0; k<error_list.length; k++){
 								if (k>0)
 									info_text+=', ';
-								info_text+=error_list[k];
+								info_text+='#'+error_list[k];
 							}
 							console.log(info_text);
 						}
