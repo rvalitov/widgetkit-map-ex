@@ -84,8 +84,9 @@ function printJSDebugString($s, $typeid=1){
 	global $widget_id;
 	global $widget_name;
 	
-	$prefix='['.$widget_name.' #'.$widget_id.'] ';	
-	$s=str_replace("'","\'",str_replace("\\","\\\\",preg_replace("/\r\n|\r|\n/", ' ',$s)));
+	$prefix='['.$widget_name.' #'.$widget_id.'] ';
+	$s=addslashes($s);
+	$s=preg_replace("/\r\n|\r|\n/", "\\n",$s);
 	switch($typeid){
 		case 1:
 			echo "console.info('".$prefix.$s."');";

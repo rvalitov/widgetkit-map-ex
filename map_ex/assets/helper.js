@@ -33,26 +33,24 @@ function loadClusterCollections(){
 				success: function (data, textStatus, jqXHR){
 					modal.hide();
 					if (data){
-						UIkit.notify('Downloaded information about '+data.length+' items', {'timeout':3000,'pos':'top-center','status':'info'});
 						$('#cluster-collection').empty();
+						var error_list=[];
 						for (var i=0;i<data.length;i++){
 							/*Validation test*/
 							var is_valid=true;
 							if ( ('name' in data[i]) && ('info' in data[i]) ) {
-								console.log("OK");
 								for (var k=1;k<=5;k++)
 									if ( (!(('icon'+k) in data[i])) || (!(('color'+k) in data[i])) || (!(('width'+k) in data[i])) || (!(('height'+k) in data[i])) || (!(('size'+k) in data[i])) || (!(('icon_x'+k) in data[i])) || (!(('icon_y'+k) in data[i])) || (!(('label_x'+k) in data[i])) || (!(('label_y'+k) in data[i])) || (typeof data[i]['width'+k] !== 'number') || (typeof data[i]['height'+k] !== 'number') || (typeof data[i]['size'+k] !== 'number') || ((typeof data[i]['icon_x'+k] !== 'number')&&(data[i]['icon_x'+k]!='')) || ((typeof data[i]['icon_y'+k] !== 'number')&&(data[i]['icon_y'+k]!='')) || ((typeof data[i]['label_x'+k] !== 'number')&&(data[i]['label_x'+k]!='')) || ((typeof data[i]['label_y'+k] !== 'number')&&(data[i]['label_y'+k]!='')) || (typeof data[i]['size'+k] !== 'number') || (data[i]['size'+k]<1) || (data[i]['width'+k]<1) || (data[i]['height'+k]<1) || (!ValidURL(data[i]['icon'+k])) ){
 										is_valid=false;
-										console.log("Error "+k);
 										break;
 									}
 							}
 							else
 								is_valid=false;
-							console.log(data[i]);
+							
 							if (is_valid)
 							{
-								var tags='<div><h4 class="uk-text-center">'+safe_tags_replace(data[i].name);
+								var tags='<div><h4 class="uk-text-center">#'+(i+1)+'. '+safe_tags_replace(data[i].name);
 								if ( (data[i]['info']) && (data[i]['info'].trim().length>0) )
 									tags+='<i class="uk-icon uk-icon-info-circle uk-margin-small-left" style="color:#ffb105;cursor:pointer;" onclick="UIkit.modal.alert(\''+data[i]['info'].replace('"','&quot;').replace("'","&#39;")+'\',{\'center\':true});"></i>';
 								tags+='</h4><div class="uk-grid uk-grid-width-1-5">';
@@ -73,7 +71,20 @@ function loadClusterCollections(){
 								tags+='"><i class="uk-icon uk-icon-check uk-margin-small-right"></i>Activate Collection</button></div></div>';
 								$('#cluster-collection').append(tags);
 							}
+							else
+								error_list.push(i);
 						}
+						var info_text='Downloaded information about '+data.length+' items.';
+						if (error_list.length>0){
+							info_text+=' Failed to parse '+error_list.length+' items: ';
+							for (var k=0; k<error_list.length; k++){
+								if (k>0)
+									info_text+=', ';
+								info_text+=error_list[k];
+							}
+							console.log(info_text);
+						}
+						UIkit.notify(info_text, {'timeout':3000,'pos':'top-center','status':'info'});
 					}
 					else
 						UIkit.modal.alert("Failed to download a list of markers collections.",{"center":true});
