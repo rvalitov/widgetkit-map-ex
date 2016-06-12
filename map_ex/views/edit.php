@@ -826,7 +826,7 @@
 							</tr>
 							<tr>
 								<td>
-									Version
+									Widget Version
 								</td>
 								<td id="version-widgetkit-map-ex">
 									N/A
@@ -834,10 +834,42 @@
 							</tr>
 							<tr>
 								<td>
-									Build Date
+									Widget Build Date
 								</td>
 								<td id="build-widgetkit-map-ex">
 									N/A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Widgetkit Version
+								</td>
+								<td id="version-wk-widgetkit-map-ex">
+									<?php echo (isset($app['version']))?$app['version']:'Unknown';?>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Database Version
+								</td>
+								<td id="version-db-widgetkit-map-ex">
+									<?php echo (isset($app['db_version']))?$app['db_version']:'Unknown';?>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									jQuery Version
+								</td>
+								<td id="version-jquery-widgetkit-map-ex">
+									Unknown
+								</td>
+							</tr>
+							<tr>
+								<td>
+									AngularJS Version
+								</td>
+								<td id="version-angularjs-widgetkit-map-ex">
+									Unknown
 								</td>
 							</tr>
 							<tr>

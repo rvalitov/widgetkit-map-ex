@@ -75,6 +75,16 @@ jQuery(document).ready(function($){
 		$(this).empty();
 		$(this).append('<a href="'+widget_wiki+'" target="_blank">'+widget_wiki+'<i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a>');
 	});
+	$('#version-jquery-'+distr_name).waitUntilExists(function(){
+		$(this).empty();
+		$(this).append($.fn.jquery);
+	});
+	$('#version-angularjs-'+distr_name).waitUntilExists(function(){
+		if (angular && angular.version && angular.version.full){
+			$(this).empty();
+			$(this).append(angular.version.full);
+		}
+	});
 	
 	function isNewVersionAvailable(vCurrent,vRemote){
 		if (typeof vCurrent + typeof vRemote != 'stringstring')
