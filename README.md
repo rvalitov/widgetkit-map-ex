@@ -50,7 +50,7 @@ Some issues about using the widget are available in the [Wiki area](https://gith
 * This widget is created by [Ramil Valitov](http://www.valitov.me).
 * The code is based on the original [Map widget](http://yootheme.com/demo/widgetkit/joomla/index.php/home/map) by [Yootheme](http://yootheme.com/).
 * Logo designed by [Freepik](http://www.freepik.com/)
-* Special thanks to [Florian](https://yootheme.com/support/profile/florian), member of the Yootheme support team, for his [post](https://yootheme.com/support/question/80769) about the problem with the map widget displayed in a lightbox and the approach how to solve it.
+* Special thanks to [Florian](https://yootheme.com/support/profile/florian), member of the Yootheme support team, for his [post](https://yootheme.com/support/question/80769) about the problem with the map widget displayed in a lightbox and the approach how to solve it (however, we use another better solution now).
 * Thanks to [Marco Rensch](https://github.com/marcorensch) for testing this widget with ZOO and [providing related instructions](https://github.com/rvalitov/widgetkit-map-ex/wiki/Using-MapEx-with-ZOO).
 
 # Feedback
