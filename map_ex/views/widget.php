@@ -7,17 +7,13 @@ Web: http://www.valitov.me/
 Git: https://github.com/rvalitov/widgetkit-map-ex
 */
 
+require_once(__DIR__.'/WidgetkitExPluginDebug.php');
+use WidgetkitEx\MapEx\WidgetkitExPluginDebug;
+
 $map_id  = uniqid('wk-map-ex');
 $map_id2 = substr($map_id,9);
 
-global $debug_info;
-global $debug_warning;
-global $debug_error;
-global $isJoomla;
-global $widget_id;
-global $widget_name;
-
-require_once(__DIR__.'/debug.php');
+$debug=new WidgetkitExPluginDebug($map_id);
 
 $markers = array();
 $width   = $settings['width']  == 'auto' ? 'auto'  : ((int)$settings['width']).'px';
@@ -55,11 +51,11 @@ foreach ($items as $i => $item) {
 			if (strlen($item['custom_pin_path'])>0){
 				$marker['pin']=trim($item['custom_pin_path']);
 				$pinoverride=true;
-				array_push($debug_info,'Unique custom pin image provided for item#'.$item_id.': '.$marker['pin']);
+				$debug->addInfoString('Unique custom pin image provided for item#'.$item_id.': '.$marker['pin']);
 			}
 			else{
 				$marker['pin']=trim($settings['custom_pin_path']);
-				array_push($debug_info,'Global custom pin image will be used for item#'.$item_id.': '.$marker['pin']);
+				$debug->addInfoString('Global custom pin image will be used for item#'.$item_id.': '.$marker['pin']);
 			}
 
 			if (strlen($marker['pin'])>0){
@@ -73,14 +69,14 @@ foreach ($items as $i => $item) {
 							$marker['pin']=JURI::base().substr($marker['pin'], 1);
 					}
 					else
-						array_push($debug_warning,'Relative URLs for WordPress are not supported in this version of the widget. Please, specify a full URL manually for '.$marker['pin'].' - this is done in the settings of the widget.');
+						$debug->addWarningString('Relative URLs for WordPress are not supported in this version of the widget. Please, specify a full URL manually for '.$marker['pin'].' - this is done in the settings of the widget.');
 
-				array_push($debug_info,'The final URL for the custom pin of the item#'.$item_id.' is '.$marker['pin']);
+				$debug->addInfoString('The final URL for the custom pin of the item#'.$item_id.' is '.$marker['pin']);
 				if ($settings['debug_output'])
 					if (url_exists($marker['pin']))
-						array_push($debug_info,'The URL '.$marker['pin'].' is valid.');
+						$debug->addInfoString('The URL '.$marker['pin'].' is valid.');
 					else
-						array_push($debug_error,'Failed to check the URL '.$marker['pin']." - it doesn't exist?");
+						$debug->addErrorString('Failed to check the URL '.$marker['pin']." - it doesn't exist?");
 				if ( ($pinoverride) && (is_numeric($item['custom_pin_anchor_x'])) && (is_numeric($item['custom_pin_anchor_y'])) )
 				{
 					$marker['anchor_x']=intval($item['custom_pin_anchor_x']);
@@ -94,18 +90,18 @@ foreach ($items as $i => $item) {
 					}
 			}
 			else
-				array_push($debug_warning,'The custom image path is empty for item#'.$item_id.'. The deafult pin image will be used.');
+				$debug->addWarningString('The custom image path is empty for item#'.$item_id.'. The deafult pin image will be used.');
 		}
 		else{
-			array_push($debug_info,'The configuration is set to use a default pin image for item#'.$item_id);
+			$debug->addInfoString('The configuration is set to use a default pin image for item#'.$item_id);
 			if (strlen($item['custom_pin_path'])>0)
-				array_push($debug_warning,'You have defined a custom unique pin image for item#'.$item_id.". However, this image will be ignored. To use custom images you must select 'Custom' as the 'Marker Pin Icon' option in the widget's settings. Ignore this message if the widget works as you expect.");
+				$debug->addWarningString('You have defined a custom unique pin image for item#'.$item_id.". However, this image will be ignored. To use custom images you must select 'Custom' as the 'Marker Pin Icon' option in the widget's settings. Ignore this message if the widget works as you expect.");
 		}
 
         $markers[] = $marker;
     }
 	else
-		array_push($debug_warning,'The location is missing for item#'.$item_id.'. This item will be ignored.');
+		$debug->addWarningString('The location is missing for item#'.$item_id.'. This item will be ignored.');
 }
 
 $settings['map_id'] = $map_id;
@@ -160,7 +156,7 @@ if ($settings['markercluster']=='custom'){
 		}
 	$settings['markers'] = $markers;
 	
-	array_push($debug_info,'Widget settings: '.print_r($settings,true));
+	$debug->addInfoString('Widget settings: '.print_r($settings,true));
 ?>
 
 <script type="widgetkit/mapex" data-id="<?php echo $map_id;?>" data-class="<?php echo $settings['class']; ?> uk-img-preserve" data-style="width:<?php echo $width?>;height:<?php echo $height?>;">
@@ -267,9 +263,7 @@ jQuery(document).ready(function($){
 
 <?php if ($settings['debug_output']):?>
 	<?php
-	printJSDebugText($debug_info,1);
-	printJSDebugText($debug_warning,2);
-	printJSDebugText($debug_error,3);
+	$debug->printDebugStrings();
 	?>
 	jQuery(document).ready(function($){
 		var countAPILoaded=0;

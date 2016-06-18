@@ -7,12 +7,21 @@ Web: http://www.valitov.me/
 Git: https://github.com/rvalitov/widgetkit-map-ex
 */
 
+require_once(__DIR__.'/views/WidgetkitExPlugin.php');
+use WidgetkitEx\MapEx\WidgetkitExPlugin;
+
 return array(
 
     'name' => 'widget/map_ex',
 
     'main' => 'YOOtheme\\Widgetkit\\Widget\\Widget',
 
+	'plugin_version' => 'v1.5.0',
+	
+	'plugin_date' => '09/06/2016',
+	
+	'plugin_logo' => 'https://raw.githubusercontent.com/wiki/rvalitov/widgetkit-map-ex/images/mapex-logo.png',
+	
     'config' => array(
 
         'name'  => 'map_ex',
@@ -135,13 +144,18 @@ return array(
             $app['angular']->addTemplate('map_ex.edit', 'plugins/widgets/map_ex/views/edit.php', true);
 			//Adding tooltip:
 			$app['scripts']->add('uikit-tooltip', 'vendor/assets/uikit/js/components/tooltip.min.js', array('uikit'));
-			$app['styles']->add('uikit-tooltip', 'https://cdnjs.cloudflare.com/ajax/libs/uikit/2.24.3/css/components/tooltip.min.css', array('uikit'));
+			$app['styles']->add('uikit-tooltip', 'https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/css/components/tooltip.min.css', array('uikit'));
 			//Marked:
 			$app['scripts']->add('marked', 'plugins/widgets/map_ex/assets/marked.min.js', array('uikit'));
-			//Updater:
-			$app['scripts']->add('map_ex.updater', 'plugins/widgets/map_ex/assets/updater.js', array('uikit'));
 			//Helper functions:
 			$app['scripts']->add('map_ex.helper', 'plugins/widgets/map_ex/assets/helper.js', array('uikit'));
+			//Mailchimp for subscription:
+			$app['scripts']->add('mailchimp', 'plugins/widgets/map_ex/assets/jquery.formchimp.min.js', array('uikit'));
+			//jQuery form validator http://www.formvalidator.net/:
+			$app['scripts']->add('jquery-form-validator', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.20/jquery.form-validator.min.js', array('uikit'));
+			//Generating dynamic update script:
+			$plugin=new WidgetkitExPlugin();
+			$app['scripts']->add('map_ex.dynamic-updater', $plugin->generateUpdaterJS($app), array(), 'string');
         }
 
     )

@@ -1,3 +1,7 @@
+<?php
+use WidgetkitEx\MapEx\WidgetkitExPlugin;
+$plugin=new WidgetkitExPlugin();
+?>
 <div class="uk-grid uk-grid-divider uk-form uk-form-horizontal" data-uk-grid-margin>
     <div class="uk-width-medium-1-4">
 
@@ -811,96 +815,11 @@
 
                 <h3 class="wk-form-heading">{{'About' | trans}}</h3>
 
-				<div class="uk-grid">
-					<div class="uk-text-center uk-width-medium-1-3" id="logo-widgetkit-map-ex">
-					</div>
-					<div class="uk-width-medium-2-3">
-						<table class="uk-table uk-table-striped">
-							<tr>
-								<td>
-									Widget Name
-								</td>
-								<td id="name-widgetkit-map-ex">
-									N/A
-								</td>
-							</tr>
-							<tr>
-								<td>
-									Widget Version
-								</td>
-								<td id="version-widgetkit-map-ex">
-									N/A
-								</td>
-							</tr>
-							<tr>
-								<td>
-									Widget Build Date
-								</td>
-								<td id="build-widgetkit-map-ex">
-									N/A
-								</td>
-							</tr>
-							<tr>
-								<td>
-									Widgetkit Version
-								</td>
-								<td id="version-wk-widgetkit-map-ex">
-									<?php echo (isset($app['version']))?$app['version']:'Unknown';?>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									Database Version
-								</td>
-								<td id="version-db-widgetkit-map-ex">
-									<?php echo (isset($app['db_version']))?$app['db_version']:'Unknown';?>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									jQuery Version
-								</td>
-								<td id="version-jquery-widgetkit-map-ex">
-									Unknown
-								</td>
-							</tr>
-							<tr>
-								<td>
-									AngularJS Version
-								</td>
-								<td id="version-angularjs-widgetkit-map-ex">
-									Unknown
-								</td>
-							</tr>
-							<tr>
-								<td>
-									Author<span data-uk-tooltip title="See the complete information about contributors and acknowledgement on the website below."><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span>
-								</td>
-								<td>
-									<a href="https://valitov.me" target="_blank">Ramil Valitov<i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									Website
-								</td>
-								<td id="website-widgetkit-map-ex">
-									N/A
-								</td>
-							</tr>
-							<tr>
-								<td>
-									Wiki and Manuals
-								</td>
-								<td id="wiki-widgetkit-map-ex">
-									N/A
-								</td>
-							</tr>
-						</table>
-						<div id="update-widgetkit-map-ex" class="uk-text-center">
-						</div>
-					</div>
-				<div>
+				<?php $plugin->printAboutInfo($app);?>
+
+				<h3 class="wk-form-heading">{{'Newsletter' | trans}}</h3>
+	
+				<?php $plugin->printNewsletterInfo($app);?>
 
             </li>
         </ul>
