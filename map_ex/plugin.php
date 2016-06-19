@@ -141,14 +141,15 @@ return array(
         },
 
         'init.admin' => function($event, $app) {
+			//Adding our own translations:
+			$app['translator']->addResource('plugins/widgets/map_ex/languages/'.$app['locale'].'.json');
+			//Edit template:
             $app['angular']->addTemplate('map_ex.edit', 'plugins/widgets/map_ex/views/edit.php', true);
 			//Adding tooltip:
 			$app['scripts']->add('uikit-tooltip', 'vendor/assets/uikit/js/components/tooltip.min.js', array('uikit'));
 			$app['styles']->add('uikit-tooltip', 'https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/css/components/tooltip.min.css', array('uikit'));
 			//Marked:
 			$app['scripts']->add('marked', 'plugins/widgets/map_ex/assets/marked.min.js', array('uikit'));
-			//Helper functions:
-			$app['scripts']->add('map_ex.helper', 'plugins/widgets/map_ex/assets/helper.js', array('uikit'));
 			//Mailchimp for subscription:
 			$app['scripts']->add('mailchimp', 'plugins/widgets/map_ex/assets/jquery.formchimp.min.js', array('uikit'));
 			//jQuery form validator http://www.formvalidator.net/:
@@ -156,6 +157,8 @@ return array(
 			//Generating dynamic update script:
 			$plugin=new WidgetkitExPlugin();
 			$app['scripts']->add('map_ex.dynamic-updater', $plugin->generateUpdaterJS($app), array(), 'string');
+			//Generating dynamic collections script:
+			$app['scripts']->add('map_ex.dynamic-collections', $plugin->generateClusterCollectionJS($app), array(), 'string');
         }
 
     )

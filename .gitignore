@@ -19,3 +19,6 @@ Thumbs.db
 .*
 !/.gitignore
 !/.github
+
+#Scripts
+*.sh
