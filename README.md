@@ -53,6 +53,9 @@ Some issues about using the widget are available in the [Wiki area](https://gith
 * Special thanks to [Florian](https://yootheme.com/support/profile/florian), member of the Yootheme support team, for his [post](https://yootheme.com/support/question/80769) about the problem with the map widget displayed in a lightbox and the approach how to solve it (however, we use another better solution now).
 * Thanks to [Marco Rensch](https://github.com/marcorensch) for testing this widget with ZOO and [providing related instructions](https://github.com/rvalitov/widgetkit-map-ex/wiki/Using-MapEx-with-ZOO).
 
+## Disclaimer
+This project is NOT affiliated with, endorsed, or sponsored by the Yootheme. Widgetkit, its name, trademark, and other aspects of the app are trademarked and owned by their respective owners.
+
 # Feedback
 Your feedback is very appreciated. If you want to see new features in this module, please, post your ideas and feature requests in the [issue tracker](https://github.com/rvalitov/widgetkit-map-ex/issues).
 
