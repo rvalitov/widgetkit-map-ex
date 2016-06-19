@@ -16,9 +16,9 @@ return array(
 
     'main' => 'YOOtheme\\Widgetkit\\Widget\\Widget',
 
-	'plugin_version' => 'v1.5.0',
+	'plugin_version' => 'v1.5.0.1',
 	
-	'plugin_date' => '09/06/2016',
+	'plugin_date' => '19/06/2016',
 	
 	'plugin_logo' => 'https://raw.githubusercontent.com/wiki/rvalitov/widgetkit-map-ex/images/mapex-logo.png',
 	
