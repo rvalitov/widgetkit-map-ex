@@ -168,26 +168,26 @@ function getMapZoom<?php echo $map_id2;?>(){
 	if (window.outerWidth<=767)
 		if (Math.abs(window.orientation) === 90){
 			<?php if ($settings['debug_output'])
-			printJSDebugString('Detected Phone Landscape mode');
+			$debug->addInfoString('Detected Phone Landscape mode');
 			?>
 			return <?php echo $zoom_phone_landscape;?>;
 		}
 		else{
 			<?php if ($settings['debug_output'])
-			printJSDebugString('Detected Phone Portrait mode');
+			$debug->addInfoString('Detected Phone Portrait mode');
 			?>
 			return <?php echo $zoom_phone_portrait;?>;
 		}
 	else
 		if (window.outerWidth<=959){
 			<?php if ($settings['debug_output'])
-			printJSDebugString('Detected Tablet mode');
+			$debug->addInfoString('Detected Tablet mode');
 			?>
 			return <?php echo $zoom_tablet;?>;
 		}
 		else{
 			<?php if ($settings['debug_output'])
-			printJSDebugString('Detected Large Screen mode');
+			$debug->addInfoString('Detected Large Screen mode');
 			?>
 			return <?php echo $zoom_large;?>;
 		}
@@ -197,13 +197,13 @@ function updateMap<?php echo $map_id2;?>(item){
 	<?php if (!empty($settings['map_center'])):?>
 	item.panTo(new google.maps.LatLng(<?php echo $settings['map_center']?>));
 	<?php if ($settings['debug_output'])
-		printJSDebugString('Auto pan performed to '.$settings['map_center']);
+		$debug->addInfoString('Auto pan performed to '.$settings['map_center']);
 	?>
 	<?php endif;?>
 
 	item.setZoom(getMapZoom<?php echo $map_id2;?>());
 	<?php if ($settings['debug_output'])
-		printJSDebugString('Auto zoom performed to level '.$settings['zoom']);
+		$debug->addInfoString('Auto zoom performed to level '.$settings['zoom']);
 	?>
 }
 
@@ -213,18 +213,18 @@ jQuery(document).ready(function($){
 		if (item) {
 			google.maps.event.addDomListener(window, 'resize', function(){
 				<?php if ($settings['debug_output'])
-					printJSDebugString('Window resize event captured, updating the map...');
+					$debug->addInfoString('Window resize event captured, updating the map...');
 				?>
 				updateMap<?php echo $map_id2;?>(item);
 			});
 			window.addEventListener("orientationchange", function () {
 				<?php if ($settings['debug_output'])
-					printJSDebugString('Screen orientation changed, updating the map...');
+					$debug->addInfoString('Screen orientation changed, updating the map...');
 				?>
 				updateMap<?php echo $map_id2;?>(item);
 			});
 			<?php if ($settings['debug_output'])
-				printJSDebugString('Responsive setup performed');
+				$debug->addInfoString('Responsive setup performed');
 			?>
 			
 			<?php if (!empty($settings['map_center'])):?>
@@ -244,7 +244,7 @@ jQuery(document).ready(function($){
 									if(typeof window['updateMap' + sub_id] === 'function') {
 										window['updateMap' + sub_id](item);
 										<?php if ($settings['debug_output'])
-											printJSDebugString('Map updated on display.uk.check event.');
+											$debug->addInfoString('Map updated on display.uk.check event.');
 										?>
 									}
 								}

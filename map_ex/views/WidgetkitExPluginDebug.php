@@ -6,28 +6,30 @@ E-mail: ramilvalitov@gmail.com
 Web: http://www.valitov.me/
 */
 
-require_once(__DIR__.'/helper.php');
-
 namespace WidgetkitEx\MapEx{
 
+require_once(__DIR__.'/WidgetkitExPlugin.php');
+
 class WidgetkitExPluginDebug extends WidgetkitExPlugin{
+	//Unique id of the plugin, usually this id is used as HTML id
 	private $id;
 	
 	private $debug_info = array();
 	private $debug_warning = array();
 	private $debug_error = array();
-	private $isJoomla=WidgetkitExPlugin::IsJoomlaInstalled();
+	private $isJoomla;
 	private $CMS;
 	
 	public function __construct($id){
 		$this->id=$id;
 		
-		if ($isJoomla)
-			$CMS=WidgetkitExPlugin::getJoomlaVersion();
+		$this->isJoomla=WidgetkitExPlugin::IsJoomlaInstalled();
+		if ($this->isJoomla)
+			$this->CMS=WidgetkitExPlugin::getJoomlaVersion();
 		else
-			$CMS=WidgetkitExPlugin::getWPVersion();
+			$this->CMS=WidgetkitExPlugin::getWPVersion();
 		
-		$wk_version=WidgetkitExPlugin::getWidgetkitVersion();
+		$wk_version=WidgetkitExPlugin::getWKVersion();
 		$php_version=@phpversion();
 		array_push($this->debug_info,'Processing widget '.$this->plugin_info['name'].' (version '.$this->plugin_info['version'].') on '.$CMS.' with Widgetkit '.$wk_version.' and PHP '.$php_version.'('.@php_sapi_name().')');
 		if (version_compare('5.3',$php_version)>0)
@@ -42,7 +44,7 @@ class WidgetkitExPluginDebug extends WidgetkitExPlugin{
 		array_push($this->debug_info,'Host: '.@php_uname());
 		$ipath=dirname(dirname(__FILE__));
 		array_push($this->debug_info,'Widget installation path: '.$ipath);
-		if ($isJoomla)
+		if ($this->isJoomla)
 			if (preg_match_all('@.*\/administrator\/components\/com_widgetkit\/plugins\/widgets\/.+@',$ipath))
 				array_push($this->debug_info,'Installation path is correct');
 			else
@@ -53,7 +55,7 @@ class WidgetkitExPluginDebug extends WidgetkitExPlugin{
 			else
 				array_push($this->debug_warning,'Installation path is not correct, please fix it. Read more in the Wiki.');
 
-		if ($isJoomla)
+		if ($this->isJoomla)
 			array_push($this->debug_info,'Detected CMS: Joomla');
 		else
 			array_push($this->debug_info,'Detected CMS: WordPress');
@@ -82,7 +84,7 @@ class WidgetkitExPluginDebug extends WidgetkitExPlugin{
 	$typeid defines the log warning level
 	*/
 	private function printJSDebugString($s, $typeid=1){
-		$prefix='['.$this->plugin_info['name'].' #'.$this->$id.'] ';
+		$prefix='['.$this->plugin_info['name'].' #'.$this->id.'] ';
 		$s=addslashes($s);
 		$s=preg_replace("/\r\n|\r|\n/", "\\n",$s);
 		switch($typeid){
@@ -107,7 +109,7 @@ class WidgetkitExPluginDebug extends WidgetkitExPlugin{
 	*/
 	private function printJSDebugText($arrayStrings, $typeid=1){
 		foreach ($arrayStrings as $s){
-			printJSDebugString($s,$typeid);
+			$this->printJSDebugString($s,$typeid);
 		}
 	}
 }
