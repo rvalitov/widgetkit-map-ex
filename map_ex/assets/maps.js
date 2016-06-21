@@ -119,12 +119,34 @@ var WidgetkitMaps = WidgetkitMaps || [];
 					}
                     var r, o = new google.maps.Marker(mapOptions);
 					var html_content=jQuery("#"+t.id).html();
-                    l.push(o), s.marker >= 1 && (r = new google.maps.InfoWindow({
-                        content: html_content,
-                        maxWidth: s.popup_max_width ? parseInt(s.popup_max_width, 10) : 300
-                    }), google.maps.event.addListener(o, "click", function() {
-                        html_content && r.open(i, o), a && (a.setHref(t.lat, t.lng), a.show())
-                    }), 0 === e && (3 === s.marker && html_content && r.open(i, o), a && (a.setHref(t.lat, t.lng), a.show())))
+                    l.push(o);
+					if (s.marker >= 1){
+						r = new google.maps.InfoWindow({
+							content: html_content,
+							maxWidth: s.popup_max_width ? parseInt(s.popup_max_width, 10) : 300
+						});
+						google.maps.event.addListener(o, "click", function() {
+							if (html_content) {
+								var infowindow;
+								if ( (s.marker==2) && (s.autohide) ){
+									infowindow=getWidgetkitMapInfoWindow(s.map_id);
+									if (!infowindow)
+										infowindow=r;
+									else
+										infowindow.close();
+								}
+								else
+									infowindow=r;
+								r.open(i, o);
+								if (a){
+									a.setHref(t.lat, t.lng);
+									a.show();
+								}
+								setWidgetkitMapInfoWindow(s.map_id,r);
+							}
+						});
+                    }
+					0 === e && (3 === s.marker && html_content && r.open(i, o), a && (a.setHref(t.lat, t.lng), a.show()));
                 }), i.panTo(n)), s.markercluster && (this.markerCluster = new e(i, l, (s.markercluster=='custom') ? 
 					{ 
 						'gridSize' : s.cluster_gridSize,
@@ -433,6 +455,7 @@ var WidgetkitMaps = WidgetkitMaps || [];
 function WidgetkitMapsObj(id, map) {
     this.id = id;
     this.map = map;
+	this.infowindow=null;
 }
 function WidgetkitMapsAdd(id, map){
 	if (id)
@@ -446,4 +469,22 @@ function getWidgetkitMap(id){
 			return WidgetkitMaps[i].map;
 		}
 	return null;
+}
+function getWidgetkitMapInfoWindow(id){
+	if (!WidgetkitMaps)
+		return null;
+	for (var i=0; i<WidgetkitMaps.length; i++)
+		if (WidgetkitMaps[i].id==id){
+			return WidgetkitMaps[i].infowindow;
+		}
+	return null;
+}
+function setWidgetkitMapInfoWindow(id,infowindow){
+	if (!WidgetkitMaps)
+		return null;
+	for (var i=0; i<WidgetkitMaps.length; i++)
+		if (WidgetkitMaps[i].id==id){
+			WidgetkitMaps[i].infowindow=infowindow;
+			return;
+		}
 }

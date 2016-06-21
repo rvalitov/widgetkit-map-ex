@@ -332,6 +332,9 @@ $plugin=new WidgetkitExPlugin();
                         <p class="uk-form-controls-condensed" ng-if="widget.data.marker != '0'">
                             <label><input class="uk-form-width-mini" type="text" ng-model="widget.data['popup_max_width']"> {{'Popup max width (px)' | trans}}</label>
                         </p>
+						<p class="uk-form-controls-condensed" ng-if="widget.data.marker == '2'">
+                            <span><input class="uk-form-width-mini" type="checkbox" ng-model="widget.data['autohide']"> {{'Single popup' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="{{'This option controls the maximum number of popup windows that can be visible at once. If checked, then maximum one popup is visible at a time and other popups will automatically hide. If unchecked, then any number of popups can be visible without restrictions.'|trans}}"><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                        </p>
                     </div>
                 </div>
 

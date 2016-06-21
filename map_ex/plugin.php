@@ -76,6 +76,7 @@ return array(
             'disabledefaultui'        => false,
 			
 			//Extra parameters:
+			'autohide'					=> false,
 			'zoom_phone_h'				=> '',
 			'zoom_tablet'				=> '',
 			'zoom_desktop'				=> '',
