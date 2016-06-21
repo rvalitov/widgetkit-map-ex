@@ -14,9 +14,9 @@ use WidgetkitEx\MapEx\WidgetkitExMapPlugin;
 $map_id  = uniqid('wk-map-ex');
 $map_id2 = substr($map_id,9);
 
-$debug=new WidgetkitExMapPlugin($map_id);
+$debug=new WidgetkitExMapPlugin($app,$map_id);
 $info=$debug->getInfo();
-$global_settings=WidgetkitExPlugin::readGlobalSettings();
+$global_settings=$debug->readGlobalSettings();
 
 $markers = array();
 $width   = $settings['width']  == 'auto' ? 'auto'  : ((int)$settings['width']).'px';

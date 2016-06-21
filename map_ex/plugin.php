@@ -11,9 +11,6 @@ require_once(__DIR__.'/views/WidgetkitExMapPlugin.php');
 use WidgetkitEx\MapEx\WidgetkitExPlugin;
 use WidgetkitEx\MapEx\WidgetkitExMapPlugin;
 
-//Loading config data
-$global_config=WidgetkitExPlugin::readGlobalSettings();
-
 return array(
 
     'name' => 'widget/map_ex',
@@ -60,7 +57,7 @@ return array(
 			
 			//Global settings, shared between all instances of the plugin
 			'global' => array(
-						'apikey'=>(isset($global_config['apikey']))?$global_config['apikey']:''
+						'apikey'=>''
 					),
 					
 			//Left for backward compatibility with original Yootheme's Map widget:
@@ -165,12 +162,12 @@ return array(
 			//jQuery form validator http://www.formvalidator.net/:
 			$app['scripts']->add('jquery-form-validator', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.20/jquery.form-validator.min.js', array('uikit'));
 			//Generating dynamic update script:
-			$plugin=new WidgetkitExMapPlugin();
+			$plugin=new WidgetkitExMapPlugin($app);
 			$app['scripts']->add('map_ex.dynamic-updater', $plugin->generateUpdaterJS($app), array(), 'string');
 			//Generating dynamic collections script:
 			$app['scripts']->add('map_ex.dynamic-collections', $plugin->generateClusterCollectionJS($app), array(), 'string');
         },
-		
+				
 		'request' => function($event, $app) {
 			$global=null;
 			if ( (isset($app['request'])) && (isset($app['request']->request)) ) {
@@ -181,7 +178,8 @@ return array(
 				
 			if ($global){
 				//Global is set for valid requests like "Save" and "Save & Close"
-				WidgetkitExPlugin::saveGlobalSettings($global);
+				$plugin=new WidgetkitExPlugin($app);
+				$plugin->saveGlobalSettings($global);
 			}
 		}
 

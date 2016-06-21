@@ -1,6 +1,6 @@
 <?php
 use WidgetkitEx\MapEx\WidgetkitExPlugin;
-$plugin=new WidgetkitExPlugin();
+$plugin=new WidgetkitExPlugin($app);
 ?>
 <div class="uk-grid uk-grid-divider uk-form uk-form-horizontal" data-uk-grid-margin>
     <div class="uk-width-medium-1-4">

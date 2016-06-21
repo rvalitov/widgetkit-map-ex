@@ -18,6 +18,9 @@ class WidgetkitExPlugin{
 	
 	private $plugin_info;
 	
+	private $isWidget=false;
+	private $isContentProvider=false;
+	
 	//Below are the versions of PHP and Widgetkit that are OK
 	const minPHPVersion='5.3';
 	const stablePHPVersion='5.6';
@@ -38,8 +41,8 @@ class WidgetkitExPlugin{
 	//Version of CMS
 	private $CMS;
 	
-	public function __construct($id=0){
-		$this->plugin_info=$this->getWKPluginInfo();
+	public function __construct($appWK,$id=0){
+		$this->plugin_info=$this->getWKPluginInfo($appWK);
 		
 		$this->id=$id;
 		
@@ -169,23 +172,25 @@ class WidgetkitExPlugin{
 			$result[$key]=htmlspecialchars($value);
 		return $result;
 	}
+	
+	public function isWidget(){
+		return $this->isWidget;
+	}
+	
+	public function isContentProvider(){
+		return $this->isContentProvider;
+	}
+	
+	public function isJoomla(){
+		return $this->isJoomla;
+	}
 
-	private static function getPluginDirectory(){
-		//We perform a sequental scan of parent directories of the current script to find the plugin install directory
-		$needle=DIRECTORY_SEPARATOR."com_widgetkit".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."widgets".DIRECTORY_SEPARATOR;
-		$pos=strrpos(__DIR__,DIRECTORY_SEPARATOR."com_widgetkit".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."widgets".DIRECTORY_SEPARATOR);
-		if (!$pos){
-			$needle=DIRECTORY_SEPARATOR."com_widgetkit".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."content".DIRECTORY_SEPARATOR;
-			$pos=strrpos(__DIR__,DIRECTORY_SEPARATOR."com_widgetkit".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."content".DIRECTORY_SEPARATOR);
-		}
-		if (!$pos)
-			return "";
-		$offset=$pos+strlen($needle);
-		$pos2=strpos(__DIR__,DIRECTORY_SEPARATOR,$offset);
-		if (!$pos2)
-			return __DIR__;
-		else
-			return substr(__DIR__,0,$pos2);
+	public function getPluginDirectory(){
+		return $this->plugin_info['path'];
+	}
+	
+	public function getPluginURL(){
+		return $this->plugin_info['url'];
 	}
 	
 	//Returns array with info about current plugin (no matter if it's a widget or a content provider). It works only for custom plugins that are created with updater.js file.
@@ -197,7 +202,7 @@ class WidgetkitExPlugin{
 	//logo - the absolute URL of the logo of the plugin or empty string if unknown.
 	//wiki - the absolute URL of wiki (manual) for the plugin or empty string if unknown.
 	//website - the absolute URL of website for the plugin or empty string if unknown.
-	private function getWKPluginInfo(){
+	private function getWKPluginInfo($appWK){
 		$info=[
 			'name'=>'',
 			'version'=>'',
@@ -207,33 +212,61 @@ class WidgetkitExPlugin{
 			'logo'=>'',
 			'wiki'=>'',
 			'website'=>'',
-			'path'=>WidgetkitExPlugin::getPluginDirectory()
+			'path'=>'',
+			'relativepath'=>'',
+			'url'=>''
 		];
 		
-		$f=@file_get_contents(__DIR__ .'/../plugin.php',false,null,0,2400);
-		if ( ($f) && (preg_match_all("@^\s*'config'\s*=>\s*array\s*\(.*$@m",$f,$matches,PREG_OFFSET_CAPTURE)) ){
-			$offset=$matches[0][0][1];
-			if (preg_match_all("@^\s*'label'\s*=>\s*'.*$@m",$f,$matches,PREG_PATTERN_ORDER,$offset)){
-				$info['name']=explode("'",trim($matches[0][0]))[3];
+		//We perform a sequental scan of parent directories of the current script to find the plugin install directory
+		$needle=DIRECTORY_SEPARATOR."com_widgetkit".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."widgets".DIRECTORY_SEPARATOR;
+		$pos=strrpos(__DIR__,$needle);
+		$this->isWidget=(boolean)$pos;
+		if (!$pos){
+			$this->isWidget=false;
+			$needle=DIRECTORY_SEPARATOR."com_widgetkit".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."content".DIRECTORY_SEPARATOR;
+			$pos=strrpos(__DIR__,$needle);
+			$this->isContentProvider=(boolean)$pos;
+		}
+		if ($pos){
+			$offset=$pos+strlen($needle);
+			$pos2=strpos(__DIR__,DIRECTORY_SEPARATOR,$offset);
+			if (!$pos2)
+				$info['path']=__DIR__;
+			else
+				$info['path']=substr(__DIR__,0,$pos2);
+			$needle=DIRECTORY_SEPARATOR."com_widgetkit".DIRECTORY_SEPARATOR;
+			$info['relativepath']=substr(__DIR__,$pos+strlen($needle),$pos2-($pos+strlen($needle)));
+		}
+		
+		if ($info['path']){
+			$f=@file_get_contents($info['path'].DIRECTORY_SEPARATOR.'plugin.php',false,null,0,2400);
+			if ( ($f) && (preg_match_all("@^\s*'config'\s*=>\s*array\s*\(.*$@m",$f,$matches,PREG_OFFSET_CAPTURE)) ){
+				$offset=$matches[0][0][1];
+				if (preg_match_all("@^\s*'label'\s*=>\s*'.*$@m",$f,$matches,PREG_PATTERN_ORDER,$offset)){
+					$info['name']=explode("'",trim($matches[0][0]))[3];
+				}
+				if (preg_match_all("@^\s*'name'\s*=>\s*'.*$@m",$f,$matches,PREG_PATTERN_ORDER,$offset)){
+					$info['codename']=explode("'",trim($matches[0][0]))[3];
+				}
+				if (preg_match_all("@^\s*'plugin_version'\s*=>\s*'.*$@m",$f,$matches)){
+					$info['version']=explode("'",trim($matches[0][0]))[3];
+				}
+				if (preg_match_all("@^\s*'plugin_date'\s*=>\s*'.*$@m",$f,$matches)){
+					$info['date']=explode("'",trim($matches[0][0]))[3];
+				}
+				if (preg_match_all("@^\s*'plugin_logo'\s*=>\s*'.*$@m",$f,$matches)){
+					$info['logo']=explode("'",trim($matches[0][0]))[3];
+				}
+				if (preg_match_all("@^\s*'plugin_wiki'\s*=>\s*'.*$@m",$f,$matches)){
+					$info['wiki']=explode("'",trim($matches[0][0]))[3];
+				}
+				if (preg_match_all("@^\s*'plugin_website'\s*=>\s*'.*$@m",$f,$matches)){
+					$info['website']=explode("'",trim($matches[0][0]))[3];
+				}
 			}
-			if (preg_match_all("@^\s*'name'\s*=>\s*'.*$@m",$f,$matches,PREG_PATTERN_ORDER,$offset)){
-				$info['codename']=explode("'",trim($matches[0][0]))[3];
-			}
-			if (preg_match_all("@^\s*'plugin_version'\s*=>\s*'.*$@m",$f,$matches)){
-				$info['version']=explode("'",trim($matches[0][0]))[3];
-			}
-			if (preg_match_all("@^\s*'plugin_date'\s*=>\s*'.*$@m",$f,$matches)){
-				$info['date']=explode("'",trim($matches[0][0]))[3];
-			}
-			if (preg_match_all("@^\s*'plugin_logo'\s*=>\s*'.*$@m",$f,$matches)){
-				$info['logo']=explode("'",trim($matches[0][0]))[3];
-			}
-			if (preg_match_all("@^\s*'plugin_wiki'\s*=>\s*'.*$@m",$f,$matches)){
-				$info['wiki']=explode("'",trim($matches[0][0]))[3];
-			}
-			if (preg_match_all("@^\s*'plugin_website'\s*=>\s*'.*$@m",$f,$matches)){
-				$info['website']=explode("'",trim($matches[0][0]))[3];
-			}
+			$url=$appWK['url']->to('widgetkit');
+			if ($url)
+				$info['url']=$url.'/'.$info['relativepath'];
 		}
 		return $info;
 	}
@@ -569,6 +602,8 @@ EOT;
 		
 		//For JS we must espace single quote character:
 		$modal=addcslashes($this->generateUpdateInfoDialog($appWK),"'");
+		
+		$configfile=$this->getPluginURL().'/config.json';
 		$js = <<< EOT
 jQuery(document).ready(function(\$){
 	(function (\$) {
@@ -642,6 +677,24 @@ jQuery(document).ready(function(\$){
 			\$('#version-angularjs-{$this->plugin_info['codename']}').empty();
 			\$('#version-angularjs-{$this->plugin_info['codename']}').append(angular.version.full);
 		}
+		
+		var configfile="{$configfile}";
+		\$.ajax({
+			'url': configfile,
+			'type' : "GET",
+			'dataType' : 'json',
+			success: function (data, textStatus, jqXHR){
+				if (data){
+					/*Update all elements*/
+					\$.each(data, function (index, value){
+						var e=\$('[ng-model="widget.data.global[\''+index+'\']"]');
+						console.info("Updated global settings for option "+index+" ("+e.length+" items)");
+						e.val(value);
+						e.trigger( "change" );
+					});
+				}
+			}
+		});
 	});
 	
 	function isNewVersionAvailable(vCurrent,vRemote){
@@ -897,8 +950,8 @@ EOT;
 	}
 	
 	//Reads global settings for this plugin
-	public static function readGlobalSettings(){
-		$path=WidgetkitExPlugin::getPluginDirectory();
+	public function readGlobalSettings(){
+		$path=$this->getPluginDirectory();
 		if (!$path)
 			return array();
 		$name=$path.DIRECTORY_SEPARATOR."config.json";
@@ -914,10 +967,10 @@ EOT;
 	}
 	
 	//Saves global settings for this plugin
-	public static function saveGlobalSettings($settings){
+	public function saveGlobalSettings($settings){
 		if (!is_array($settings))
 			return false;
-		$path=WidgetkitExPlugin::getPluginDirectory();
+		$path=$this->getPluginDirectory();
 		if (!$path)
 			return false;
 		$name=$path.DIRECTORY_SEPARATOR."config.json";
