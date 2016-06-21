@@ -22,3 +22,6 @@ Thumbs.db
 
 #Scripts
 *.sh
+
+#global config file, because if it doesn't exist, it would be created programmatically
+config.json
