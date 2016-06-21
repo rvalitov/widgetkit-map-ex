@@ -7,13 +7,13 @@ Web: http://www.valitov.me/
 Git: https://github.com/rvalitov/widgetkit-map-ex
 */
 
-require_once(__DIR__.'/WidgetkitExPluginDebug.php');
-use WidgetkitEx\MapEx\WidgetkitExPluginDebug;
+require_once(__DIR__.'/WidgetkitExMapPlugin.php');
+use WidgetkitEx\MapEx\WidgetkitExMapPlugin;
 
 $map_id  = uniqid('wk-map-ex');
 $map_id2 = substr($map_id,9);
 
-$debug=new WidgetkitExPluginDebug($map_id);
+$debug=new WidgetkitExMapPlugin($map_id);
 
 $markers = array();
 $width   = $settings['width']  == 'auto' ? 'auto'  : ((int)$settings['width']).'px';

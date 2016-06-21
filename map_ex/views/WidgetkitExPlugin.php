@@ -1,6 +1,12 @@
 <?php
 /*
-Helper functions for Widgetkit 2 plugins.
+This is a helper class that is suitable for use with any type of plugin for Widgetkit 2:
+1) Widgets
+2) Content provider plugins
+
+In order to use this class in your plugin you need to rename the namespace of this class according to the name of your plugin, for example, for MapEx widget this class should be declared in namespace "WidgetkitEx\MapEx".
+If you need extra unique functions that are plugin-specific, then you should declare your own class that extends this class, see usage example for the WidgetkitExMapPlugin in the MapEx widget.
+
 Author: Ramil Valitov
 E-mail: ramilvalitov@gmail.com
 Web: http://www.valitov.me/
@@ -11,9 +17,68 @@ namespace WidgetkitEx\MapEx{
 class WidgetkitExPlugin{
 	
 	private $plugin_info;
+	
+	//Below are the versions of PHP and Widgetkit that are OK
+	const minPHPVersion='5.3';
+	const stablePHPVersion='5.6';
+	const minWKVersion='2.5.0';
+	const stableWKVersion='2.6.0';
 
-	public function __construct(){
+	//Unique id of the plugin, usually this id is used as HTML id
+	private $id;
+	
+	//The 3 arrays below contain strings that will be used for console log (JS) output, see usage example in the MapEx widget.
+	private $debug_info = array();
+	private $debug_warning = array();
+	private $debug_error = array();
+	
+	//true, if current CMS is Joomla
+	private $isJoomla;
+	
+	//Version of CMS
+	private $CMS;
+	
+	public function __construct($id=0){
 		$this->plugin_info=$this->getWKPluginInfo();
+		
+		$this->id=$id;
+		
+		$this->isJoomla=WidgetkitExPlugin::IsJoomlaInstalled();
+		if ($this->isJoomla)
+			$this->CMS=WidgetkitExPlugin::getJoomlaVersion();
+		else
+			$this->CMS=WidgetkitExPlugin::getWPVersion();
+		
+		$wk_version=WidgetkitExPlugin::getWKVersion();
+		$php_version=@phpversion();
+		array_push($this->debug_info,'Processing widget '.$this->plugin_info['name'].' (version '.$this->plugin_info['version'].') on '.$CMS.' with Widgetkit '.$wk_version.' and PHP '.$php_version.'('.@php_sapi_name().')');
+		if (version_compare($this->minPHPVersion,$php_version)>0)
+			array_push($this->debug_error,'Your PHP is too old! Upgrade is strongly required! This widget may not work with your version of PHP.');
+		else
+			if (version_compare($this->stablePHPVersion,$php_version)>0)
+				array_push($this->debug_warning,'Your PHP is quite old. Although this widget can work with your version of PHP, upgrade is recommended to the latest stable version of PHP.');
+			
+		if (version_compare($this->minWKVersion,$wk_version)>0)
+			array_push($this->debug_warning,"Your Widgetkit version is quite old. Although this widget may work with your version of Widgetkit, upgrade is recommended to the latest stable version of Widgetkit. Besides, you may experience some issues of missing options in the settings of this widget if you don't upgrade.");
+
+		array_push($this->debug_info,'Host: '.@php_uname());
+		$ipath=$this->plugin_info['path'];
+		array_push($this->debug_info,'Widget installation path: '.$ipath);
+		if ($this->isJoomla)
+			if (preg_match_all('@.*\/administrator\/components\/com_widgetkit\/plugins\/widgets\/.+@',$ipath))
+				array_push($this->debug_info,'Installation path is correct');
+			else
+				array_push($this->debug_error,'Installation path is not correct, please fix it. Read more in the Wiki.');
+		else
+			if (preg_match_all('@.*\/wp-content\/plugins\/widgetkit\/plugins\/widgets\/.+@',$ipath))
+				array_push($this->debug_info,'Installation path is correct');
+			else
+				array_push($this->debug_warning,'Installation path is not correct, please fix it. Read more in the Wiki.');
+
+		if ($this->isJoomla)
+			array_push($this->debug_info,'Detected CMS: Joomla');
+		else
+			array_push($this->debug_info,'Detected CMS: WordPress');
 	}
 
 	//If $firstName=true, then returns first name of the current user or empty string if the first name is unkown
@@ -38,6 +103,16 @@ class WidgetkitExPlugin{
 		return ((sizeof($split_name)>0)?implode(' ',$split_name):'');
 	}
 
+	//true if Joomla is installed
+	public function isCMSJoomla(){
+		return $this->isJoomla;
+	}
+	
+	//Returns CMS version
+	public function getCMSVersion(){
+		return $this->CMS;
+	}
+	
 	//Returns true, if the current CMS is Joomla
 	public static function IsJoomlaInstalled(){
 		return ( (class_exists('JURI')) && (method_exists('JURI','base')) );
@@ -95,6 +170,24 @@ class WidgetkitExPlugin{
 		return $result;
 	}
 
+	private static function getPluginDirectory(){
+		//We perform a sequental scan of parent directories of the current script to find the plugin install directory
+		$needle=DIRECTORY_SEPARATOR."com_widgetkit".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."widgets".DIRECTORY_SEPARATOR;
+		$pos=strrpos(__DIR__,DIRECTORY_SEPARATOR."com_widgetkit".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."widgets".DIRECTORY_SEPARATOR);
+		if (!$pos){
+			$needle=DIRECTORY_SEPARATOR."com_widgetkit".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."content".DIRECTORY_SEPARATOR;
+			$pos=strrpos(__DIR__,DIRECTORY_SEPARATOR."com_widgetkit".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."content".DIRECTORY_SEPARATOR);
+		}
+		if (!$pos)
+			return "";
+		$offset=$pos+strlen($needle);
+		$pos2=strpos(__DIR__,DIRECTORY_SEPARATOR,$offset);
+		if (!$pos2)
+			return __DIR__;
+		else
+			return substr(__DIR__,0,$pos2);
+	}
+	
 	//Returns array with info about current plugin (no matter if it's a widget or a content provider). It works only for custom plugins that are created with updater.js file.
 	//The array contains following fields:
 	//name - the name of the plugin or empty string if unknown.
@@ -113,7 +206,8 @@ class WidgetkitExPlugin{
 			'date'=>'',
 			'logo'=>'',
 			'wiki'=>'',
-			'website'=>''
+			'website'=>'',
+			'path'=>WidgetkitExPlugin::getPluginDirectory()
 		];
 		
 		$f=@file_get_contents(__DIR__ .'/../plugin.php',false,null,0,2400);
@@ -151,18 +245,18 @@ class WidgetkitExPlugin{
 		$versionDB=htmlspecialchars((isset($appWK['db_version']))?$appWK['db_version']:'Unknown');
 		$php_version=htmlspecialchars(@phpversion());
 		$phpinfo;
-		if (version_compare('5.3',$php_version)>0)
+		if (version_compare($this->minPHPVersion,$php_version)>0)
 			$phpinfo='<span  data-uk-tooltip class="uk-text-danger" style="margin-top: 5px;" title="{{ \'Your PHP is too old! Upgrade is strongly recommended! This plugin may not work with your version of PHP.\' |trans}}"><i class="uk-icon-warning  uk-margin-small-right"></i>'.$php_version.'</span>';
 		else
-		if (version_compare('5.6',$php_version)>0)
+		if (version_compare($this->stablePHPVersion,$php_version)>0)
 			$phpinfo='<span  data-uk-tooltip class="uk-text-warning" style="margin-top: 5px;" title="{{ \'Your PHP is quite old. Although this plugin can work with your version of PHP, upgrade is recommended to the latest stable version of PHP.\' |trans}}"><i class="uk-icon-warning  uk-margin-small-right"></i>'.$php_version.'</span>';
 		else
 			$phpinfo='<span  data-uk-tooltip class="uk-text-success" style="margin-top: 5px;" title="{{ \'Your PHP version is OK.\' |trans}}"><i class="uk-icon-check uk-margin-small-right"></i>'.$php_version.' ('.@php_sapi_name().')</span>';
 
 		$wkinfo;
-		if (version_compare('2.5.0',$versionWK)>0)
+		if (version_compare($this->minWKVersion,$versionWK)>0)
 			$wkinfo='<span  data-uk-tooltip class="uk-text-danger" style="margin-top: 5px;" title="{{ \'Your Widgetkit version is too old. Upgrade is strongly recommended. Although this plugin may work with your version of Widgetkit, upgrade is recommended to the latest stable version of Widgetkit.\' |trans}}"><i class="uk-icon-warning uk-margin-small-right"></i>'.$versionWK.'</span>';
-		if (version_compare('2.6.0',$versionWK)>0)
+		if (version_compare($this->stableWKVersion,$versionWK)>0)
 			$wkinfo='<span  data-uk-tooltip class="uk-text-warning" style="margin-top: 5px;" title="{{ \'Your Widgetkit version is quite old. Although this plugin may work with your version of Widgetkit, upgrade is recommended to the latest stable version of Widgetkit.\' |trans}}"><i class="uk-icon-warning uk-margin-small-right"></i>'.$versionWK.'</span>';
 		else
 			$wkinfo='<span  data-uk-tooltip class="uk-text-success" style="margin-top: 5px;" title="{{ \'Your Widgetkit version is OK.\' |trans}}"><i class="uk-icon-check uk-margin-small-right"></i>'.$versionWK.'</span>';
@@ -737,142 +831,6 @@ EOT;
 EOT;
 		return str_replace(array("\r","\n"),"",$js);
 	}
-	
-	public function generateClusterCollectionJS($appWK){
-		$js = <<< EOT
-function showMapExInfo(caption,text){
-	var id='mapex-dialog-'+ jQuery.now();
-	jQuery('#'+id).empty();
-	jQuery(document.body).prepend('<div class="uk-modal" id="'+id+'"><div class="uk-modal-dialog"><div class="uk-modal-header"><h3>'+caption+'</h3></div><div class="uk-overflow-container">'+text+'</div><div class="uk-modal-footer"><button class="uk-button uk-modal-close">{$appWK['translator']->trans('Ok')}</button></div></div></div>');
-	
-	/*We force to open links in new window*/
-	jQuery('#'+id+' a').attr('target','_blank');
-	
-	jQuery('#'+id).on({
-		'hide.uk.modal': function(){
-			jQuery('#'+id).remove();
-		}
-	});
-
-	var modal = UIkit.modal('#'+id);
-	
-	if ( !modal.isActive() )
-		modal.show();
-}
-	
-function loadClusterCollections(){	
-	var tagsToReplace = {
-		'&': '&amp;',
-		'<': '&lt;',
-		'>': '&gt;'
-	};
-
-	function replaceTag(tag) {
-		return tagsToReplace[tag] || tag;
-	}
-
-	function safe_tags_replace(str) {
-		if (str)
-			return str.replace(/[&<>]/g, replaceTag);
-		else
-			return str;
-	}
-	
-	function ValidURL(str) {
-		var urlregex = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
-		return urlregex.test(str);
-	}
-
-	(function( $ ) {
-	  $(function() {
-			// More code using $ as alias to jQuery
-			var modal = UIkit.modal.blockUI("{$appWK['translator']->trans('Loading, please wait...')}",{"center":true});
-			$.ajax({
-				'url': 'https://raw.githubusercontent.com/rvalitov/cluster-markers/master/config/config.json',
-				'type' : "GET",
-				'dataType' : 'json',
-				'cache' : false,
-				success: function (data, textStatus, jqXHR){
-					modal.hide();
-					if (data){
-						$('#cluster-collection').empty();
-						var error_list=[];
-						for (var i=0;i<data.length;i++){
-							/*Validation test*/
-							var is_valid=true;
-							if ( ('name' in data[i]) && ('levels' in data[i]) && ('info' in data[i]) && (typeof data[i]['name'] === 'string') && (typeof data[i]['levels'] === 'object') && (typeof data[i]['info'] === 'string') && (data[i]['info'].length<=2000) && (data[i]['levels'].length>=1) ) {
-								for (var k=0;k<data[i]['levels'].length;k++)
-									if ( (!('icon' in data[i]['levels'][k])) || (!('color' in data[i]['levels'][k])) || (!('width' in data[i]['levels'][k])) || (!('height' in data[i]['levels'][k])) || (!('size' in data[i]['levels'][k])) || (!('icon_x' in data[i]['levels'][k])) || (!('icon_y' in data[i]['levels'][k])) || (!('label_x' in data[i]['levels'][k])) || (!('label_y' in data[i]['levels'][k])) || (typeof data[i]['levels'][k]['width'] !== 'number') || (typeof data[i]['levels'][k]['height'] !== 'number') || (typeof data[i]['levels'][k]['size'] !== 'number') || ((typeof data[i]['levels'][k]['icon_x'] !== 'number')&&(data[i]['levels'][k]['icon_x']!='')) || ((typeof data[i]['levels'][k]['icon_y'] !== 'number')&&(data[i]['levels'][k]['icon_y']!='')) || ((typeof data[i]['levels'][k]['label_x'] !== 'number')&&(data[i]['levels'][k]['label_x']!='')) || ((typeof data[i]['levels'][k]['label_y'] !== 'number')&&(data[i]['levels'][k]['label_y']!='')) || (typeof data[i]['levels'][k]['size'] !== 'number') || (data[i]['levels'][k]['size']<1) || (data[i]['levels'][k]['width']<1) || (data[i]['levels'][k]['height']<1) || (!ValidURL(data[i]['levels'][k]['icon'])) ){
-										is_valid=false;
-										break;
-									}
-							}
-							else
-								is_valid=false;
-							
-							if (is_valid)
-							{
-								var name;
-								if (data[i].name.length>64)
-									name=data[i].name.substring(0,61)+'...';
-								else
-									name=data[i].name;
-								var tags='<div class="uk-panel uk-panel-box"><h4 class="uk-text-center">#'+(i+1)+'. '+safe_tags_replace(name);
-								if ( (data[i]['info']) && (data[i]['info'].trim().length>0) )
-									tags+='<i class="uk-icon uk-icon-info-circle uk-margin-small-left" style="color:#ffb105;cursor:pointer;" onclick="showMapExInfo(\''+name.replace(/"/g,'&quot;').replace(/'/g,'&#39;')+'\',\''+data[i]['info'].replace(/"/g,'&quot;').replace(/'/g,"\\'")+'\');"></i>';
-								tags+='</h4><div class="uk-grid uk-grid-width-1-'+Math.min(5,data[i]['levels'].length)+'">';
-								for (var k=0;k<data[i]['levels'].length;k++)
-									tags+='<div class="uk-text-center"><div><img src="'+data[i]['levels'][k]['icon']+'"></div><small>{$appWK['translator']->trans('Level')} '+(k+1)+'</small></div>';
-								/*
-								It's quite difficult to mess with angularjs when you add code with ng-click that must be compiled dynamically in the scope. So, it's better to emulate user input in to fill in the data when a collection is activated.
-								*/
-								tags+='</div><div class="uk-text-center"><button class="uk-button uk-button-success" onclick="UIkit.modal.alert(\'{$appWK['translator']->trans('Selected collection was activated!')}\',{\'center\':true});';
-								tags+='jQuery(\'#mapex-clear-levels\').click();';
-								for (var k=0;k<data[i]['levels'].length;k++){
-									tags+='jQuery(\'#mapex-add-level\').click();';
-									var id=k+1;
-									tags+='jQuery(\'#cluster-'+id+'-color\').val(\''+data[i]['levels'][k]['color']+'\').trigger(\'change\');';
-									tags+='jQuery(\'#cluster-'+id+'-icon input\').val(\''+data[i]['levels'][k]['icon']+'\').trigger(\'change\');';
-									tags+='jQuery(\'#cluster-'+id+'-width\').val(\''+data[i]['levels'][k]['width']+'\').trigger(\'change\');';
-									tags+='jQuery(\'#cluster-'+id+'-height\').val(\''+data[i]['levels'][k]['height']+'\').trigger(\'change\');';
-									tags+='jQuery(\'#cluster-'+id+'-size\').val(\''+data[i]['levels'][k]['size']+'\').trigger(\'change\');';
-									tags+='jQuery(\'#cluster-'+id+'-icon_x\').val(\''+data[i]['levels'][k]['icon_x']+'\').trigger(\'change\');';
-									tags+='jQuery(\'#cluster-'+id+'-icon_y\').val(\''+data[i]['levels'][k]['icon_y']+'\').trigger(\'change\');';
-									tags+='jQuery(\'#cluster-'+id+'-label_x\').val(\''+data[i]['levels'][k]['label_x']+'\').trigger(\'change\');';
-									tags+='jQuery(\'#cluster-'+id+'-label_y\').val(\''+data[i]['levels'][k]['label_y']+'\').trigger(\'change\');';
-								}
-								tags+='"><i class="uk-icon uk-icon-check uk-margin-small-right"></i>{$appWK['translator']->trans('Activate Collection')}</button></div></div>';
-								$('#cluster-collection').append(tags);
-							}
-							else
-								error_list.push(i);
-						}
-						var info_text='Downloaded information about '+data.length+' items.';
-						if (error_list.length>0){
-							info_text+=' Failed to parse '+error_list.length+' items: ';
-							for (var k=0; k<error_list.length; k++){
-								if (k>0)
-									info_text+=', ';
-								info_text+='#'+error_list[k];
-							}
-							console.log(info_text);
-						}
-						UIkit.notify(info_text, {'timeout':3000,'pos':'top-center','status':'info'});
-					}
-					else
-						UIkit.modal.alert("{$appWK['translator']->trans('Failed to download a list of markers collections.')}",{"center":true});
-				},
-				error: function (jqXHR, textStatus, errorThrown ){
-					modal.hide();
-					UIkit.modal.alert("{$appWK['translator']->trans('Failed to download a list of markers collections.')}",{"center":true});
-				}
-			});
-	  });
-	})(jQuery);
-}
-EOT;
-	return $js;
-	}
 
 	//Returns a string that contains dumb of the $var.
 	//This function is better than print_r because it controls the depth ($max_count), and doesn't cause reaching the memory limit error.
@@ -936,6 +894,92 @@ EOT;
 		}
 
 		return $output;
+	}
+	
+	//Reads global settings for this plugin
+	public static function readGlobalSettings(){
+		$path=WidgetkitExPlugin::getPluginDirectory();
+		if (!$path)
+			return array();
+		$name=$path.DIRECTORY_SEPARATOR."config.json";
+		if (!file_exists($name))
+			return array();
+		$data=@file_get_contents($name);
+		if ($data===false)
+			return array();
+		$data=@json_decode($data,true);
+		if (!$data)
+			return array();
+		return $data;
+	}
+	
+	//Saves global settings for this plugin
+	public static function saveGlobalSettings($settings){
+		if (!is_array($settings))
+			return false;
+		$path=WidgetkitExPlugin::getPluginDirectory();
+		if (!$path)
+			return false;
+		$name=$path.DIRECTORY_SEPARATOR."config.json";
+		$data=@json_encode($settings);
+		if (!$data)
+			return false;
+		return (@file_put_contents($name,$data)!==false);
+	}
+	
+	//Adds a string to the list of debug strings with "info" debug level
+	public function addInfoString($s){
+		array_push($this->debug_info,$s);
+	}
+	
+	//Adds a string to the list of debug strings with "warning" debug level
+	public function addWarningString($s){
+		array_push($this->debug_warning,$s);
+	}
+	
+	//Adds a string to the list of debug strings with "error" debug level
+	public function addErrorString($s){
+		array_push($this->debug_error,$s);
+	}
+	
+	public function printDebugStrings(){
+		$this->printJSDebugText($this->debug_info,1);
+		$this->printJSDebugText($this->debug_warning,2);
+		$this->printJSDebugText($this->debug_error,3);
+	}
+	
+	/*
+	Prints debug info string for JS console output
+	$typeid defines the log warning level
+	*/
+	private function printJSDebugString($s, $typeid=1){
+		$prefix='['.$this->plugin_info['name'].' #'.$this->id.'] ';
+		$s=addslashes($s);
+		$s=preg_replace("/\r\n|\r|\n/", "\\n",$s);
+		switch($typeid){
+			case 1:
+				echo "console.info('".$prefix.$s."');";
+				break;
+			case 2:
+				echo "console.warn('".$prefix.$s."');";
+				break;
+			case 3:
+				echo "console.error('".$prefix.$s."');";
+				break;
+			default:
+				echo "console.log('".$prefix.$s."');";
+				break;
+		}
+	}
+
+	/*
+	Prints debug info strings (array) for JS console output
+	$typeid defines the log warning level
+	*/
+	private function printJSDebugText($arrayStrings, $typeid=1){
+		foreach ($arrayStrings as $s){
+			$this->printJSDebugString($s,$typeid);
+		}
 	}
 }
 
