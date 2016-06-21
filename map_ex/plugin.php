@@ -155,6 +155,8 @@ return array(
 			//Adding tooltip:
 			$app['scripts']->add('uikit-tooltip', 'vendor/assets/uikit/js/components/tooltip.min.js', array('uikit'));
 			$app['styles']->add('uikit-tooltip', 'https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/css/components/tooltip.min.css', array('uikit'));
+			//jQuery wait plugin:
+			$app['scripts']->add('jquery.wait', 'plugins/widgets/map_ex/assets/jquery.wait.min.js', array('uikit'));
 			//Marked:
 			$app['scripts']->add('marked', 'plugins/widgets/map_ex/assets/marked.min.js', array('uikit'));
 			//Mailchimp for subscription:
@@ -164,8 +166,8 @@ return array(
 			//Generating dynamic update script:
 			$plugin=new WidgetkitExMapPlugin($app);
 			$app['scripts']->add('map_ex.dynamic-updater', $plugin->generateUpdaterJS($app), array(), 'string');
-			//Generating dynamic collections script:
-			$app['scripts']->add('map_ex.dynamic-collections', $plugin->generateClusterCollectionJS($app), array(), 'string');
+			//Generating dynamic MapEx script:
+			$app['scripts']->add('map_ex.dynamic-custom', $plugin->generateMapExJS($app), array(), 'string');
         },
 				
 		'request' => function($event, $app) {

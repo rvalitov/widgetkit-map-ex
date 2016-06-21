@@ -11,8 +11,16 @@ require_once(__DIR__.'/WidgetkitExPlugin.php');
 
 class WidgetkitExMapPlugin extends WidgetkitExPlugin{
 	//$appWK - is parameter that must be set to $app upon call.
-	public function generateClusterCollectionJS($appWK){
+	public function generateMapExJS($appWK){
 		$js = <<< EOT
+jQuery(document).ready(function(\$){
+	\$('div.uk-form-controls > field input[ng-model="latlng.marker"]').waitUntilExists(function(){
+		\$(this).prop('disabled', true);
+		\$(this).attr('placeholder',"{$appWK['translator']->trans('Field disabled by MapEx widget')}");
+		\$(this).attr('title',"{$appWK['translator']->trans('Field disabled by MapEx widget')}");
+	});
+});
+
 function showMapExInfo(caption,text){
 	var id='mapex-dialog-'+ jQuery.now();
 	jQuery('#'+id).empty();
