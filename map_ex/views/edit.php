@@ -13,6 +13,7 @@ $plugin=new WidgetkitExPlugin();
 				<li><a href="#">{{'Marker Clustering' | trans}}</a></li>
                 <li><a href="#">{{'Content' | trans}}</a></li>
                 <li><a href="#">{{'General' | trans}}</a></li>
+				<li><a href="#">{{'Global Settings' | trans}}</a></li>
 				<li><a href="#">{{'About' | trans}}</a></li>
             </ul>
         </div>
@@ -817,6 +818,29 @@ $plugin=new WidgetkitExPlugin();
                 </div>
 
             </li>
+			<li>
+
+                <h3 class="wk-form-heading">{{'Global Settings' | trans}}</h3>
+				
+				<div class="uk-panel uk-panel-box uk-alert">
+					<p class="uk-text-center"><i class="uk-icon uk-icon-info-circle uk-margin-small-right"></i>{{'Global settings are shared between all the instances of this plugin. If you change any options below, then they will automatically change in all other plugins of this type, too.'|trans}}</p>
+				</div>
+		
+				<div class="uk-panel uk-panel-box uk-alert-warning uk-margin" ng-if="!widget.data.global['apikey']">
+					<p class="uk-text-center"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>{{ 'The Google API key is not defined. Please, enter your API key in order to use the Google Map service. You can obtain the key from Google.' | trans}}</p>
+					<p class="uk-text-center">
+					<a class="uk-button" href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank"><i class="uk-icon uk-icon-external-link uk-margin-small-right"></i>{{'More info' |trans}}</a>
+					</p>
+				</div>
+				
+				<div class="uk-form-row">
+                    <span class="uk-form-label" for="wk-width">{{'API key' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="{{ 'Google API key that you should obtain from Google in order to use the Google Map services.' | trans}}"><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <div class="uk-form-controls">
+                        <input id="wk-width" class="uk-form-width-medium" type="text" ng-model="widget.data.global['apikey']">
+                    </div>
+                </div>
+				
+			</li>
 			<li>
 
                 <h3 class="wk-form-heading">{{'About' | trans}}</h3>

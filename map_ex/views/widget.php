@@ -8,12 +8,14 @@ Git: https://github.com/rvalitov/widgetkit-map-ex
 */
 
 require_once(__DIR__.'/WidgetkitExMapPlugin.php');
+use WidgetkitEx\MapEx\WidgetkitExPlugin;
 use WidgetkitEx\MapEx\WidgetkitExMapPlugin;
 
 $map_id  = uniqid('wk-map-ex');
 $map_id2 = substr($map_id,9);
 
 $debug=new WidgetkitExMapPlugin($map_id);
+$global_settings=WidgetkitExPlugin::readGlobalSettings();
 
 $markers = array();
 $width   = $settings['width']  == 'auto' ? 'auto'  : ((int)$settings['width']).'px';
@@ -164,6 +166,14 @@ if ($settings['markercluster']=='custom'){
 </script>
 
 <script>
+<?php
+if (!isset($global_settings['apikey']))
+	$global_settings['apikey']="";
+else
+	$global_settings['apikey']=trim($global_settings['apikey']);
+echo 'var mapexGoogleApiKey=mapexGoogleApiKey || "'.$global_settings['apikey'].'";';
+?>
+
 function getMapZoom<?php echo $map_id2;?>(){
 	if (window.outerWidth<=767)
 		if (Math.abs(window.orientation) === 90){

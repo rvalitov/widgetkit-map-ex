@@ -57,7 +57,12 @@ return array(
             'height'                  => 400,
             'maptypeid'               => 'styled',
             'maptypecontrol'          => false,
-
+			
+			//Global settings, shared between all instances of the plugin
+			'global' => array(
+						'apikey'=>(isset($global_config['apikey']))?$global_config['apikey']:''
+					),
+					
 			//Left for backward compatibility with original Yootheme's Map widget:
             'mapctrl'                 => true,
 			
