@@ -874,6 +874,69 @@ EOT;
 	return $js;
 	}
 
+	//Returns a string that contains dumb of the $var.
+	//This function is better than print_r because it controls the depth ($max_count), and doesn't cause reaching the memory limit error.
+	public static function features_var_export($var, $prefix = '', $init = TRUE, $count = 0, $max_count=5) {
+		if ($count > $max_count) {
+			// Recursion depth reached.
+			return '...';
+		}
+
+		if (is_object($var)) {
+			$output = method_exists($var, 'export') ? $var->export() : WidgetkitExPlugin::features_var_export((array) $var, '', FALSE, $count+1);
+		}
+		else if (is_array($var)) {
+			if (empty($var)) {
+				$output = 'array()';
+			}
+			else {
+			$output = "array(\n";
+			foreach ($var as $key => $value) {
+				// Using normal var_export on the key to ensure correct quoting.
+				$output .= "  " . var_export($key, TRUE) . " => " . WidgetkitExPlugin::features_var_export($value, '  ', FALSE, $count+1) . ",\n";
+			}
+			$output .= ')';
+			}
+		}
+		else if (is_bool($var)) {
+			$output = $var ? 'TRUE' : 'FALSE';
+		}
+		else if (is_int($var)) {
+			$output = intval($var);
+		}
+		else if (is_numeric($var)) {
+			$floatval = floatval($var);
+			if (is_string($var) && ((string) $floatval !== $var)) {
+			  // Do not convert a string to a number if the string
+			  // representation of that number is not identical to the
+			  // original value.
+			  $output = var_export($var, TRUE);
+			}
+			else {
+			$output = $floatval;
+			}
+		}
+		else if (is_string($var) && strpos($var, "\n") !== FALSE) {
+			// Replace line breaks in strings with a token for replacement
+			// at the very end. This protects whitespace in strings from
+			// unintentional indentation.
+			$var = str_replace("\n", "***BREAK***", $var);
+			$output = var_export($var, TRUE);
+		}
+		else {
+			$output = var_export($var, TRUE);
+		}
+
+		if ($prefix) {
+			$output = str_replace("\n", "\n$prefix", $output);
+		}
+
+		if ($init) {
+			$output = str_replace("***BREAK***", "\n", $output);
+		}
+
+		return $output;
+	}
 }
 
 }
