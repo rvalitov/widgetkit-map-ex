@@ -669,26 +669,6 @@ jQuery(document).ready(function(\$){
 			}
 		});
 	});
-	
-	function isNewVersionAvailable(vCurrent,vRemote){
-		if (typeof vCurrent + typeof vRemote != 'stringstring')
-			return false;
-	
-		left=vCurrent.replace(/^\D/,'');
-		right=vRemote.replace(/^\D/,'');
-		var a = left.split('.')
-		,   b = right.split('.')
-		,   i = 0, len = Math.max(a.length, b.length);
-			
-		for (; i < len; i++) {
-			if ((a[i] && !b[i] && parseInt(a[i]) > 0) || (parseInt(a[i]) > parseInt(b[i]))) {
-				return false;
-			} else if ((b[i] && !a[i] && parseInt(b[i]) > 0) || (parseInt(a[i]) < parseInt(b[i]))) {
-				return true;
-			}
-		}
-		return false;
-	}
 
 	function printNiceDate(MyDate,dateSeparator){
 		if (typeof dateSeparator!='string'){
@@ -713,7 +693,7 @@ jQuery(document).ready(function(\$){
 			'dataType' : 'json',
 			success: function (data, textStatus, jqXHR){
 				if (data){
-					if (isNewVersionAvailable('{$settings['version']}',data.tag_name)){
+					if (versioncompare('{$settings['version']}',data.tag_name)<0){
 						var date_remote = Date.parse(data.published_at);
 						if (date_remote>0){
 							date_remote=printNiceDate(new Date(date_remote));

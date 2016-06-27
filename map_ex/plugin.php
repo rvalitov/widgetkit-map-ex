@@ -163,6 +163,10 @@ return array(
 			$app['scripts']->add('mailchimp', 'plugins/widgets/map_ex/assets/jquery.formchimp.min.js', array('uikit'));
 			//jQuery form validator http://www.formvalidator.net/:
 			$app['scripts']->add('jquery-form-validator', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.20/jquery.form-validator.min.js', array('uikit'));
+			//Underscore.js
+			$app['scripts']->add('underscore', 'plugins/widgets/map_ex/assets/underscore-min.js', array('uikit'));
+			//Semantic version compare
+			$app['scripts']->add('versioncompare', 'plugins/widgets/map_ex/assets/versioncompare.js', array('uikit'));
 			//Generating dynamic update script:
 			$plugin=new WidgetkitExMapPlugin($app);
 			$app['scripts']->add('map_ex.dynamic-updater', $plugin->generateUpdaterJS($app), array(), 'string');
