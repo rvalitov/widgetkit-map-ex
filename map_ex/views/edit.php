@@ -379,7 +379,7 @@ $plugin=new WidgetkitExPlugin($app);
 				</div>
 				
 				<div class="uk-form-row">
-                    <span class="uk-form-label">{{'Name' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="{{ 'The label that will be displayed in the type controls to refer to your custom map style. If left empty, then the default value \'Styled\' is used"|trans}}><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <span class="uk-form-label">{{'Name' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="{{ 'The label that will be displayed in the type controls to refer to your custom map style. If left empty, then the default value \'Styled\' is used'|trans}}"><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls">
 						<span><input id="wk-maptype_name" type="text" ng-model="widget.data['maptype_name']"></span>
                     </div>
@@ -433,7 +433,7 @@ $plugin=new WidgetkitExPlugin($app);
                 </div>
 
                 <div class="uk-form-row" ng-if="widget.data['styling_mode'] == ''">
-                    <span class="uk-form-label" for="wk-styler-gamma">{{'Gamma' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="{{ 'Gamma is a floating point value between 0.01 and 10.0 (where 1.0 applies no correction) indicates the amount of gamma correction to apply to the element. Gammas modify the lightness of hues in a non-linear fashion, while not impacting white or black values. Gammas are typically used to modify the contrast of multiple elements. For example, you could modify the gamma to increase or decrease the contrast between the edges and interiors of elements. Low gamma values (< 1) increase contrast, while high values (> 1) decrease contrast.'|trans}}"><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <span class="uk-form-label" for="wk-styler-gamma">{{'Gamma' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="{{ 'Gamma is a floating point value between 0.01 and 10.0 (where 1.0 applies no correction) indicates the amount of gamma correction to apply to the element. Gammas modify the lightness of hues in a non-linear fashion, while not impacting white or black values. Gammas are typically used to modify the contrast of multiple elements. For example, you could modify the gamma to increase or decrease the contrast between the edges and interiors of elements. Low gamma values (less than 1) increase contrast, while high values (greater than 1) decrease contrast.'|trans}}"><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls">
                         <input id="wk-styler-gamma" class="uk-form-width-small" type="text" ng-model="widget.data['styler_gamma']"> ({{'%from% to %to%' | trans: {from:0, to:10} }})
                     </div>
@@ -820,6 +820,7 @@ $plugin=new WidgetkitExPlugin($app);
                     </div>
                 </div>
 
+				<pre>{{widget | json}}</pre>
             </li>
 			<li>
 
