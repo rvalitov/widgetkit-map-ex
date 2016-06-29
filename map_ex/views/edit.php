@@ -819,8 +819,6 @@ $plugin=new WidgetkitExPlugin($app);
                         <label><input type="checkbox" ng-model="widget.data['debug_output']"> {{'Print debug info to browser console' | trans}}</label>
                     </div>
                 </div>
-
-				<pre>{{widget | json}}</pre>
             </li>
 			<li>
 

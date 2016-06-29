@@ -987,6 +987,12 @@ EOT;
 			$this->printJSDebugString($s,$typeid);
 		}
 	}
+	
+	//UTF8 safe basename function
+	public static function mb_basename($path, $suffix = null) {
+		$split = preg_split('/\\'.DIRECTORY_SEPARATOR.'/', rtrim($path, DIRECTORY_SEPARATOR.' '));
+		return substr(basename('X' . $split[count($split) - 1], $suffix), 1);
+	}
 }
 
 }

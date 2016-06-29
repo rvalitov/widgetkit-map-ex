@@ -76,7 +76,7 @@ foreach ($items as $i => $item) {
 
 				$debug->addInfoString('The final URL for the custom pin of the item#'.$item_id.' is '.$marker['pin']);
 				if ($settings['debug_output'])
-					if (url_exists($marker['pin']))
+					if (WidgetkitExPlugin::url_exists($marker['pin']))
 						$debug->addInfoString('The URL '.$marker['pin'].' is valid.');
 					else
 						$debug->addErrorString('Failed to check the URL '.$marker['pin']." - it doesn't exist?");
