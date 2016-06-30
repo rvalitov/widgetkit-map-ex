@@ -39,22 +39,29 @@ class WidgetkitExPlugin{
 	private $isJoomla;
 	
 	//Version of CMS
+	private $CMSVersion;
+	
 	private $CMS;
 	
 	public function __construct($appWK,$id=0){
 		$this->id=$id;
 		
 		$this->isJoomla=WidgetkitExPlugin::IsJoomlaInstalled();
-		if ($this->isJoomla)
-			$this->CMS=WidgetkitExPlugin::getJoomlaVersion();
-		else
-			$this->CMS=WidgetkitExPlugin::getWPVersion();
 		
 		$this->plugin_info=$this->getWKPluginInfo($appWK);
 		
-		$wk_version=WidgetkitExPlugin::getWKVersion();
+		if ($this->isJoomla){
+			$this->CMSVersion=$this->getJoomlaVersion();
+			$this->CMS="Joomla";
+		}
+		else{
+			$this->CMSVersion=$this->getWPVersion();
+			$this->CMS="WordPress";
+		}
+		
+		$wk_version=$this->getWKVersion();
 		$php_version=@phpversion();
-		array_push($this->debug_info,'Processing widget '.$this->plugin_info['name'].' (version '.$this->plugin_info['version'].') on '.$CMS.' with Widgetkit '.$wk_version.' and PHP '.$php_version.'('.@php_sapi_name().')');
+		array_push($this->debug_info,'Processing widget '.$this->plugin_info['name'].' (version '.$this->plugin_info['version'].') on '.$this->CMS.' '.$this->CMSVersion.' with Widgetkit '.$wk_version.' and PHP '.$php_version.'('.@php_sapi_name().')');
 		if (version_compare($this->minPHPVersion,$php_version)>0)
 			array_push($this->debug_error,'Your PHP is too old! Upgrade is strongly required! This widget may not work with your version of PHP.');
 		else
@@ -111,8 +118,17 @@ class WidgetkitExPlugin{
 		return $this->isJoomla;
 	}
 	
+	public function isCMSWordPress(){
+		return !$this->isJoomla;
+	}
+	
 	//Returns CMS version
 	public function getCMSVersion(){
+		return $this->CMSVersion;
+	}
+	
+	//Returns CMS name (Joomla or WordPress)
+	public function getCMSName(){
 		return $this->CMS;
 	}
 	
@@ -128,27 +144,20 @@ class WidgetkitExPlugin{
 	}
 
 	//Returns Joomla version or empty string if failed
-	public static function getJoomlaVersion(){
-		//TODO: use absolute paths here
-		$f=@file_get_contents(__DIR__ .'/../../../../../../../libraries/cms/version/version.php',false,null,0,3400);
-		if (!$f)
+	public function getJoomlaVersion(){
+		if ($this->isCMSJoomla()){
+			$jversion = new \JVersion;
+			return $jversion->getShortVersion();
+		}
+		else
 			return "";
-
-		if (preg_match_all("@.*public\s+\\\$RELEASE\s*=\s*'.+';@",$f,$matches))
-			$v.=explode("'",$matches[0][0],3)[1];
-		if (preg_match_all("@.*public\s+\\\$DEV_LEVEL\s*=\s*'.+';@",$f,$matches))
-			$v.='.'.explode("'",$matches[0][0],3)[1];
-		if (preg_match_all("@.*public\s+\\\$DEV_STATUS\s*=\s*'.+';@",$f,$matches))
-			$v.=' '.explode("'",$matches[0][0],3)[1];
-		if (preg_match_all("@.*public\s+\\\$CODENAME\s*=\s*'.+';@",$f,$matches))
-			$v.=' '.explode("'",$matches[0][0],3)[1];
-		return trim($v);
 	}
 
 	//Returns WordPress version or empty string if failed
-	public static function getWPVersion(){
-		//TODO: use absolute paths here
-		$f=@file_get_contents(__DIR__ .'/../../../../../../../wp-includes/version.php',false,null,0,1400);
+	public function getWPVersion(){
+		if (!$this->isCMSWordPress())
+			return "";
+		$f=@file_get_contents($this->getRootDirectory().'/wp-includes/version.php',false,null,0,1400);
 		if (!$f)
 			return "";
 		
@@ -158,9 +167,8 @@ class WidgetkitExPlugin{
 	}
 
 	//Returns Widgetkit version or empty string if failed
-	public static function getWKVersion(){
-		//TODO: use absolute paths here
-		$f=@file_get_contents(__DIR__ .'/../../../../config.php',false,null,0,1400);
+	public function getWKVersion(){
+		$f=@file_get_contents($this->getWKDirectory().'/config.php',false,null,0,1400);
 		if ( (!$f) || (!preg_match_all("@.*'version'\s+=>\s+'.+',@",$f,$matches)) )
 			return "";
 		return explode("'",$matches[0][0],5)[3];
@@ -198,6 +206,14 @@ class WidgetkitExPlugin{
 	
 	public function getWebsiteRootURL(){
 		return $this->plugin_info['root_url'];
+	}
+	
+	public function getWKDirectory(){
+		return $this->plugin_info['wk_path'];
+	}
+	
+	public function getRootDirectory(){
+		return $this->plugin_info['root'];
 	}
 	
 	//Returns array with info about current plugin (no matter if it's a widget or a content provider). It works only for custom plugins that are created with updater.js file.
@@ -469,7 +485,7 @@ EOT;
 		$firstName=htmlspecialchars(WidgetkitExPlugin::extractWKUserName($appWK['user']));
 		$lastName=htmlspecialchars(WidgetkitExPlugin::extractWKUserName($appWK['user'],false));
 		$email=htmlspecialchars($appWK['user']->getEmail());
-		$cms=htmlspecialchars((WidgetkitExPlugin::IsJoomlaInstalled())?'Joomla':'WordPress');
+		$cms=htmlspecialchars($this->getCMSName());
 		$origin=htmlspecialchars($appWK['request']->getBaseUrl());
 		$locale=htmlspecialchars($appWK['locale']);
 		
