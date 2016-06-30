@@ -34,9 +34,8 @@ The new features that the MapEx has and that are not available in the original M
 
 # Supported platforms
 * The latest code is based on Widgetkit 2.5.3, however it should work with any Widgetkit 2.4.x and later (recommended 2.5.0+). Tested on Widgetkit 2.6.x and 2.7.x, too.
-* Joomla 3.4.x or later required
-
-Widget should work with Wordpress 4.4.x (according to feedback from users; I can't test it personally, because I don't have the required subscription). If you will face any problems using this widget on WordPress, you can contact me to make some changes to the code of this widget if necessary.
+* Joomla 3.4.x or later
+* Wordpress 4.4.x or later
 
 **Read full system requirements [here](https://github.com/rvalitov/widgetkit-map-ex/wiki/System-requirements).** 
 
