@@ -680,7 +680,7 @@ $plugin=new WidgetkitExPlugin($app);
 						</div>
 						
 						<div class="uk-text-right">
-							<button class="uk-button uk-button-danger uk-margin-top" onclick="UIkit.notify(jQuery('#level-removed').text(), {'timeout':3000,'pos':'top-center','status':'info'});" ng-click="widget.data['clusters'].splice({{$index}},1)"><i class="uk-icon uk-icon-minus-circle uk-margin-small-right"></i>{{'Remove Level'|trans}}</button>
+							<button class="uk-button uk-button-danger uk-margin-top" onclick="UIkit.notify(jQuery('#level-removed').text(), {'timeout':3000,'pos':'top-center','status':'info'});" ng-click="widget.data['clusters'].splice($index,1)"><i class="uk-icon uk-icon-minus-circle uk-margin-small-right"></i>{{'Remove Level'|trans}}</button>
 						</div>
 						
 						</div>
