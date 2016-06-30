@@ -14,6 +14,8 @@ function versioncompare(v1,v2){
 	s2=s2.replace(/^\D+/, '');
 	if (s1==s2)
 		return 0;		
+	if ( (!s1) || (!s2) )
+		return 0;
 	return (versionsort([s1,s2])[0]==s1)? -1: 1;
 }
 
