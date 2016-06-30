@@ -26,6 +26,7 @@ class WidgetkitExPlugin{
 	const stablePHPVersion='5.6';
 	const minWKVersion='2.5.0';
 	const stableWKVersion='2.6.0';
+	const minUIkitVersion='2.20.0';
 
 	//Unique id of the plugin, usually this id is used as HTML id
 	private $id;
@@ -62,13 +63,13 @@ class WidgetkitExPlugin{
 		$wk_version=$this->getWKVersion();
 		$php_version=@phpversion();
 		array_push($this->debug_info,'Processing widget '.$this->plugin_info['name'].' (version '.$this->plugin_info['version'].') on '.$this->CMS.' '.$this->CMSVersion.' with Widgetkit '.$wk_version.' and PHP '.$php_version.'('.@php_sapi_name().')');
-		if (version_compare($this->minPHPVersion,$php_version)>0)
+		if (version_compare(WidgetkitExPlugin::minPHPVersion,$php_version)>0)
 			array_push($this->debug_error,'Your PHP is too old! Upgrade is strongly required! This widget may not work with your version of PHP.');
 		else
-			if (version_compare($this->stablePHPVersion,$php_version)>0)
+			if (version_compare(WidgetkitExPlugin::stablePHPVersion,$php_version)>0)
 				array_push($this->debug_warning,'Your PHP is quite old. Although this widget can work with your version of PHP, upgrade is recommended to the latest stable version of PHP.');
 			
-		if (version_compare($this->minWKVersion,$wk_version)>0)
+		if (version_compare(WidgetkitExPlugin::minWKVersion,$wk_version)>0)
 			array_push($this->debug_warning,"Your Widgetkit version is quite old. Although this widget may work with your version of Widgetkit, upgrade is recommended to the latest stable version of Widgetkit. Besides, you may experience some issues of missing options in the settings of this widget if you don't upgrade.");
 
 		array_push($this->debug_info,'Host: '.@php_uname());
@@ -336,18 +337,18 @@ class WidgetkitExPlugin{
 		$versionDB=htmlspecialchars((isset($appWK['db_version']))?$appWK['db_version']:'Unknown');
 		$php_version=htmlspecialchars(@phpversion());
 		$phpinfo;
-		if (version_compare($this->minPHPVersion,$php_version)>0)
+		if (version_compare(WidgetkitExPlugin::minPHPVersion,$php_version)>0)
 			$phpinfo='<span  data-uk-tooltip class="uk-text-danger" style="margin-top: 5px;" title="{{ \'Your PHP is too old! Upgrade is strongly recommended! This plugin may not work with your version of PHP.\' |trans}}"><i class="uk-icon-warning  uk-margin-small-right"></i>'.$php_version.'</span>';
 		else
-		if (version_compare($this->stablePHPVersion,$php_version)>0)
+		if (version_compare(WidgetkitExPlugin::stablePHPVersion,$php_version)>0)
 			$phpinfo='<span  data-uk-tooltip class="uk-text-warning" style="margin-top: 5px;" title="{{ \'Your PHP is quite old. Although this plugin can work with your version of PHP, upgrade is recommended to the latest stable version of PHP.\' |trans}}"><i class="uk-icon-warning  uk-margin-small-right"></i>'.$php_version.'</span>';
 		else
 			$phpinfo='<span  data-uk-tooltip class="uk-text-success" style="margin-top: 5px;" title="{{ \'Your PHP version is OK.\' |trans}}"><i class="uk-icon-check uk-margin-small-right"></i>'.$php_version.' ('.@php_sapi_name().')</span>';
 
 		$wkinfo;
-		if (version_compare($this->minWKVersion,$versionWK)>0)
+		if (version_compare(WidgetkitExPlugin::minWKVersion,$versionWK)>0)
 			$wkinfo='<span  data-uk-tooltip class="uk-text-danger" style="margin-top: 5px;" title="{{ \'Your Widgetkit version is too old. Upgrade is strongly recommended. Although this plugin may work with your version of Widgetkit, upgrade is recommended to the latest stable version of Widgetkit.\' |trans}}"><i class="uk-icon-warning uk-margin-small-right"></i>'.$versionWK.'</span>';
-		if (version_compare($this->stableWKVersion,$versionWK)>0)
+		if (version_compare(WidgetkitExPlugin::stableWKVersion,$versionWK)>0)
 			$wkinfo='<span  data-uk-tooltip class="uk-text-warning" style="margin-top: 5px;" title="{{ \'Your Widgetkit version is quite old. Although this plugin may work with your version of Widgetkit, upgrade is recommended to the latest stable version of Widgetkit.\' |trans}}"><i class="uk-icon-warning uk-margin-small-right"></i>'.$versionWK.'</span>';
 		else
 			$wkinfo='<span  data-uk-tooltip class="uk-text-success" style="margin-top: 5px;" title="{{ \'Your Widgetkit version is OK.\' |trans}}"><i class="uk-icon-check uk-margin-small-right"></i>'.$versionWK.'</span>';
@@ -414,8 +415,9 @@ EOT;
 				<td>
 					{{ 'UIkit version' |trans}}
 				</td>
-				<td id="version-uikit-{$this->plugin_info['codename']}">
-					Unknown
+				<td>
+					<span id="version-uikit-valid-{$this->plugin_info['codename']}" data-uk-tooltip class="uk-text-success" style="margin-top: 5px;" title="{{ 'Your UIkit version is OK.' |trans}}"><i class="uk-icon-check uk-margin-small-right"></i><span class="version-uikit-{$this->plugin_info['codename']}">Unknown</span></span>
+					<span id="version-uikit-invalid-{$this->plugin_info['codename']}" data-uk-tooltip class="uk-text-danger" style="margin-top: 5px;" title="{{ 'Your UIkit version is too old, please upgrade your Widgetkit.' |trans}}"><i class="uk-icon-warning uk-margin-small-right"></i><span class="version-uikit-{$this->plugin_info['codename']}">Unknown</span></span>
 				</td>
 			</tr>
 			<tr>
@@ -662,9 +664,9 @@ EOT;
 		$modal=addcslashes($this->generateUpdateInfoDialog($appWK),"'");
 		
 		$configfile=$this->getPluginURL().'/config.json';
+		$minUIkitVersion=WidgetkitExPlugin::minUIkitVersion;
 		$js = <<< EOT
 jQuery(document).ready(function(\$){
-	
 	/* Display modal dialog with update info */
 	function showUpdateInfo(urlDownload,buildDate,buildVersion,releaseInfo){
 		var modaltext='{$modal}';
@@ -700,8 +702,14 @@ jQuery(document).ready(function(\$){
 		\$('#version-jquery-{$this->plugin_info['codename']}').append(\$.fn.jquery);
 		
 		if (UIkit && UIkit.version){
-			\$('#version-uikit-{$this->plugin_info['codename']}').empty();
-			\$('#version-uikit-{$this->plugin_info['codename']}').append(UIkit.version);
+			\$('.version-uikit-{$this->plugin_info['codename']}').empty();
+			\$('.version-uikit-{$this->plugin_info['codename']}').append(UIkit.version);
+			\$('#version-uikit-valid-{$this->plugin_info['codename']}').removeClass("uk-hidden");
+			\$('#version-uikit-invalid-{$this->plugin_info['codename']}').removeClass("uk-hidden");
+			if (versioncompare(UIkit.version,"{$minUIkitVersion}")<0)
+				\$('#version-uikit-valid-{$this->plugin_info['codename']}').addClass("uk-hidden");
+			else
+				\$('#version-uikit-invalid-{$this->plugin_info['codename']}').addClass("uk-hidden");
 		}
 		
 		if (angular && angular.version && angular.version.full){
