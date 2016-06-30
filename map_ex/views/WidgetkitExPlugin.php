@@ -95,18 +95,30 @@ class WidgetkitExPlugin{
 	//If $firstName=true, then returns first name of the current user or empty string if the first name is unkown
 	//If $firstName=false, then returns second name of the current user or empty string if the second name is unkown
 	//$widgetkit_user - is parameter that must be set to $app['user'] upon call.
-	private static function extractWKUserName($widgetkit_user,$firstName=true){
-		$name=trim($widgetkit_user->getName());
-		//There is a bug in Widgetkit - it doesn't get the name of the user
-		if (!$name){
-			//For Joomla:
-			if (WidgetkitExPlugin::IsJoomlaInstalled()) {
-				$user=\JFactory::getUser($widgetkit_user->getId());
-				if ($user)
-					$name=$user->name;
-			}
-			//TODO: add equivalent approach for WP
+	private function extractWKUserName($widgetkit_user,$firstName=true){
+		//$name=trim($widgetkit_user->getName());
+		//There is a bug in Widgetkit - it doesn't get the name of the user, so the code above is obsolete
+		if (!$this->isCMSJoomla()) {
+			//For Wordpress:
+			$current_user = wp_get_current_user();
+			if (!$current_user)
+				return "";
+			if ($firstName)
+				if ($current_user->user_firstname)
+					return $current_user->user_firstname;
+				else
+					return $current_user->user_login;
+			else
+				return $current_user->user_lastname;
 		}
+		//For Joomla:
+		$name;
+		$user=\JFactory::getUser($widgetkit_user->getId());
+		if ($user)
+			$name=$user->name;
+		else
+			return "";
+
 		$split_name=explode(' ',$name);
 		if ($firstName)
 			 return ((sizeof($split_name)>0)?$split_name[0]:$name);
@@ -484,8 +496,8 @@ EOT;
 	//Prints information for the "Newsletter" section of the plugin with subscribe button
 	//$appWK - is parameter that must be set to $app upon call.
 	public function printNewsletterInfo($appWK){
-		$firstName=htmlspecialchars(WidgetkitExPlugin::extractWKUserName($appWK['user']));
-		$lastName=htmlspecialchars(WidgetkitExPlugin::extractWKUserName($appWK['user'],false));
+		$firstName=htmlspecialchars($this->extractWKUserName($appWK['user']));
+		$lastName=htmlspecialchars($this->extractWKUserName($appWK['user'],false));
 		$email=htmlspecialchars($appWK['user']->getEmail());
 		$cms=htmlspecialchars($this->getCMSName());
 		$origin=htmlspecialchars($appWK['request']->getBaseUrl());
