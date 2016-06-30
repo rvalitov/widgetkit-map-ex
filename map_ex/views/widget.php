@@ -64,7 +64,7 @@ foreach ($items as $i => $item) {
 			if (strlen($marker['pin'])>0){
 				//Checking for absolute URL
 				if ( (substr($marker['pin'], 0, 7) != 'http://') && (substr($marker['pin'], 0, 8) != 'https://') && (substr($marker['pin'], 0, 2) != '//') && (strlen($marker['pin'])>2) )
-					if ($isJoomla){
+					if ($debug->isCMSJoomla()){
 						//We must remove the starting '/' if it exists, because JURI::base() already has it set.
 						if (substr($marker['pin'], 0, 1) != '/')
 							$marker['pin']=JURI::base().$marker['pin'];
