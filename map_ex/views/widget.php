@@ -16,6 +16,8 @@ $map_id2 = substr($map_id,9);
 
 $debug=new WidgetkitExMapPlugin($app,$map_id);
 $info=$debug->getInfo();
+if ($settings['debug_output'])
+	$debug->addInfoString("Plugin info ".print_r($info,true));
 $global_settings=$debug->readGlobalSettings();
 
 $markers = array();
@@ -63,16 +65,14 @@ foreach ($items as $i => $item) {
 
 			if (strlen($marker['pin'])>0){
 				//Checking for absolute URL
-				if ( (substr($marker['pin'], 0, 7) != 'http://') && (substr($marker['pin'], 0, 8) != 'https://') && (substr($marker['pin'], 0, 2) != '//') && (strlen($marker['pin'])>2) )
-					if ($debug->isCMSJoomla()){
-						//We must remove the starting '/' if it exists, because JURI::base() already has it set.
-						if (substr($marker['pin'], 0, 1) != '/')
-							$marker['pin']=JURI::base().$marker['pin'];
-						else
-							$marker['pin']=JURI::base().substr($marker['pin'], 1);
-					}
+				if ( (substr($marker['pin'], 0, 7) != 'http://') && (substr($marker['pin'], 0, 8) != 'https://') && (substr($marker['pin'], 0, 2) != '//') && (strlen($marker['pin'])>2) ){
+					$markerurl;
+					if (substr($marker['pin'], 0, 1) != '/')
+						$markerurl=$marker['pin'];
 					else
-						$debug->addWarningString('Relative URLs for WordPress are not supported in this version of the widget. Please, specify a full URL manually for '.$marker['pin'].' - this is done in the settings of the widget.');
+						$markerurl=substr($marker['pin'], 1);
+					$marker['pin']=$debug->getWebsiteRootURL().$markerurl;
+				}
 
 				$debug->addInfoString('The final URL for the custom pin of the item#'.$item_id.' is '.$marker['pin']);
 				if ($settings['debug_output'])

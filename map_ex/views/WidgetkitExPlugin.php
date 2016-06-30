@@ -42,8 +42,6 @@ class WidgetkitExPlugin{
 	private $CMS;
 	
 	public function __construct($appWK,$id=0){
-		$this->plugin_info=$this->getWKPluginInfo($appWK);
-		
 		$this->id=$id;
 		
 		$this->isJoomla=WidgetkitExPlugin::IsJoomlaInstalled();
@@ -51,6 +49,8 @@ class WidgetkitExPlugin{
 			$this->CMS=WidgetkitExPlugin::getJoomlaVersion();
 		else
 			$this->CMS=WidgetkitExPlugin::getWPVersion();
+		
+		$this->plugin_info=$this->getWKPluginInfo($appWK);
 		
 		$wk_version=WidgetkitExPlugin::getWKVersion();
 		$php_version=@phpversion();
@@ -129,6 +129,7 @@ class WidgetkitExPlugin{
 
 	//Returns Joomla version or empty string if failed
 	public static function getJoomlaVersion(){
+		//TODO: use absolute paths here
 		$f=@file_get_contents(__DIR__ .'/../../../../../../../libraries/cms/version/version.php',false,null,0,3400);
 		if (!$f)
 			return "";
@@ -146,6 +147,7 @@ class WidgetkitExPlugin{
 
 	//Returns WordPress version or empty string if failed
 	public static function getWPVersion(){
+		//TODO: use absolute paths here
 		$f=@file_get_contents(__DIR__ .'/../../../../../../../wp-includes/version.php',false,null,0,1400);
 		if (!$f)
 			return "";
@@ -157,6 +159,7 @@ class WidgetkitExPlugin{
 
 	//Returns Widgetkit version or empty string if failed
 	public static function getWKVersion(){
+		//TODO: use absolute paths here
 		$f=@file_get_contents(__DIR__ .'/../../../../config.php',false,null,0,1400);
 		if ( (!$f) || (!preg_match_all("@.*'version'\s+=>\s+'.+',@",$f,$matches)) )
 			return "";
@@ -193,15 +196,25 @@ class WidgetkitExPlugin{
 		return $this->plugin_info['url'];
 	}
 	
+	public function getWebsiteRootURL(){
+		return $this->plugin_info['root_url'];
+	}
+	
 	//Returns array with info about current plugin (no matter if it's a widget or a content provider). It works only for custom plugins that are created with updater.js file.
 	//The array contains following fields:
-	//name - the name of the plugin or empty string if unknown.
-	//version - the version of the plugin or empty string if unknown.
-	//codename - the name of the distro (codename) or empty string if unknown.
-	//date - the release date of the plugin or empty string if unknown.
-	//logo - the absolute URL of the logo of the plugin or empty string if unknown.
-	//wiki - the absolute URL of wiki (manual) for the plugin or empty string if unknown.
-	//website - the absolute URL of website for the plugin or empty string if unknown.
+	//name 			- the name of the plugin or empty string if unknown.
+	//version 		- the version of the plugin or empty string if unknown.
+	//codename 		- the name of the distro (codename) or empty string if unknown.
+	//date 			- the release date of the plugin or empty string if unknown.
+	//logo 			- the absolute URL of the logo of the plugin or empty string if unknown.
+	//wiki 			- the absolute URL of wiki (manual) for the plugin or empty string if unknown.
+	//website		- the absolute URL of home website (homepage) for the plugin or empty string if unknown.
+	//root_url 		- the aboslute URL of the current website
+	//path			- directory on the server where the plugin is located
+	//relativepath	- relative path to the plugin from the Widgetkit directory
+	//wk_path		- directory on the server where the Widgetkit is installed
+	//root			- directory on the server where the website is located
+	//url			- absolute URL to the directory where the plugin is located
 	private function getWKPluginInfo($appWK){
 		$info=[
 			'name'=>'',
@@ -212,30 +225,54 @@ class WidgetkitExPlugin{
 			'logo'=>'',
 			'wiki'=>'',
 			'website'=>'',
+			'root_url'=>'',
 			'path'=>'',
 			'relativepath'=>'',
+			'wk_path'=>'',
+			'root'=>'',
 			'url'=>''
 		];
 		
 		//We perform a sequental scan of parent directories of the current script to find the plugin install directory
-		$needle=DIRECTORY_SEPARATOR."com_widgetkit".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."widgets".DIRECTORY_SEPARATOR;
+		$widgetkit_dir_name;
+		$baseurl;
+
+		if ($this->isCMSJoomla()){
+			$widgetkit_dir_name=DIRECTORY_SEPARATOR."administrator".DIRECTORY_SEPARATOR."components".DIRECTORY_SEPARATOR."com_widgetkit";
+			$baseurl=\JURI::base();
+		}
+		else{
+			$widgetkit_dir_name=DIRECTORY_SEPARATOR."wp-content".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."widgetkit";
+			$baseurl=get_site_url();
+		}
+		if ( ($baseurl) && ($baseurl[strlen($baseurl)-1]!='/') )
+			$baseurl.='/';
+		$info['root_url']=$baseurl;
+		
+		$needle=$widgetkit_dir_name.DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."widgets".DIRECTORY_SEPARATOR;
 		$pos=strrpos(__DIR__,$needle);
 		$this->isWidget=(boolean)$pos;
 		if (!$pos){
 			$this->isWidget=false;
-			$needle=DIRECTORY_SEPARATOR."com_widgetkit".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."content".DIRECTORY_SEPARATOR;
+			$needle=$widgetkit_dir_name.DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."content".DIRECTORY_SEPARATOR;
 			$pos=strrpos(__DIR__,$needle);
 			$this->isContentProvider=(boolean)$pos;
 		}
 		if ($pos){
+			$info['root']=substr(__DIR__,0,$pos);
 			$offset=$pos+strlen($needle);
 			$pos2=strpos(__DIR__,DIRECTORY_SEPARATOR,$offset);
 			if (!$pos2)
 				$info['path']=__DIR__;
 			else
 				$info['path']=substr(__DIR__,0,$pos2);
-			$needle=DIRECTORY_SEPARATOR."com_widgetkit".DIRECTORY_SEPARATOR;
-			$info['relativepath']=substr(__DIR__,$pos+strlen($needle),$pos2-($pos+strlen($needle)));
+			
+			$pos=strrpos($info['path'],$widgetkit_dir_name);
+			if ($pos)
+				$info['relativepath']=substr($info['path'],$pos+strlen($widgetkit_dir_name));
+		}
+		if ($info['root']){
+			$info['wk_path']=$info['root'].$widgetkit_dir_name;
 		}
 		
 		if ($info['path']){
@@ -265,8 +302,13 @@ class WidgetkitExPlugin{
 				}
 			}
 			$url=$appWK['url']->to('widgetkit');
-			if ($url)
-				$info['url']=$url.'/'.$info['relativepath'];
+			if ($url){
+				if ($url[strlen($url)-1]!='/')
+					$info['url']=$url;
+				else
+					$info['url']=substr($url,0,strlen($url)-1);
+				$info['url'].=$info['relativepath'];
+			}
 		}
 		return $info;
 	}
