@@ -128,9 +128,9 @@ function loadClusterCollections(){
 							else
 								error_list.push(i);
 						}
-						var info_text='Downloaded information about '+data.length+' items.';
+						var info_text=replaceTransAll('{$appWK['translator']->trans('Downloaded information about %number% items.')}',{'number':data.length});
 						if (error_list.length>0){
-							info_text+=' Failed to parse '+error_list.length+' items: ';
+							info_text+=' '+replaceTransAll('{$appWK['translator']->trans('Failed to parse %number% items:')}',{'number':error_list.length});
 							for (var k=0; k<error_list.length; k++){
 								if (k>0)
 									info_text+=', ';

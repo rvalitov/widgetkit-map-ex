@@ -167,6 +167,8 @@ return array(
 			$app['scripts']->add('underscore', 'plugins/widgets/map_ex/assets/underscore-min.js', array('uikit'));
 			//Semantic version compare
 			$app['scripts']->add('versioncompare', 'plugins/widgets/map_ex/assets/versioncompare.js', array('uikit'));
+			//Marked:
+			$app['scripts']->add('replacer', 'plugins/widgets/map_ex/assets/replacer.js', array('uikit'));
 			//Generating dynamic update script:
 			$plugin=new WidgetkitExMapPlugin($app);
 			$app['scripts']->add('map_ex.dynamic-updater', $plugin->generateUpdaterJS($app), array(), 'string');
