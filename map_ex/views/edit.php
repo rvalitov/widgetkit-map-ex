@@ -77,7 +77,7 @@ $plugin=new WidgetkitExPlugin($app);
                     <span class="uk-form-label" for="wk-zoom_phone_h">{{'Phone Landscape' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="{{ 'Initial zoom level of the map. The higher numbers - the greater the zoom is (more detailed map). The value 0 corresponds to a map of the Earth fully zoomed out.' | trans}}"><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls">
                         <select id="wk-zoom_phone_h" class="uk-form-width-medium" ng-model="widget.data['zoom_phone_h']">
-							<option value="">Inherit</option>
+							<option value="">{{ 'Inherit' | trans}}</option>
                             <option value="0">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -106,7 +106,7 @@ $plugin=new WidgetkitExPlugin($app);
                     <span class="uk-form-label" for="wk-zoom_tablet">{{'Tablet' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="{{ 'Initial zoom level of the map. The higher numbers - the greater the zoom is (more detailed map). The value 0 corresponds to a map of the Earth fully zoomed out.' | trans}}"><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls">
                         <select id="wk-zoom_tablet" class="uk-form-width-medium" ng-model="widget.data['zoom_tablet']">
-							<option value="">Inherit</option>
+							<option value="">{{ 'Inherit' | trans}}</option>
                             <option value="0">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -135,7 +135,7 @@ $plugin=new WidgetkitExPlugin($app);
                     <span class="uk-form-label" for="wk-zoom_desktop">{{'Desktop' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="{{ 'Initial zoom level of the map. The higher numbers - the greater the zoom is (more detailed map). The value 0 corresponds to a map of the Earth fully zoomed out.' | trans}}"><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls">
                         <select id="wk-zoom_desktop" class="uk-form-width-medium" ng-model="widget.data['zoom_desktop']">
-							<option value="">Inherit</option>
+							<option value="">{{ 'Inherit' | trans}}</option>
                             <option value="0">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -164,7 +164,7 @@ $plugin=new WidgetkitExPlugin($app);
                     <span class="uk-form-label" for="wk-zoom_large">{{'Large Screens' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="{{ 'Initial zoom level of the map. The higher numbers - the greater the zoom is (more detailed map). The value 0 corresponds to a map of the Earth fully zoomed out.' | trans}}"><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls">
                         <select id="wk-zoom_large" class="uk-form-width-medium" ng-model="widget.data['zoom_large']">
-							<option value="">Inherit</option>
+							<option value="">{{ 'Inherit' | trans}}</option>
                             <option value="0">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -261,7 +261,7 @@ $plugin=new WidgetkitExPlugin($app);
                 </div>
 				
 				<div class="uk-form-row">
-                    <span class="uk-form-label">{{'Rotate Controls' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="{{ 'Enables/disables the appearance of a Rotate control for controlling the orientation of 45&deg; imagery. By default, the control\'s presence is determined by the presence or absence of 45&deg; imagery for the given map type at the current zoom and location. You cannot make the control appear if no 45&deg; imagery is currently available.'|trans}}"><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
+                    <span class="uk-form-label">{{'Rotate Controls' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="{{ 'Enables/disables the appearance of a Rotate control for controlling the orientation of 45° imagery. By default, the control\'s presence is determined by the presence or absence of 45° imagery for the given map type at the current zoom and location. You cannot make the control appear if no 45° imagery is currently available.'|trans}}"><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls uk-form-controls-text">
                         <label><input type="checkbox" ng-model="widget.data['rotatecontrol']"> {{'Show rotate controls' | trans}}</label>
                     </div>
