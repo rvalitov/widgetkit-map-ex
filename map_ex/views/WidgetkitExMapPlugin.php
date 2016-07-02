@@ -93,14 +93,18 @@ function loadClusterCollections(){
 							
 							if (is_valid)
 							{
-								var name;
+								var name,txt;
+								var show_popup=false;
 								if (data[i].name.length>64)
 									name=data[i].name.substring(0,61)+'...';
 								else
 									name=data[i].name;
 								var tags='<div class="uk-panel uk-panel-box"><h4 class="uk-text-center">#'+(i+1)+'. '+safe_tags_replace(name);
-								if ( (data[i]['info']) && (data[i]['info'].trim().length>0) )
-									tags+='<i class="uk-icon uk-icon-info-circle uk-margin-small-left" style="color:#ffb105;cursor:pointer;" onclick="showMapExInfo(\''+name.replace(/"/g,'&quot;').replace(/'/g,'&#39;')+'\',\''+data[i]['info'].replace(/"/g,'&quot;').replace(/'/g,"\\'")+'\');"></i>';
+								if ( (data[i]['info']) && (data[i]['info'].trim().length>0) ){
+									tags+='<i id="cluster-collection-info-'+i+'" class="uk-icon uk-icon-info-circle uk-margin-small-left" style="color:#ffb105;cursor:pointer;"></i>';
+									txt=data[i]['info'].trim();
+									show_popup=true;
+								}
 								tags+='</h4><div class="uk-grid uk-grid-width-1-'+Math.min(5,data[i]['levels'].length)+'">';
 								for (var k=0;k<data[i]['levels'].length;k++)
 									tags+='<div class="uk-text-center"><div><img src="'+data[i]['levels'][k]['icon']+'"></div><small>{$appWK['translator']->trans('Level')} '+(k+1)+'</small></div>';
@@ -124,6 +128,10 @@ function loadClusterCollections(){
 								}
 								tags+='"><i class="uk-icon uk-icon-check uk-margin-small-right"></i>{$appWK['translator']->trans('Activate Collection')}</button></div></div>';
 								$('#cluster-collection').append(tags);
+								if (show_popup)
+									$('#cluster-collection-info-'+i).click({'name':name,'txt':txt},function(event){
+										showMapExInfo(event.data.name,event.data.txt);
+									});
 							}
 							else
 								error_list.push(i);
