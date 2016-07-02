@@ -166,7 +166,7 @@ return array(
 			//Underscore.js
 			$app['scripts']->add('underscore', 'plugins/widgets/map_ex/assets/underscore-min.js', array('uikit'));
 			//Semantic version compare
-			$app['scripts']->add('versioncompare', 'plugins/widgets/map_ex/assets/versioncompare.js', array('uikit'));
+			$app['scripts']->add('versioncompare', 'plugins/widgets/map_ex/assets/versioncompare.min.js', array('uikit'));
 			//Marked:
 			$app['scripts']->add('replacer', 'plugins/widgets/map_ex/assets/replacer.min.js', array('uikit'));
 			//Generating dynamic update script:
