@@ -1056,7 +1056,7 @@ EOT;
 	Returns true, if the data is suitable for output as a table. Used for debug, see the console.table command.
 	*/
 	public static function isDataForTable($array){
-		if ( (!is_array($array)) || (sizeof($array)<=1) )
+		if ( (!is_array($array)) || (sizeof($array)<1) )
 			return false;
 		$count=0;
 		for ($i=0; $i<sizeof($array); $i++){
