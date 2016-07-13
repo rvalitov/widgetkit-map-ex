@@ -980,13 +980,13 @@ EOT;
 		return $output;
 	}
 	
-	//Prints a list of items from $array that are listed in $list. Intended to print debug output.
-	public static function printArrayItems($array,$list,$max_count=5){
+	//Returns an array with items from $array that have keys listed in $list.
+	public static function intersectArrayItems($array,$list){
 		if (!is_array($list))
 			return '';
-		$s='';
+		$s=array();
 		for ($i=0; $i<sizeof($list); $i++)
-			$s.=$list[$i].': '.(isset($array[$list[$i]])?(WidgetkitExPlugin::features_var_export($array[$list[$i]],'', TRUE, 0, $max_count)):'null').PHP_EOL;
+			$s[$list[$i]]=(isset($array[$list[$i]])?($array[$list[$i]]):null);
 		return $s;
 	}
 	
@@ -1037,9 +1037,38 @@ EOT;
 	}
 	
 	public function printDebugStrings(){
+echo <<< EOT
+if (typeof console.groupCollapsed === "function")
+	console.groupCollapsed('{$this->plugin_info['name']} #{$this->id}');
+else if (typeof console.group === "function")
+	console.group('{$this->plugin_info['name']} #{$this->id}');
+EOT;
 		$this->printJSDebugText($this->debug_info,1);
 		$this->printJSDebugText($this->debug_warning,2);
 		$this->printJSDebugText($this->debug_error,3);
+echo <<< EOT
+if (typeof console.groupEnd === "function")
+	console.groupEnd();
+EOT;
+	}
+	
+	/*
+	Returns true, if the data is suitable for output as a table. Used for debug, see the console.table command.
+	*/
+	public static function isDataForTable($array){
+		if ( (!is_array($array)) || (sizeof($array)<=1) )
+			return false;
+		$count=0;
+		for ($i=0; $i<sizeof($array); $i++){
+			if (!is_array($array[$i]))
+				return false;
+			if ($i==0)
+				$count=sizeof($array[$i]);
+			else
+				if ($count!=sizeof($array[$i]))
+					return false;
+		}
+		return true;
 	}
 	
 	/*
@@ -1047,21 +1076,47 @@ EOT;
 	$typeid defines the log warning level
 	*/
 	private function printJSDebugString($s, $typeid=1){
-		$prefix='['.$this->plugin_info['name'].' #'.$this->id.'] ';
-		$s=addslashes($s);
-		$s=preg_replace("/\r\n|\r|\n/", "\\n",$s);
+		//We don't use prefix anymore, because good browsers can collapse output in groups.
+		//$prefix='['.$this->plugin_info['name'].' #'.$this->id.'] ';
+		$prefix='';
+		if (WidgetkitExPlugin::isDataForTable($s)){
+			echo 'if (typeof console.table === "function")';
+			echo "console.table([";
+			for ($i=0;$i<sizeof($s);$i++){
+				if ($i>0)
+					echo ","; 
+				echo "JSON.parse('".json_encode($s[$i])."')";
+			}
+			echo "]); else ";
+		}
+		if (is_string($s)){
+			$s=addslashes($s);
+			$s=preg_replace("/\r\n|\r|\n/", "\\n",$s);
+		}
 		switch($typeid){
 			case 1:
-				echo "console.info('".$prefix.$s."');";
+				if (is_string($s))
+					echo "console.info('".$prefix.$s."');";
+				else
+					echo "console.info(JSON.parse('".json_encode($s)."'));";
 				break;
 			case 2:
-				echo "console.warn('".$prefix.$s."');";
+				if (is_string($s))
+					echo "console.warn('".$prefix.$s."');";
+				else
+					echo "console.info(JSON.parse('".json_encode($s)."'));";
 				break;
 			case 3:
-				echo "console.error('".$prefix.$s."');";
+				if (is_string($s))
+					echo "console.error('".$prefix.$s."');";
+				else
+					echo "console.info(JSON.parse('".json_encode($s)."'));";
 				break;
 			default:
-				echo "console.log('".$prefix.$s."');";
+				if (is_string($s))
+					echo "console.log('".$prefix.$s."');";
+				else
+					echo "console.info(JSON.parse('".json_encode($s)."'));";
 				break;
 		}
 	}

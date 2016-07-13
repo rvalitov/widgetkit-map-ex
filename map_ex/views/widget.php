@@ -16,8 +16,10 @@ $map_id2 = substr($map_id,9);
 
 $debug=new WidgetkitExMapPlugin($app,$map_id);
 $info=$debug->getInfo();
-if ($settings['debug_output'])
-	$debug->addInfoString("Plugin info ".print_r($info,true));
+if ($settings['debug_output']){
+	$debug->addInfoString("Plugin info:");
+	$debug->addInfoString($info);
+}
 $global_settings=$debug->readGlobalSettings();
 
 $markers = array();
@@ -32,10 +34,15 @@ $zoom_large=is_numeric($settings['zoom_large']) ? $settings['zoom_large'] : $zoo
 
 // Markers
 $item_id=0;
+
+$debug_items=array();
+if ($settings['debug_output'])
+	$debug->addInfoString('Content items:');
 foreach ($items as $i => $item) {
 	$item_id++;
-	if ($settings['debug_output'])
-		$debug->addInfoString('Item #'.$item_id.':'.PHP_EOL.WidgetkitExPlugin::printArrayItems($item,array(
+	$debug_item;
+	if ($settings['debug_output']){
+		$debug_item=WidgetkitExPlugin::intersectArrayItems($item,array(
 			'location',
 			'title',
 			'content',
@@ -43,7 +50,11 @@ foreach ($items as $i => $item) {
 			'custom_pin_path',
 			'custom_pin_anchor_x',
 			'custom_pin_anchor_y'
-		)));
+		));
+		$debug_item['item_id']=$item_id;
+	}
+	$debug_item['comments']='';
+
     if (isset($item['location']) && $item['location']) {
         $marker = array(
             'lat'     => $item['location']['lat'],
@@ -66,11 +77,11 @@ foreach ($items as $i => $item) {
 			if (strlen($item['custom_pin_path'])>0){
 				$marker['pin']=trim($item['custom_pin_path']);
 				$pinoverride=true;
-				$debug->addInfoString('Unique custom pin image provided for item#'.$item_id.': '.$marker['pin']);
+				$debug_item['PinType']='Unique custom';
 			}
 			else{
 				$marker['pin']=trim($settings['custom_pin_path']);
-				$debug->addInfoString('Global custom pin image will be used for item#'.$item_id.': '.$marker['pin']);
+				$debug_item['PinType']='Global custom';
 			}
 
 			if (strlen($marker['pin'])>0){
@@ -84,12 +95,12 @@ foreach ($items as $i => $item) {
 					$marker['pin']=$debug->getWebsiteRootURL().$markerurl;
 				}
 
-				$debug->addInfoString('The final URL for the custom pin of the item#'.$item_id.' is '.$marker['pin']);
+				$debug_item['finalPinURL']=$marker['pin'];
 				if ($settings['debug_output'])
 					if (WidgetkitExPlugin::url_exists($marker['pin']))
-						$debug->addInfoString('The URL '.$marker['pin'].' is valid.');
+						$debug_item['finalPinURLisValid']=true;
 					else
-						$debug->addErrorString('Failed to check the URL '.$marker['pin']." - it doesn't exist?");
+						$debug_item['finalPinURLisValid']=false;
 				if ( ($pinoverride) && (is_numeric($item['custom_pin_anchor_x'])) && (is_numeric($item['custom_pin_anchor_y'])) )
 				{
 					$marker['anchor_x']=intval($item['custom_pin_anchor_x']);
@@ -103,19 +114,24 @@ foreach ($items as $i => $item) {
 					}
 			}
 			else
-				$debug->addWarningString('The custom image path is empty for item#'.$item_id.'. The deafult pin image will be used.');
+				$debug_item['PinType']='Default';
+				$debug_item['comments'].='The custom image path is empty. The deafult pin image will be used.';
 		}
 		else{
-			$debug->addInfoString('The configuration is set to use a default pin image for item#'.$item_id);
+			$debug_item['PinType']='Default';
 			if (strlen($item['custom_pin_path'])>0)
-				$debug->addWarningString('You have defined a custom unique pin image for item#'.$item_id.". However, this image will be ignored. To use custom images you must select 'Custom' as the 'Marker Pin Icon' option in the widget's settings. Ignore this message if the widget works as you expect.");
+				$debug_item['comments'].="You have defined a custom unique pin image. However, this image will be ignored. To use custom images you must select 'Custom' as the 'Marker Pin Icon' option in the widget's settings. Ignore this message if the widget works as you expect.";
 		}
 
         $markers[] = $marker;
     }
 	else
 		$debug->addWarningString('The location is missing for item#'.$item_id.'. This item will be ignored.');
+	if ($settings['debug_output'])
+		array_push($debug_items,$debug_item);
 }
+if ($settings['debug_output'])
+	$debug->addInfoString($debug_items);
 
 $settings['map_id'] = $map_id;
 $settings['map_id2'] = $map_id2;
@@ -169,7 +185,10 @@ if ($settings['markercluster']=='custom'){
 		}
 	$settings['markers'] = $markers;
 	
-	$debug->addInfoString('Widget settings: '.print_r($settings,true));
+	if ($settings['debug_output']){
+		$debug->addInfoString('Widget settings:');
+		$debug->addInfoString($settings);
+	}
 ?>
 
 <script type="widgetkit/mapex" data-id="<?php echo $map_id;?>" data-class="<?php echo $settings['class']; ?> uk-img-preserve" data-style="width:<?php echo $width?>;height:<?php echo $height?>;">
