@@ -980,6 +980,16 @@ EOT;
 		return $output;
 	}
 	
+	//Prints a list of items from $array that are listed in $list. Intended to print debug output.
+	public static function printArrayItems($array,$list,$max_count=5){
+		if (!is_array($list))
+			return '';
+		$s='';
+		for ($i=0; $i<sizeof($list); $i++)
+			$s.=$list[$i].': '.(isset($array[$list[$i]])?(WidgetkitExPlugin::features_var_export($array[$list[$i]],'', TRUE, 0, $max_count)):'null').PHP_EOL;
+		return $s;
+	}
+	
 	//Reads global settings for this plugin
 	public function readGlobalSettings(){
 		$path=$this->getPluginDirectory();

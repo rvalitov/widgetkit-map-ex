@@ -34,6 +34,16 @@ $zoom_large=is_numeric($settings['zoom_large']) ? $settings['zoom_large'] : $zoo
 $item_id=0;
 foreach ($items as $i => $item) {
 	$item_id++;
+	if ($settings['debug_output'])
+		$debug->addInfoString('Item #'.$item_id.':'.PHP_EOL.WidgetkitExPlugin::printArrayItems($item,array(
+			'location',
+			'title',
+			'content',
+			'media',
+			'custom_pin_path',
+			'custom_pin_anchor_x',
+			'custom_pin_anchor_y'
+		)));
     if (isset($item['location']) && $item['location']) {
         $marker = array(
             'lat'     => $item['location']['lat'],
