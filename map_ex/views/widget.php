@@ -306,38 +306,43 @@ jQuery(document).ready(function($){
 	$debug->printDebugStrings();
 	?>
 	jQuery(document).ready(function($){
-		var countAPILoaded=0;
-		var isUsingMap=false;
-		var srcFirstAPI='';
-		$("script").each(function() {
-			var srcAPI=$(this).attr("src");
-			if ( (srcAPI) && (srcAPI.indexOf('/maps.google.com/')>0) ) {
-				console.info('<?php echo '['.$info['name'].' #'.$map_id.'] '; ?>Found Google Maps API loading script: '+srcAPI);
-				if (countAPILoaded==0)
-					srcFirstAPI=srcAPI;
-				countAPILoaded++;
+		if (typeof window.functionCheckMapExWidget === 'undefined') {
+			window.functionCheckMapExWidget = function() {
+				var countAPILoaded=0;
+				var isUsingMap=false;
+				var srcFirstAPI='';
+				$("script").each(function() {
+					var srcAPI=$(this).attr("src");
+					if ( (srcAPI) && (srcAPI.indexOf('/maps.google.com/')>0) ) {
+						console.info('<?php echo '['.$info['name'].'] ';?>Found Google Maps API loading script: '+srcAPI);
+						if (countAPILoaded==0)
+							srcFirstAPI=srcAPI;
+						countAPILoaded++;
+					}
+					if ( (srcAPI) && (srcAPI.indexOf('wkInitializeGoogleMapsApi')>0) )
+						isUsingMap=true;
+				});
+				switch(countAPILoaded){
+					case 0:
+						console.error('<?php echo '['.$info['name'].'] ';?>No script found that loads Google Maps API. It\'s a fatal error. Possible reasons: invalid installation or conflict with other components, modules or plugins.');
+						break;
+					case 1:
+						console.info('<?php echo '['.$info['name'].'] ';?>Single script detected that loads Google Maps API.');
+						if (srcFirstAPI.length>0)
+						if (srcFirstAPI.indexOf('wkInitializeGoogleMapsEx')>0)
+							console.info('<?php echo '['.$info['name'].'] ';?>The Google Maps API loading script is correct.');
+						else
+							console.error('<?php echo '['.$info['name'].'] ';?>The Google Maps API loading script is not correct. Some other component, module or plugin on your website overrides our script making this widget inactive.');
+						break;
+					default:
+						if (isUsingMap)
+							console.error('<?php echo '['.$info['name'].'] ';?>We found out that you are using both MapEx and Map widget on the same page. This leads to conflicts and errors. You can use only MapEx or Map widget, but not both. You can convert all your Map widgets to MapEx widgets in the control panel.');
+						else
+							console.error('<?php echo '['.$info['name'].'] ';?>Multiple scripts detected that try to load Google Maps API. This may cause unexpected behaviour or malfunction of the widget. Please, turn of other plugins that use Goolge Maps API to fix this error.');
+						break;
+				}
 			}
-			if ( (srcAPI) && (srcAPI.indexOf('wkInitializeGoogleMapsApi')>0) )
-				isUsingMap=true;
-		});
-		switch(countAPILoaded){
-			case 0:
-				console.error('<?php echo '['.$info['name'].' #'.$map_id.'] '; ?>No script found that loads Google Maps API. It\'s a fatal error. Possible reasons: invalid installation or conflict with other components, modules or plugins.');
-				break;
-			case 1:
-				console.info('<?php echo '['.$info['name'].' #'.$map_id.'] '; ?>Single script detected that loads Google Maps API.');
-				if (srcFirstAPI.length>0)
-				if (srcFirstAPI.indexOf('wkInitializeGoogleMapsEx')>0)
-					console.info('<?php echo '['.$info['name'].' #'.$map_id.'] '; ?>The Google Maps API loading script is correct.');
-				else
-					console.error('<?php echo '['.$info['name'].' #'.$map_id.'] '; ?>The Google Maps API loading script is not correct. Some other component, module or plugin on your website overrides our script making this widget inactive.');
-				break;
-			default:
-				if (isUsingMap)
-					console.error('<?php echo '['.$info['name'].' #'.$map_id.'] '; ?>We found out that you are using both MapEx and Map widget on the same page. This leads to conflicts and errors. You can use only MapEx or Map widget, but not both. You can convert all your Map widgets to MapEx widgets in the control panel.');
-				else
-					console.error('<?php echo '['.$info['name'].' #'.$map_id.'] '; ?>Multiple scripts detected that try to load Google Maps API. This may cause unexpected behaviour or malfunction of the widget. Please, turn of other plugins that use Goolge Maps API to fix this error.');
-				break;
+			functionCheckMapExWidget();
 		}
 	});
 <?php endif;?>
