@@ -1079,15 +1079,22 @@ EOT;
 		//We don't use prefix anymore, because good browsers can collapse output in groups.
 		//$prefix='['.$this->plugin_info['name'].' #'.$this->id.'] ';
 		$prefix='';
-		if (WidgetkitExPlugin::isDataForTable($s)){
-			echo 'if (typeof console.table === "function")';
-			echo "console.table([";
-			for ($i=0;$i<sizeof($s);$i++){
-				if ($i>0)
-					echo ","; 
-				echo "JSON.parse('".json_encode($s[$i])."')";
-			}
-			echo "]); else ";
+		$datatable=WidgetkitExPlugin::isDataForTable($s);
+		if ($datatable){
+		echo <<< EOT
+if (typeof console.table === "function"){
+	var data_list=[];
+EOT;
+		for ($i=0;$i<sizeof($s);$i++) {
+			echo "try { data_list.push(JSON.parse('".json_encode($s[$i],JSON_HEX_APOS)."')); } catch(err) { console.error('Failed to parse JSON: '+err); ";
+			$this->printJSDebugString(WidgetkitExPlugin::features_var_export($s[$i]), 3);
+			echo "}";
+		}
+		echo <<< EOT
+	console.table(data_list);
+}
+else {
+EOT;
 		}
 		if (is_string($s)){
 			$s=addslashes($s);
@@ -1097,28 +1104,42 @@ EOT;
 			case 1:
 				if (is_string($s))
 					echo "console.info('".$prefix.$s."');";
-				else
-					echo "console.info(JSON.parse('".json_encode($s)."'));";
+				else{
+					echo "try {console.info(JSON.parse('".json_encode($s,JSON_HEX_APOS)."')); } catch (err) { console.error('Failed to parse JSON: '+err); ";
+					$this->printJSDebugString(WidgetkitExPlugin::features_var_export($s), 3);
+					echo "}";
+				}
 				break;
 			case 2:
 				if (is_string($s))
 					echo "console.warn('".$prefix.$s."');";
-				else
-					echo "console.info(JSON.parse('".json_encode($s)."'));";
+				else{
+					echo "try {console.warn(JSON.parse('".json_encode($s,JSON_HEX_APOS)."')); } catch (err) { console.error('Failed to parse JSON: '+err); ";
+					$this->printJSDebugString(WidgetkitExPlugin::features_var_export($s), 3);
+					echo "}";
+				}
 				break;
 			case 3:
 				if (is_string($s))
 					echo "console.error('".$prefix.$s."');";
-				else
-					echo "console.info(JSON.parse('".json_encode($s)."'));";
+				else{
+					echo "try {console.error(JSON.parse('".json_encode($s,JSON_HEX_APOS)."')); } catch (err) { console.error('Failed to parse JSON: '+err); ";
+					$this->printJSDebugString(WidgetkitExPlugin::features_var_export($s), 3);
+					echo "}";
+				}
 				break;
 			default:
 				if (is_string($s))
 					echo "console.log('".$prefix.$s."');";
-				else
-					echo "console.info(JSON.parse('".json_encode($s)."'));";
+				else{
+					echo "try {console.log(JSON.parse('".json_encode($s,JSON_HEX_APOS)."')); } catch (err) { console.error('Failed to parse JSON: '+err); ";
+					$this->printJSDebugString(WidgetkitExPlugin::features_var_export($s), 3);
+					echo "}";
+				}
 				break;
 		}
+		if ($datatable)
+			echo '}';
 	}
 
 	/*
