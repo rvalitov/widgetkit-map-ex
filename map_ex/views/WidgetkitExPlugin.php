@@ -526,7 +526,7 @@ EOT;
 			<div class="uk-panel uk-panel-box uk-alert">
 			<i class="uk-icon uk-icon-info-circle uk-margin-small-right"></i>{{ 'Please, fill in all the fields below, then click Submit button' |trans}}
 			</div>
-			<form class="uk-form uk-form-horizontal" action="http://valitov.us11.list-manage.com/subscribe/post?u=13280b8048b58d2be207f1dd5&amp;id=52d79713c6" method="post" id="form-{$this->plugin_info['codename']}-subscribe" target="_blank">
+			<form class="uk-form uk-form-horizontal" action="https://valitov.us11.list-manage.com/subscribe/post?u=13280b8048b58d2be207f1dd5&amp;id=52d79713c6" method="post" id="form-{$this->plugin_info['codename']}-subscribe" target="_blank">
 				<fieldset data-uk-margin>
 					<legend>{{ 'Subscription form' |trans}}</legend>
 					<div class="uk-form-row">
