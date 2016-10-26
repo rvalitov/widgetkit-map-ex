@@ -1058,17 +1058,33 @@ EOT;
 	public static function isDataForTable($array){
 		if ( (!is_array($array)) || (sizeof($array)<1) )
 			return false;
-		$count=0;
-		for ($i=0; $i<sizeof($array); $i++){
-			if (!is_array($array[$i]))
+		$count=-1;
+		foreach ($array as $value){
+			if (!is_array($value))
 				return false;
-			if ($i==0)
-				$count=sizeof($array[$i]);
+			if ($count<0)
+				$count=sizeof($value);
 			else
-				if ($count!=sizeof($array[$i]))
+				if ($count!=sizeof($value))
 					return false;
 		}
 		return true;
+	}
+	
+	/*
+	Converts the contents of $value into JSON format that can be later parsed by the browser using Javascript
+	*/
+	public static function EncodeDataJson($value){
+		$result=json_encode($value,JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_TAG|JSON_HEX_AMP);
+		if (!$result){
+			error_log("Failed to JSON encode data, error code ".json_last_error());
+			return '';
+		}
+		if (is_string($result)){
+			$result=addslashes($result);
+			$result=preg_replace("/\r\n|\r|\n/", "\\n",$result);
+		}
+		return $result;
 	}
 	
 	/*
@@ -1085,9 +1101,9 @@ EOT;
 if (typeof console.table === "function"){
 	var data_list=[];
 EOT;
-		for ($i=0;$i<sizeof($s);$i++) {
-			echo "try { data_list.push(JSON.parse('".json_encode($s[$i],JSON_HEX_APOS)."')); } catch(err) { console.error('Failed to parse JSON: '+err); ";
-			$this->printJSDebugString(WidgetkitExPlugin::features_var_export($s[$i]), 3);
+		foreach ($s as $value){
+			echo "try { data_list.push(JSON.parse('".WidgetkitExPlugin::EncodeDataJson($value)."')); } catch(err) { console.error('Failed to parse JSON: '+err); ";
+			$this->printJSDebugString(WidgetkitExPlugin::features_var_export($value, 3));
 			echo "}";
 		}
 		echo <<< EOT
@@ -1105,7 +1121,7 @@ EOT;
 				if (is_string($s))
 					echo "console.info('".$prefix.$s."');";
 				else{
-					echo "try {console.info(JSON.parse('".json_encode($s,JSON_HEX_APOS)."')); } catch (err) { console.error('Failed to parse JSON: '+err); ";
+					echo "try {console.info(JSON.parse('".WidgetkitExPlugin::EncodeDataJson($s)."')); } catch (err) { console.error('Failed to parse JSON: '+err); ";
 					$this->printJSDebugString(WidgetkitExPlugin::features_var_export($s), 3);
 					echo "}";
 				}
@@ -1114,7 +1130,7 @@ EOT;
 				if (is_string($s))
 					echo "console.warn('".$prefix.$s."');";
 				else{
-					echo "try {console.warn(JSON.parse('".json_encode($s,JSON_HEX_APOS)."')); } catch (err) { console.error('Failed to parse JSON: '+err); ";
+					echo "try {console.warn(JSON.parse('".WidgetkitExPlugin::EncodeDataJson($s)."')); } catch (err) { console.error('Failed to parse JSON: '+err); ";
 					$this->printJSDebugString(WidgetkitExPlugin::features_var_export($s), 3);
 					echo "}";
 				}
@@ -1123,7 +1139,7 @@ EOT;
 				if (is_string($s))
 					echo "console.error('".$prefix.$s."');";
 				else{
-					echo "try {console.error(JSON.parse('".json_encode($s,JSON_HEX_APOS)."')); } catch (err) { console.error('Failed to parse JSON: '+err); ";
+					echo "try {console.error(JSON.parse('".WidgetkitExPlugin::EncodeDataJson($s)."')); } catch (err) { console.error('Failed to parse JSON: '+err); ";
 					$this->printJSDebugString(WidgetkitExPlugin::features_var_export($s), 3);
 					echo "}";
 				}
@@ -1132,7 +1148,7 @@ EOT;
 				if (is_string($s))
 					echo "console.log('".$prefix.$s."');";
 				else{
-					echo "try {console.log(JSON.parse('".json_encode($s,JSON_HEX_APOS)."')); } catch (err) { console.error('Failed to parse JSON: '+err); ";
+					echo "try {console.log(JSON.parse('".WidgetkitExPlugin::EncodeDataJson($s)."')); } catch (err) { console.error('Failed to parse JSON: '+err); ";
 					$this->printJSDebugString(WidgetkitExPlugin::features_var_export($s), 3);
 					echo "}";
 				}
