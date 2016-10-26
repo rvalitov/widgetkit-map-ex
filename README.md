@@ -42,7 +42,7 @@ The new features that the MapEx has and that are not available in the original M
 # Supported platforms
 * The latest code is based on Widgetkit 2.5.3, however it should work with any Widgetkit 2.4.x and later (recommended 2.5.0+). Tested on Widgetkit 2.6.x, 2.7.x and 2.8.x too.
 * PHP5 and PHP7 compatible
-* Joomla 3.4.x or later
+* Joomla 3.4.x or later. Tested on Joomla 3.4.x, 3.5.x, 3.6.x.
 * Wordpress 4.4.x or later
 
 **Read full system requirements [here](https://github.com/rvalitov/widgetkit-map-ex/wiki/System-requirements).** 
