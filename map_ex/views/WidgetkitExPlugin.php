@@ -517,7 +517,9 @@ EOT;
 	</p>
 </div>
 
+<div class="uk-text-center">
 <button class="uk-button uk-button-success" data-uk-modal="{target:'#{$this->plugin_info['codename']}-subscribe'}"><i class="uk-icon uk-icon-check uk-margin-small-right"></i>{{ 'Subscribe' |trans}}</button>
+</div>
 
 <div id="{$this->plugin_info['codename']}-subscribe" class="uk-modal">
 	<div class="uk-modal-dialog">
