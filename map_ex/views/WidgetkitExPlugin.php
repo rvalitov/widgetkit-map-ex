@@ -463,6 +463,16 @@ class WidgetkitExPlugin{
 		else
 			$accessinfo='<span class="uk-text-success"><i class="uk-icon uk-icon-success uk-margin-small-right"></i>'.$appWK['translator']->trans('Ok').'</span>';
 		$accessinfo.='<a href="#write-check-'.$this->plugin_info['codename'].'" data-uk-modal="{center:true}" class="uk-margin-small-left"><i class="uk-icon-info-circle"></i></a>';
+		
+		$installpath=true;
+		if ($this->isJoomla)
+			$installpath=preg_match_all('@.*\/administrator\/components\/com_widgetkit\/plugins\/widgets\/.+@',$this->plugin_info['path']);
+		else
+			$installpath=preg_match_all('@.*\/wp-content\/plugins\/widgetkit\/plugins\/widgets\/.+@',$this->plugin_info['path']);
+		if ($installpath)
+			$installpath='<span class="uk-text-success" style="word-break:break-all"><i class="uk-icon uk-icon-check uk-margin-small-right"></i>'.$this->plugin_info['path'].'</span>';
+		else
+			$installpath='<span class="uk-text-danger" style="word-break:break-all"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>'.$this->plugin_info['path'].'</span>';
 				
 		if (!isset($this->plugin_info['codename'])){
 			echo <<< EOT
@@ -560,6 +570,14 @@ EOT;
 				</td>
 				<td>
 					{$phpinfo}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					{{ 'Installation path' | trans}}
+				</td>
+				<td>
+					{$installpath}
 				</td>
 			</tr>
 			<tr>

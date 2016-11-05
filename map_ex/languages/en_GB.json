@@ -112,6 +112,7 @@
 	"Imperial (miles)": "Imperial (miles)",
 	"Inherit": "Inherit",
 	"Initial zoom level of the map. The higher numbers - the greater the zoom is (more detailed map). The value 0 corresponds to a map of the Earth fully zoomed out.": "Initial zoom level of the map. The higher numbers - the greater the zoom is (more detailed map). The value 0 corresponds to a map of the Earth fully zoomed out.",
+	"Installation path": "Installation path",
 	"Installed": "Installed",
 	"Instructions": "Instructions",
 	"Invert": "Invert",
