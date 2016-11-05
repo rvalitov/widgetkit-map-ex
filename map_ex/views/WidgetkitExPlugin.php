@@ -14,6 +14,93 @@ Web: http://www.valitov.me/
 
 namespace WidgetkitEx\MapEx{
 
+//Class describes file or directory
+class WKDiskItem{
+	public $name;
+	public $fullname;
+	public $is_writable;
+	public $size;//Can be zero for directory
+	public $hash;
+	public $is_file;
+	public $contents;//Other items inside the directory, empty if it's a file
+	
+	public function AnalyzeItem($fullname){
+		$this->fullname=$fullname;
+		$this->name=pathinfo($fullname,PATHINFO_BASENAME);
+		$this->is_file=!is_dir($this->fullname);
+		$this->is_writable=is_writable($this->fullname);
+		$this->contents=null;
+		if ($this->is_file){
+			$this->size=filesize($this->fullname);
+			$this->hash=sha1_file($this->fullname);
+		}
+		else{
+			$result=array();
+			$cdir = scandir($fullname);
+			foreach ($cdir as $key => $value)
+				if (!in_array($value,array(".",".."))) {
+					$item=new WKDiskItem();
+					$item->AnalyzeItem($fullname . DIRECTORY_SEPARATOR . $value);
+					array_push($result,$item);
+				}
+			$this->contents=$result; 
+		}
+	}
+	
+	private static function printDiskItem($value){
+		if (is_object(!$value))
+			return '';
+		$color;
+		$list='';
+		if ($value->is_writable)
+			$color='<span class="uk-text-success"><i class="uk-icon-check uk-margin-small-right"></i>';
+		else
+			$color='<span class="uk-text-danger"><i class="uk-icon-warning uk-margin-small-right"></i>';
+		if ($value->contents){
+			//Folder
+			$list.='<li>'.$color.'<i class="uk-icon-folder-open-o uk-margin-small-right"></i>'.htmlspecialchars($value->name).'</span>';
+			$list.='<ul class="uk-list">';
+			$list.=WKDiskItem::printStructureInt($value->contents,true);
+			$list.='</li></ul>';
+		}
+		else{
+			//File
+			$list.='<li>'.$color.'<i class="uk-icon-file-o uk-margin-small-right"></i>'.htmlspecialchars($value->name).'</span></li>';
+		}
+		return $list;
+	}
+	
+	//Makes a beautiful output of directory structure
+	private static function printStructureInt($array,$nested=false){
+		$list='';
+		if (!$nested)
+			$list.='<ul class="uk-list">';
+		if (is_array($array))
+			foreach ($array as $value)
+				$list.=WKDiskItem::printDiskItem($value);
+		else
+			$list.=WKDiskItem::printDiskItem($array);
+		if (!$nested)
+			$list.='</ul>';
+		return $list;
+	}
+	
+	//Makes a beautiful output of directory structure
+	public function printStructure(){
+		return WKDiskItem::printStructureInt($this);
+	}
+	
+	public function hasWriteAccessProblems(){
+		if (!$this->is_writable)
+			return true;
+		if (is_array($this->contents))
+			foreach ($this->contents as $value)
+				if (!$value->is_writable)
+					return true;
+		return false;
+	}
+}
+
 class WidgetkitExPlugin{
 	
 	private $plugin_info;
@@ -144,7 +231,7 @@ class WidgetkitExPlugin{
 	public function getCMSName(){
 		return $this->CMS;
 	}
-	
+
 	//Returns true, if the current CMS is Joomla
 	public static function IsJoomlaInstalled(){
 		return ( (class_exists('JURI')) && (method_exists('JURI','base')) );
@@ -341,7 +428,7 @@ class WidgetkitExPlugin{
 		}
 		return $info;
 	}
-
+	
 	//Prints information for the "About" section of the plugin
 	//$appWK - is parameter that must be set to $app upon call.
 	public function printAboutInfo($appWK){
@@ -365,6 +452,18 @@ class WidgetkitExPlugin{
 		else
 			$wkinfo='<span  data-uk-tooltip class="uk-text-success" style="margin-top: 5px;" title="{{ \'Your Widgetkit version is OK.\' |trans}}"><i class="uk-icon-check uk-margin-small-right"></i>'.$versionWK.'</span>';
 		
+		$accessinfo;
+		$accessok=false;
+		$item=new WKDiskItem();
+		$item->AnalyzeItem($this->plugin_info['path']);
+		//Making it beautiful:
+		$accesslist=$item->printStructure();
+		if ($item->hasWriteAccessProblems())
+			$accessinfo='<span class="uk-text-danger"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>'.$appWK['translator']->trans('Failure').'</span>';
+		else
+			$accessinfo='<span class="uk-text-success"><i class="uk-icon uk-icon-success uk-margin-small-right"></i>'.$appWK['translator']->trans('Ok').'</span>';
+		$accessinfo.='<a href="#write-check-'.$this->plugin_info['codename'].'" data-uk-modal="{center:true}" class="uk-margin-small-left"><i class="uk-icon-info-circle"></i></a>';
+				
 		if (!isset($this->plugin_info['codename'])){
 			echo <<< EOT
 <div class="uk-panel uk-panel-box uk-alert uk-alert-danger"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>{{ 'Failed to retrieve information' |trans}}</div>;
@@ -373,6 +472,21 @@ EOT;
 		}
 	
 		echo <<< EOT
+<div id="write-check-{$this->plugin_info['codename']}" class="uk-modal">
+    <div class="uk-modal-dialog">
+		<div class="uk-modal-header">
+			<h2>{{ 'Details' | trans}}</h2>
+		</div>
+        <div class="uk-overflow-container">
+		{$accesslist}
+		</div>
+		<div class="uk-modal-footer">
+			<div class="uk-text-center">
+				<a class="uk-modal-close uk-button uk-button-primary">{{ 'Ok' |trans}}</a>
+			</div>
+		</div>
+    </div>
+</div>
 <div class="uk-grid">
 	<div class="uk-text-center uk-width-medium-1-3" id="logo-{$this->plugin_info['codename']}">
 	</div>
@@ -446,6 +560,14 @@ EOT;
 				</td>
 				<td>
 					{$phpinfo}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					{{ 'Write access check' | trans}}
+				</td>
+				<td>
+					{$accessinfo}
 				</td>
 			</tr>
 			<tr>
