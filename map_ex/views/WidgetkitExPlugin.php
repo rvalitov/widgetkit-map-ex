@@ -876,6 +876,7 @@ jQuery(document).ready(function(\$){
 			'url': configfile,
 			'type' : "GET",
 			'dataType' : 'json',
+			'cache': false,
 			success: function (data, textStatus, jqXHR){
 				if (data){
 					/*Update all elements*/
@@ -910,6 +911,7 @@ jQuery(document).ready(function(\$){
 	\$.ajax({
 			'url': '{$settings['api']}{$settings['distr_name']}/releases/latest',
 			'type' : "GET",
+			'cache':false,
 			'dataType' : 'json',
 			success: function (data, textStatus, jqXHR){
 				if (data){
