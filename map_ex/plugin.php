@@ -23,6 +23,8 @@ return array(
 	
 	'plugin_logo' => 'https://raw.githubusercontent.com/wiki/rvalitov/widgetkit-map-ex/images/mapex-logo.png',
 	
+	'plugin_wiki' => 'https://github.com/rvalitov/widgetkit-map-ex/wiki',
+	
     'config' => array(
 
         'name'  => 'map_ex',
