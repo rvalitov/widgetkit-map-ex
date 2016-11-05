@@ -159,9 +159,44 @@ function loadClusterCollections(){
 	  });
 	})(jQuery);
 }
+
+function WKverifyMapsApiKey(){
+	var key=jQuery('#wk-apikey').val();
+	var error_msg=[];
+	var iframe = document.createElement('iframe');
+	iframe.className="uk-hidden";
+	var html = '<head><script src="https://maps.googleapis.com/maps/api/js?key='+key+'&callback=initMap" async defer><\/script><script>var map;function initMap() { map = new google.maps.Map(document.getElementById(\'map\'), { center: {lat: -34.397, lng: 150.644}, zoom: 8 });}<\/script></head><body><div id="map"></div></body>';
+	document.body.appendChild(iframe);
+	iframe.contentWindow.console.error = function(msg) { error_msg.push(msg); };
+	iframe.contentWindow.console.warning = function() {};
+	iframe.contentWindow.console.log = function() {};
+	iframe.contentWindow.document.open();
+	iframe.contentWindow.document.write(html);
+	iframe.contentWindow.document.close();
+	
+	var modal = UIkit.modal.blockUI('<h2 class="uk-text-center uk-text-muted">{$appWK['translator']->trans('Please, wait...')}<i class="uk-icon-spinner uk-margin-left uk-icon-spin uk-icon-medium"></h2>',{'center':true});
+	
+	iframe.onload = function() {
+		function checkResults(){
+			document.body.removeChild(iframe);
+			modal.hide();
+			if (error_msg.length){
+				var l='<ul>';
+				for (var i=0;i<error_msg.length;i++)
+					l+='<li>'+error_msg[i]+'</li>';
+				l+='</ul>';
+				UIkit.modal.alert('<h2>{$appWK['translator']->trans('Error')}</h2><div class="uk-overflow-container"><p><i class="uk-icon-warning uk-margin-small-right uk-text-danger"></i>{$appWK['translator']->trans('It seems that your key is invalid. Below is a list of error messages recieved from Google.')}</p>'+l+'</div>',{'center':true});
+			}
+			else{
+				UIkit.modal.alert('<h2>{$appWK['translator']->trans('Success')}</h2><p><i class="uk-icon-check uk-margin-small-right uk-text-success"></i>{$appWK['translator']->trans('It seems that your key is valid.')}</p>',{'center':true});
+			}
+		}
+		setTimeout(checkResults, 5000);
+	};
+}
 EOT;
 	return $js;
-	}	
+	}
 }
 
 }

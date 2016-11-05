@@ -838,7 +838,10 @@ $plugin=new WidgetkitExPlugin($app);
 				<div class="uk-form-row">
                     <span class="uk-form-label" for="wk-width">{{'API key' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="{{ 'Google API key that you should obtain from Google in order to use the Google Map services.' | trans}}"><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls">
-                        <input id="wk-width" class="uk-form-width-medium" type="text" ng-model="widget.data.global['apikey']">
+                        <input id="wk-apikey" class="uk-form-width-medium" type="text" ng-model="widget.data.global['apikey']">
+                    </div>
+					<div class="uk-form-controls uk-margin-top">
+                        <button class="uk-button" ng-disabled="!widget.data.global['apikey']" onclick="WKverifyMapsApiKey()">{{ 'Verify key' | trans}}</button>
                     </div>
                 </div>
 				
