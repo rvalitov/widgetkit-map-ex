@@ -161,11 +161,14 @@ function loadClusterCollections(){
 }
 
 function WKverifyMapsApiKey(){
-	var key=jQuery('#wk-apikey').val();
+	var el=jQuery('#wk-apikey');
+	if (!el.length)
+		return;
+	var key=el.val();
 	var error_msg=[];
 	var iframe = document.createElement('iframe');
 	iframe.className="uk-hidden";
-	var html = '<head><script src="https://maps.googleapis.com/maps/api/js?key='+key+'&callback=initMap" async defer><\/script><script>var map;function initMap() { map = new google.maps.Map(document.getElementById(\'map\'), { center: {lat: -34.397, lng: 150.644}, zoom: 8 });}<\/script></head><body><div id="map"></div></body>';
+	var html = '\<head><script src="https://maps.googleapis.com/maps/api/js?key='+key+'&callback=initMap" async defer><\/script><script>var map;function initMap() { map = new google.maps.Map(document.getElementById(\'map\'), { center: {lat: -34.397, lng: 150.644}, zoom: 8 });}<\/script><\/head>\<body><div id="map"></div><\/body>';
 	document.body.appendChild(iframe);
 	iframe.contentWindow.console.error = function(msg) { error_msg.push(msg); };
 	iframe.contentWindow.console.warning = function() {};
