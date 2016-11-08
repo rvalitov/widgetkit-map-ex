@@ -18,21 +18,33 @@ namespace WidgetkitEx\MapEx{
 class WKDiskItem{
 	public $name;
 	public $fullname;
+	public $relativename;
 	public $is_writable;
 	public $size;//Can be zero for directory
 	public $hash;
 	public $is_file;
 	public $contents;//Other items inside the directory, empty if it's a file
 	
-	public function AnalyzeItem($fullname){
+	//$relpath - relative path of the root item, used for filling the $relativename fields
+	//$githash - if true, then SHA1 hash of Git style is calculated, else SHA1 of the file.
+	public function AnalyzeItem($fullname,$relpath="",$githash=true){
 		$this->fullname=$fullname;
 		$this->name=pathinfo($fullname,PATHINFO_BASENAME);
 		$this->is_file=!is_dir($this->fullname);
 		$this->is_writable=is_writable($this->fullname);
+		$this->relativename=$this->name;
+		if ($relpath)
+			$this->relativename=$relpath.$this->name;
 		$this->contents=null;
 		if ($this->is_file){
 			$this->size=filesize($this->fullname);
-			$this->hash=sha1_file($this->fullname);
+			if ($githash){
+				$fc=file_get_contents ($this->fullname);
+				if ($fc!==false)
+					$this->hash=sha1('blob '.$this->size."\0".$fc);
+			}
+			else
+				$this->hash=sha1_file($this->fullname);
 		}
 		else{
 			$result=array();
@@ -40,7 +52,7 @@ class WKDiskItem{
 			foreach ($cdir as $key => $value)
 				if (!in_array($value,array(".",".."))) {
 					$item=new WKDiskItem();
-					$item->AnalyzeItem($fullname . DIRECTORY_SEPARATOR . $value);
+					$item->AnalyzeItem($fullname . DIRECTORY_SEPARATOR . $value,$this->relativename. DIRECTORY_SEPARATOR);
 					array_push($result,$item);
 				}
 			$this->contents=$result; 
@@ -98,6 +110,27 @@ class WKDiskItem{
 				if (!$value->is_writable)
 					return true;
 		return false;
+	}
+	
+	public function toArrayItem(){
+		if (!$this->is_file)
+			return false;
+		return array('name'=>$this->relativename,'size'=>$this->size,'hash'=>$this->hash);
+	}
+	
+	//Returns all the information about files in a single array
+	public function toArray(){
+		$l=array();
+		$i=$this->toArrayItem();
+		if (is_array($i))
+			return array($i);
+		if (is_array($this->contents))
+			foreach ($this->contents as $value){
+				$i=$value->toArray();
+				if (is_array($i))
+					$l=array_merge($l,$i);
+			}
+		return $l;
 	}
 }
 
@@ -464,6 +497,8 @@ class WidgetkitExPlugin{
 			$accessinfo='<span class="uk-text-success"><i class="uk-icon uk-icon-success uk-margin-small-right"></i>'.$appWK['translator']->trans('Ok').'</span>';
 		$accessinfo.='<a href="#write-check-'.$this->plugin_info['codename'].'" data-uk-modal="{center:true}" class="uk-margin-small-left"><i class="uk-icon-info-circle"></i></a>';
 		
+		$files=json_encode($item->toArray());
+		
 		$installpath=true;
 		if ($this->isJoomla)
 			$installpath=preg_match_all('@.*\/administrator\/components\/com_widgetkit\/plugins\/widgets\/.+@',$this->plugin_info['path']);
@@ -480,6 +515,14 @@ class WidgetkitExPlugin{
 EOT;
 			return;
 		}
+		
+		$canverify=true;
+		$filesintegrity='<button class="uk-button uk-button-small"';
+		if (!$canverify)
+			$filesintegrity.=' disabled';
+		else
+			$filesintegrity.=' onclick="verifyFiles'.$this->plugin_info['codename'].'()"';
+		$filesintegrity.='>'.$appWK['translator']->trans('Verify files').'</button>';
 	
 		echo <<< EOT
 <div id="write-check-{$this->plugin_info['codename']}" class="uk-modal">
@@ -496,6 +539,9 @@ EOT;
 			</div>
 		</div>
     </div>
+</div>
+<div class="uk-hidden" id="files-{$this->plugin_info['codename']}">
+{$files}
 </div>
 <div class="uk-grid">
 	<div class="uk-text-center uk-width-medium-1-3" id="logo-{$this->plugin_info['codename']}">
@@ -586,6 +632,14 @@ EOT;
 				</td>
 				<td>
 					{$accessinfo}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					{{ 'Files integrity' | trans}}
+				</td>
+				<td>
+					{$filesintegrity}
 				</td>
 			</tr>
 			<tr>
@@ -820,6 +874,90 @@ EOT;
 		$configfile=$this->getPluginURL().'/config.json';
 		$minUIkitVersion=WidgetkitExPlugin::minUIkitVersion;
 		$js = <<< EOT
+	function verifyFiles{$this->plugin_info['codename']}(){
+		var modal = UIkit.modal.blockUI('<h2 class="uk-text-center uk-text-muted">{$appWK['translator']->trans('Please, wait...')}<i class="uk-icon-spinner uk-margin-left uk-icon-spin uk-icon-medium"></h2>',{'center':true});
+		jQuery.ajax({
+			'url': '{$settings['api']}{$settings['distr_name']}/tags',
+			'dataType' : 'json',
+			'type' : "GET",
+			success: function (data, textStatus, jqXHR){
+				if (data){
+					var found=false;
+					jQuery.each(data, function (index, value){
+						if (value.name=='{$settings['version']}'){
+							var filesTree='{$settings['api']}{$settings['distr_name']}/git/trees/'+value.commit.sha+'?recursive=1';
+							found=true;
+							jQuery.ajax({
+								'url': filesTree,
+								'dataType' : 'json',
+								'type' : "GET",
+								success: function (data, textStatus, jqXHR){
+									if (data){
+										var error_list='';
+										try {
+											var localfiles=JSON.parse(jQuery('#files-{$this->plugin_info['codename']}').html());
+										}
+										catch(err) {
+											UIkit.modal.alert('{$appWK['translator']->trans('Failed to parse JSON')}',{'center':true});
+											return;
+										}
+										jQuery.each(data.tree, function (index, value){
+											if ( (value.type=='blob') && (value.path.indexOf('{$this->plugin_info['codename']}/')==0) ){
+												var isvalid=false;
+												var isfound=false;
+												var localsha='';
+												var localsize=0;
+												
+												jQuery.each(localfiles, function (indexfile, valuefile){
+													if (valuefile.name==value.path){
+														isfound=true;
+														localsha=valuefile.hash;
+														localsize=valuefile.size;
+													}														
+												});
+												if (isfound){
+													if ( (localsize!=value.size) || (localsha!=value.sha) )
+														error_list+='<tr><td>'+value.path+'</td><td>{$appWK['translator']->trans('File is altered')}</td></tr>';
+												}
+												else
+													error_list+='<tr><td>'+value.path+'</td><td>{$appWK['translator']->trans('File is missing')}</td></tr>';
+											}
+										});
+										modal.hide();
+										if (error_list)
+											UIkit.modal.alert('<div class="uk-overflow-container"><table class="uk-table"><thead><tr><th>{$appWK['translator']->trans('File')}</th><th>{$appWK['translator']->trans('Problem')}</th></tr></thead><tbody>'+error_list+'</tbody></table></div>',{'center':true});
+										else
+											UIkit.modal.alert('{$appWK['translator']->trans('No problems detected')}',{'center':true});
+									}
+									else{
+										modal.hide();
+										UIkit.modal.alert("{$appWK['translator']->trans('Couldn\'t retrieve information about files of your release')}",{'center':true});
+									}
+								},
+								error: function (jqXHR, textStatus, errorThrown ){
+									modal.hide();
+									UIkit.modal.alert("{$appWK['translator']->trans('Failed to get information from server')}",{'center':true});
+								}
+							});
+						}
+					});
+					if (!found){
+						modal.hide();
+						UIkit.modal.alert("{$appWK['translator']->trans('Information about your release is not available. The files can\'t be verified.')}",{'center':true});
+					}
+				}
+				else{
+					modal.hide();
+					UIkit.modal.alert("{$appWK['translator']->trans('Failed to get information from server')}",{'center':true});
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown ){
+				modal.hide();
+				UIkit.modal.alert("{$appWK['translator']->trans('Failed to get information from server')}",{'center':true});
+			}
+		});
+	}
+	
 jQuery(document).ready(function(\$){
 	/* Display modal dialog with update info */
 	function showUpdateInfo(urlDownload,buildDate,buildVersion,releaseInfo){
