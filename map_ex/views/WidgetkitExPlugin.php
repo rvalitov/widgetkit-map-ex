@@ -485,6 +485,8 @@ class WidgetkitExPlugin{
 		else
 			$wkinfo='<span  data-uk-tooltip class="uk-text-success" style="margin-top: 5px;" title="{{ \'Your Widgetkit version is OK.\' |trans}}"><i class="uk-icon-check uk-margin-small-right"></i>'.$versionWK.'</span>';
 		
+		$cmsinfo=$this->CMS.' '.$this->CMSVersion;
+		
 		$accessinfo;
 		$accessok=false;
 		$item=new WKDiskItem();
@@ -567,6 +569,14 @@ EOT;
 					{{ 'Plugin build date' |trans}}
 				</td>
 				<td id="build-{$this->plugin_info['codename']}">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					{{ 'CMS' |trans}}
+				</td>
+				<td id="cms-{$this->plugin_info['codename']}">
+					{$cmsinfo}
 				</td>
 			</tr>
 			<tr>

@@ -31,6 +31,7 @@
 	"Cluster level removed": "Cluster level removed",
 	"Cluster Marker Level #%level%": "Cluster Marker Level #%level%",
 	"Cluster Markers": "Cluster Markers",
+	"CMS": "CMS",
 	"Color of text of the cluster marker. Example: #ff0000. Standard HTML color names are also valid. The default value is black.": "Color of text of the cluster marker. Example: #ff0000. Standard HTML color names are also valid. The default value is black.",
 	"Color used for the background of the Map. This color will be visible when tiles have not yet loaded as the user pans. Example: #ff0000. The default value is empty that uses the default color of Google Maps (currently it is light grey).": "Color used for the background of the Map. This color will be visible when tiles have not yet loaded as the user pans. Example: #ff0000. The default value is empty that uses the default color of Google Maps (currently it is light grey).",
 	"Column Width": "Column Width",
