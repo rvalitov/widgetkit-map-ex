@@ -197,11 +197,20 @@ if ($settings['markercluster']=='custom'){
 
 <script>
 <?php
+$gapikey;
+if ($debug->isWKAPIKeySupported($app)){
+	$gapikey=$app['config']->get('googlemapseapikey');
+	if (!$gapikey)
+		$gapikey="";
+}
+else{
 if (!isset($global_settings['apikey']))
 	$global_settings['apikey']="";
 else
 	$global_settings['apikey']=trim($global_settings['apikey']);
-echo 'var mapexGoogleApiKey=mapexGoogleApiKey || "'.$global_settings['apikey'].'";';
+$gapikey=$global_settings['apikey'];
+}
+echo 'var mapexGoogleApiKey=mapexGoogleApiKey || "'.$gapikey.'";';
 ?>
 
 function getMapZoom<?php echo $map_id2;?>(){

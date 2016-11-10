@@ -1,6 +1,7 @@
 <?php
-use WidgetkitEx\MapEx\WidgetkitExPlugin;
-$plugin=new WidgetkitExPlugin($app);
+use WidgetkitEx\MapEx\WidgetkitExMapPlugin;
+$plugin=new WidgetkitExMapPlugin($app);
+$is_api_key_supported=$plugin->isWKAPIKeySupported($app);
 ?>
 <div class="uk-grid uk-grid-divider uk-form uk-form-horizontal" data-uk-grid-margin>
     <div class="uk-width-medium-1-4">
@@ -828,7 +829,18 @@ $plugin=new WidgetkitExPlugin($app);
 					<p class="uk-text-center"><i class="uk-icon uk-icon-info-circle uk-margin-small-right"></i>{{'Global settings are shared between all the instances of this plugin. If you change any options below, then they will automatically change in all other plugins of this type, too.'|trans}}</p>
 				</div>
 		
+				<h3 class="wk-form-heading">{{'Google Maps API key' | trans}}</h3>
+		
+				<?php if ($is_api_key_supported) : ?>
+				<div class="uk-panel uk-panel-box uk-alert">
+					<p class="uk-text-center"><i class="uk-icon-info-circle uk-margin-small-right"></i>{{ 'Your version of Widgetkit supports Google Maps API Key natively. You should edit the key in the Widgetkit settings' |trans }}<a href="<?php echo $app['config']->get('settings-page'); ?>"><i class="uk-icon uk-icon-external-link uk-margin-small-left"></i></a></p>
+				</div>
+                <?php endif; ?>
+				<?php if ($is_api_key_supported): ?>
+				<div class="uk-panel uk-panel-box uk-alert-warning uk-margin <?php echo (!$app['config']->get('googlemapseapikey'))?'':'uk-hidden' ?>">
+				<?php else:?>
 				<div class="uk-panel uk-panel-box uk-alert-warning uk-margin" ng-if="!widget.data.global['apikey']">
+				<?php endif; ?>
 					<p class="uk-text-center"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>{{ 'The Google API key is not defined. Please, enter your API key in order to use the Google Map service. You can obtain the key from Google.' | trans}}</p>
 					<p class="uk-text-center">
 					<a class="uk-button" href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank"><i class="uk-icon uk-icon-external-link uk-margin-small-right"></i>{{'More info' |trans}}</a>
@@ -838,10 +850,18 @@ $plugin=new WidgetkitExPlugin($app);
 				<div class="uk-form-row">
                     <span class="uk-form-label" for="wk-width">{{'API key' | trans}}<span  data-uk-tooltip style="margin-top: 5px;" title="{{ 'Google API key that you should obtain from Google in order to use the Google Map services.' | trans}}"><i class="uk-icon uk-icon-question-circle uk-margin-small-left" style="color:#ffb105"></i></span></span>
                     <div class="uk-form-controls">
+						<?php if ($is_api_key_supported): ?>
+						<input id="wk-apikey" class="uk-form-width-medium" type="text" disabled value="<?php echo $app['config']->get('googlemapseapikey')?>">
+						<?php else:?>
                         <input id="wk-apikey" class="uk-form-width-medium" type="text" ng-model="widget.data.global['apikey']">
+						<?php endif; ?>
                     </div>
 					<div class="uk-form-controls uk-margin-top">
+						<?php if ($is_api_key_supported): ?>
+						<button class="uk-button" onclick="WKverifyMapsApiKey()" <?php if (!$app['config']->get('googlemapseapikey')) echo "disabled";?>>{{ 'Verify key' | trans}}</button>
+						<?php else:?>
                         <button class="uk-button" ng-disabled="!widget.data.global['apikey']" onclick="WKverifyMapsApiKey()">{{ 'Verify key' | trans}}</button>
+						<?php endif; ?>
                     </div>
                 </div>
 				

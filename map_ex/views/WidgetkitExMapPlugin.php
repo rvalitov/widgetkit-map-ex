@@ -10,6 +10,13 @@ namespace WidgetkitEx\MapEx{
 require_once(__DIR__.'/WidgetkitExPlugin.php');
 
 class WidgetkitExMapPlugin extends WidgetkitExPlugin{
+	//First version of WK that supports Google Maps API key natively
+	const minWKAPIVersion='2.7.5';
+
+	public function isWKAPIKeySupported($appWK){
+		return ( ($appWK['config']->get('googlemapseapikey')) || (version_compare($this->getWKVersion(),WidgetkitExMapPlugin::minWKAPIVersion)>=0) );
+	}
+	
 	//$appWK - is parameter that must be set to $app upon call.
 	public function generateMapExJS($appWK){
 		$js = <<< EOT
