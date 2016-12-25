@@ -164,6 +164,12 @@ class WidgetkitExPlugin{
 	
 	private $CMS;
 	
+	//Use {wk} or uk prefix for CSS classes. Old Widgetkit uses uk prefix for UIkit, latest Widgetkits use {wk}
+	private $useWKPrefix;
+	
+	//Version of UIkit installed
+	private $UIkitVersion;
+	
 	public function __construct($appWK,$id=0){
 		$this->id=$id;
 		
@@ -195,14 +201,21 @@ class WidgetkitExPlugin{
 		array_push($this->debug_info,'Host: '.@php_uname());
 		$ipath=$this->plugin_info['path'];
 		array_push($this->debug_info,'Widget installation path: '.$ipath);
+		$pathCorrect=false;
 		if ($this->isJoomla)
 			if (preg_match_all('@.*\/administrator\/components\/com_widgetkit\/plugins\/widgets\/.+@',$ipath))
+			{
 				array_push($this->debug_info,'Installation path is correct');
+				$pathCorrect=true;
+			}
 			else
 				array_push($this->debug_error,'Installation path is not correct, please fix it. Read more in the Wiki.');
 		else
 			if (preg_match_all('@.*\/wp-content\/plugins\/widgetkit\/plugins\/widgets\/.+@',$ipath))
+			{
 				array_push($this->debug_info,'Installation path is correct');
+				$pathCorrect=true;
+			}
 			else
 				array_push($this->debug_warning,'Installation path is not correct, please fix it. Read more in the Wiki.');
 
@@ -210,6 +223,47 @@ class WidgetkitExPlugin{
 			array_push($this->debug_info,'Detected CMS: Joomla');
 		else
 			array_push($this->debug_info,'Detected CMS: WordPress');
+		
+		$this->useWKPrefix=false;
+		$this->UIkitVersion=null;
+		if ($pathCorrect){
+			error_log($ipath);
+			$wkuikit = $ipath.'/../../../vendor/assets/wkuikit';
+			if ( (file_exists($wkuikit)) && (is_dir($wkuikit)) ){
+				$this->useWKPrefix=true;
+				$wkuikit.='/js/uikit.min.js';
+				$this->UIkitVersion = self::readUIKitVersion($wkuikit);
+			}
+			if ($this->UIkitVersion==''){
+				$wkuikit = $ipath.'/../../../vendor/assets/uikit/js/uikit.min.js';
+				$this->UIkitVersion = self::readUIKitVersion($wkuikit);
+			}
+		}
+	}
+	
+	//Reads UIkit version from specified uikit.min.js file
+	private static function readUIKitVersion($filename){
+		if ( (!file_exists($filename)) || (!is_file($filename)) || (!is_readable($filename)) )
+			return null;
+		
+		$file_contents=file_get_contents($filename,false,null,0,30);
+		if ($file_contents===false)
+			return null;
+		/* Example of version format:
+		/*! UIkit 2.27.2 |
+		*/
+		if ( (preg_match('@\/\*\!\s+UIkit\s+(?<version>\d+\.\d+\.\d+)\s+\|@',$file_contents,$matches)==1) && (isset($matches['version'])) && ($matches['version']!='') )
+			return $matches['version'];
+		else
+			return null;
+	}
+	
+	public function getCSSPrefix($appWK){
+		return $appWK['config']->get('theme.support') === 'noconflict' ? 'wk' : 'uk';
+	}
+	
+	public function getUIkitVersion(){
+		return ($this->UIkitVersion!='') ? $this->UIkitVersion : '2.26.3';
 	}
 
 	//If $firstName=true, then returns first name of the current user or empty string if the first name is unkown
@@ -510,7 +564,9 @@ class WidgetkitExPlugin{
 			$installpath='<span class="uk-text-success" style="word-break:break-all"><i class="uk-icon uk-icon-check uk-margin-small-right"></i>'.$this->plugin_info['path'].'</span>';
 		else
 			$installpath='<span class="uk-text-danger" style="word-break:break-all"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>'.$this->plugin_info['path'].'</span>';
-				
+
+		$YoothemeProCompatible=($this->useWKPrefix) ? '<span class="uk-text-success"><i class="uk-icon-check uk-margin-small-right"></i>{{ "Yes" |trans}}</span>' : '<span class="uk-text-success"><i class="uk-icon-check uk-margin-small-right"></i>{{ "No" |trans}}</span>';
+		
 		if (!isset($this->plugin_info['codename'])){
 			echo <<< EOT
 <div class="uk-panel uk-panel-box uk-alert uk-alert-danger"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>{{ 'Failed to retrieve information' |trans}}</div>;
@@ -610,6 +666,24 @@ EOT;
 				<td>
 					<span id="version-uikit-valid-{$this->plugin_info['codename']}" data-uk-tooltip class="uk-text-success" style="margin-top: 5px;" title="{{ 'Your UIkit version is OK.' |trans}}"><i class="uk-icon-check uk-margin-small-right"></i><span class="version-uikit-{$this->plugin_info['codename']}">Unknown</span></span>
 					<span id="version-uikit-invalid-{$this->plugin_info['codename']}" data-uk-tooltip class="uk-text-danger" style="margin-top: 5px;" title="{{ 'Your UIkit version is too old, please upgrade your Widgetkit.' |trans}}"><i class="uk-icon-warning uk-margin-small-right"></i><span class="version-uikit-{$this->plugin_info['codename']}">Unknown</span></span>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					{{ 'UIkit version in Widgetkit bundle' |trans}}
+				</td>
+				<td>
+					{$this->UIkitVersion}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					{{ 'Yootheme Pro compatible' |trans}}
+				</td>
+				<td>
+					<span data-uk-tooltip style="margin-top: 5px;" title="{{ 'Widgetkit version 2.9.0 and later are compatible with Yootheme Pro.' |trans}}">
+						{$YoothemeProCompatible}
+					</span>
 				</td>
 			</tr>
 			<tr>
@@ -1071,7 +1145,7 @@ jQuery(document).ready(function(\$){
 						else {
 							date_remote='';
 						}
-						var infotext='<p class="uk-margin-remove"><i class="uk-icon-info-circle uk-margin-small-right"></i>{$appWK['translator']->trans('New release of plugin %name% is available!',array('%name%' => $settings['name']))} {$appWK['translator']->trans('Version')} '+data.tag_name+'.</p><p class="uk-text-center uk-margin-remove"><button class="uk-button uk-button-mini uk-button-success" id="info-{$settings['distr_name']}">{$appWK['translator']->trans('Update details')}</button></p>';
+						var infotext='<div class="wk-noconflict"><p class="uk-margin-remove"><i class="uk-icon-info-circle uk-margin-small-right"></i>{$appWK['translator']->trans('New release of plugin %name% is available!',array('%name%' => $settings['name']))} {$appWK['translator']->trans('Version')} '+data.tag_name+'.</p><p class="uk-text-center uk-margin-remove"><button class="uk-button uk-button-mini uk-button-success" id="info-{$settings['distr_name']}">{$appWK['translator']->trans('Update details')}</button></p></div>';
 						
 						UIkit.notify(infotext, {'timeout':{$settings['infotimeout']},'pos':'top-center','status':'warning'});
 						\$('#info-{$settings['distr_name']}').click(function(){

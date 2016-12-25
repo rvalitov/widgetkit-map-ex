@@ -146,33 +146,34 @@ return array(
     'events' => array(
 
         'init.site' => function($event, $app) {
-            $app['scripts']->add('widgetkit-map-ex', 'plugins/widgets/map_ex/assets/maps.js', array('uikit'));
+            $app['scripts']->add('widgetkit-map-ex', 'plugins/widgets/map_ex/assets/maps.js', array('uikit2'));
         },
 
         'init.admin' => function($event, $app) {
+			$plugin=new WidgetkitExMapPlugin($app);
+			$uikit=($plugin->getCSSPrefix($app)=='uk') ? 'uikit' : 'uikit2';
 			//Adding our own translations:
 			$app['translator']->addResource('plugins/widgets/map_ex/languages/'.$app['locale'].'.json');
 			//Edit template:
             $app['angular']->addTemplate('map_ex.edit', 'plugins/widgets/map_ex/views/edit.php', true);
 			//Adding tooltip:
-			$app['scripts']->add('uikit-tooltip', 'vendor/assets/uikit/js/components/tooltip.min.js', array('uikit'));
-			$app['styles']->add('uikit-tooltip', 'https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/css/components/tooltip.min.css', array('uikit'));
+			$app['scripts']->add($uikit.'-tooltip', 'vendor/assets/uikit/js/components/tooltip.min.js', array($uikit));
+			$app['styles']->add($uikit.'-tooltip', 'https://cdnjs.cloudflare.com/ajax/libs/uikit/'.$plugin->getUIkitVersion().'/css/components/tooltip.min.css', array($uikit));
 			//jQuery wait plugin:
-			$app['scripts']->add('jquery.wait', 'plugins/widgets/map_ex/assets/jquery.wait.min.js', array('uikit'));
+			$app['scripts']->add('jquery.wait', 'plugins/widgets/map_ex/assets/jquery.wait.min.js', array($uikit));
 			//Marked:
-			$app['scripts']->add('marked', 'plugins/widgets/map_ex/assets/marked.min.js', array('uikit'));
+			$app['scripts']->add('marked', 'plugins/widgets/map_ex/assets/marked.min.js', array($uikit));
 			//Mailchimp for subscription:
-			$app['scripts']->add('mailchimp', 'plugins/widgets/map_ex/assets/jquery.formchimp.min.js', array('uikit'));
+			$app['scripts']->add('mailchimp', 'plugins/widgets/map_ex/assets/jquery.formchimp.min.js', array($uikit));
 			//jQuery form validator http://www.formvalidator.net/:
-			$app['scripts']->add('jquery-form-validator', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.20/jquery.form-validator.min.js', array('uikit'));
+			$app['scripts']->add('jquery-form-validator', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.20/jquery.form-validator.min.js', array($uikit));
 			//Underscore.js
-			$app['scripts']->add('underscore', 'plugins/widgets/map_ex/assets/underscore-min.js', array('uikit'));
+			$app['scripts']->add('underscore', 'plugins/widgets/map_ex/assets/underscore-min.js', array($uikit));
 			//Semantic version compare
-			$app['scripts']->add('versioncompare', 'plugins/widgets/map_ex/assets/versioncompare.min.js', array('uikit'));
+			$app['scripts']->add('versioncompare', 'plugins/widgets/map_ex/assets/versioncompare.min.js', array($uikit));
 			//Marked:
-			$app['scripts']->add('replacer', 'plugins/widgets/map_ex/assets/replacer.min.js', array('uikit'));
+			$app['scripts']->add('replacer', 'plugins/widgets/map_ex/assets/replacer.min.js', array($uikit));
 			//Generating dynamic update script:
-			$plugin=new WidgetkitExMapPlugin($app);
 			$app['scripts']->add('map_ex.dynamic-updater', $plugin->generateUpdaterJS($app), array(), 'string');
 			//Generating dynamic MapEx script:
 			$app['scripts']->add('map_ex.dynamic-custom', $plugin->generateMapExJS($app), array(), 'string');

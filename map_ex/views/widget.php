@@ -15,6 +15,7 @@ $map_id  = uniqid('wk-map-ex');
 $map_id2 = substr($map_id,9);
 
 $debug=new WidgetkitExMapPlugin($app,$map_id);
+$cssprefix=WidgetkitExPlugin::getCSSPrefix($app);
 $info=$debug->getInfo();
 if ($settings['debug_output']){
 	$debug->addInfoString("Plugin info:");
@@ -180,7 +181,7 @@ if ($settings['markercluster']=='custom'){
 	//We must print the contents in HTML, not in JS. Such approach allows to use SEF urls.
 	for ($i=0; $i<sizeof($markers); $i++)
 		if (isset($markers[$i]['content'])){
-			echo '<div class="uk-hidden" id="'.$markers[$i]['id'].'">'.$markers[$i]['content'].'</div>';
+			echo '<div class="'. $cssprefix. '-hidden" id="'.$markers[$i]['id'].'">'.$markers[$i]['content'].'</div>';
 			unset($markers[$i]['content']);
 		}
 	$settings['markers'] = $markers;
@@ -191,7 +192,7 @@ if ($settings['markercluster']=='custom'){
 	}
 ?>
 
-<script type="widgetkit/mapex" data-id="<?php echo $map_id;?>" data-class="<?php echo $settings['class']; ?> uk-img-preserve" data-style="width:<?php echo $width?>;height:<?php echo $height?>;">
+<script type="widgetkit/mapex" data-id="<?php echo $map_id;?>" data-class="<?php echo $settings['class']; ?> <?php echo $cssprefix?>-img-preserve" data-style="width:<?php echo $width?>;height:<?php echo $height?>;">
     <?php echo json_encode($settings) ?>
 </script>
 
