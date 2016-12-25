@@ -227,7 +227,6 @@ class WidgetkitExPlugin{
 		$this->useWKPrefix=false;
 		$this->UIkitVersion=null;
 		if ($pathCorrect){
-			error_log($ipath);
 			$wkuikit = $ipath.'/../../../vendor/assets/wkuikit';
 			if ( (file_exists($wkuikit)) && (is_dir($wkuikit)) ){
 				$this->useWKPrefix=true;
@@ -888,6 +887,63 @@ EOT;
 EOT;
 	}
 
+	//Prints information for the "Donate" section of the plugin
+	//$appWK - is parameter that must be set to $app upon call.
+	public function printDonationInfo($appWK){
+		echo <<< EOT
+<div class="uk-panel uk-panel-box uk-alert">
+	<p>
+		<i class="uk-icon uk-icon-info-circle uk-margin-small-right"></i>{{ 'If you like this module, please, donate. It will help to support the project and improve it. You can choose any suitable payment method and donate any amount. Thank you!' | trans}}
+	</p>
+</div>
+
+<div class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-margin-top" data-uk-grid-match="{target:'.uk-panel'}">
+	<div>
+		<div class="uk-panel uk-panel-box uk-text-center uk-margin-bottom">
+			<p class="uk-panel-title">{{ 'Euro' |trans}} <i class="uk-icon uk-icon-euro"></i></p>
+			<p>Payment methods:</p>
+			<ul style="list-style-type: none;">
+				<li><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BJJF3E6DBRYHA" target="_blank"><i class="uk-icon uk-icon-credit-card"></i> {{ 'Bank card' |trans}}</a></li>
+				<li><a href="https://www.paypal.me/valitov/0eur" target="_blank"><i class="uk-icon uk-icon-paypal"></i> {{ 'PayPal' |trans}}</a></li>
+			</ul>
+		</div>
+	</div>
+	<div>
+		<div class="uk-panel uk-panel-box uk-text-center uk-margin-bottom">
+			<p class="uk-panel-title">{{ 'USD' |trans}} <i class="uk-icon uk-icon-usd"></i></p>
+			<p>Payment methods:</p>
+			<ul style="list-style-type: none;">
+				<li><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=B8VMNU7SEAU8J" target="_blank"><i class="uk-icon uk-icon-credit-card"></i> {{ 'Bank card' |trans}}</a></li>
+				<li><a href="https://www.paypal.me/valitov/0usd" target="_blank"><i class="uk-icon uk-icon-paypal"></i> {{ 'PayPal' |trans}}</a></li>
+			</ul>
+		</div>
+	</div>
+	<div>
+		<div class="uk-panel uk-panel-box uk-text-center uk-margin-bottom">
+			<p class="uk-panel-title">{{ 'Russian ruble' |trans}} <i class="uk-icon uk-icon-rouble"></i></p>
+			<p>Payment methods:</p>
+			<ul style="list-style-type: none;">
+				<li><a href="https://money.yandex.ru/to/410011424143476" target="_blank"><i class="uk-icon uk-icon-credit-card"></i> {{ 'Bank card' |trans}}</a></li>
+				<li><a href="https://www.paypal.me/valitov/0rub" target="_blank"><i class="uk-icon uk-icon-paypal"></i> {{ 'PayPal' |trans}}</a></li>
+				<li><a href="https://money.yandex.ru/to/410011424143476" target="_blank">{{ 'Yandex Money' |trans}}</a></li>
+			</ul>
+		</div>
+	</div>
+	<div>
+		<div class="uk-panel uk-panel-box uk-text-center uk-margin-bottom">
+			<p class="uk-panel-title">{{ 'Other currencies' |trans}}</p>
+			<p>Payment methods:</p>
+			<ul style="list-style-type: none;">
+				<li><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BJJF3E6DBRYHA" target="_blank"><i class="uk-icon uk-icon-credit-card"></i> {{ 'Bank card' |trans}}</a></li>
+				<li><a href="https://www.paypal.me/valitov" target="_blank"><i class="uk-icon uk-icon-paypal"></i> {{ 'PayPal' |trans}}</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+EOT;
+	}
+	
 	//Generates and returns Javascript code (without <script> tags) used for checking updates
 	//$appWK - is parameter that must be set to $app upon call.
 	//$settings - array that contains info about the installed plugin. Meaning of the keys:
