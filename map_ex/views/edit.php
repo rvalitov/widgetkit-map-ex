@@ -1,4 +1,12 @@
 <?php
+/*
+Custom Map widget for Widgetkit 2.
+Author: Ramil Valitov
+Contacts: ramilvalitov@gmail.com
+Web: http://www.valitov.me/
+Git: https://github.com/rvalitov/widgetkit-map-ex
+*/
+
 use WidgetkitEx\MapEx\WidgetkitExMapPlugin;
 $plugin=new WidgetkitExMapPlugin($app);
 $is_api_key_supported=$plugin->isWKAPIKeySupported($app);

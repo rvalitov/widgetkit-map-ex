@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/Release-v1.5.2-green.svg?style=flat) ![Widgetkit](https://img.shields.io/badge/Widgetkit-v2.4.x+-green.svg?style=flat) ![Joomla](https://img.shields.io/badge/Joomla!-v3.4.x+-yellow.svg?style=flat) ![Wordpress](https://img.shields.io/badge/Wordpress-v4.4.x+-yellow.svg?style=flat) ![PHP7](https://img.shields.io/badge/PHP7-compatible-blue.svg?style=flat)
+![Version](https://img.shields.io/badge/Release-v1.5.4-green.svg?style=flat) ![Widgetkit](https://img.shields.io/badge/Widgetkit-v2.4.x+-green.svg?style=flat) ![Joomla](https://img.shields.io/badge/Joomla!-v3.4.x+-yellow.svg?style=flat) ![Wordpress](https://img.shields.io/badge/Wordpress-v4.4.x+-yellow.svg?style=flat) ![PHP7](https://img.shields.io/badge/PHP7-compatible-blue.svg?style=flat) ![YoothemePro](https://img.shields.io/badge/YoothemePro-compatible-blue.svg?style=flat)
 
 ![MapEx widget logo](https://raw.githubusercontent.com/wiki/rvalitov/widgetkit-map-ex/images/mapex-logo.png)
 
@@ -13,7 +13,8 @@
 * **Styled map** - you can change the visual look of the map.
 * **Backward compatibility** - all other behavior, styling and features of the original [Map widget](http://yootheme.com/demo/widgetkit/joomla/index.php/home/map) are preserved.
 * **Use with your existing data** - you can easily convert your existing Map widgets into MapEx preserving all the data and options.
-* **Compatible with ZOO** - you can use MapEx with Yootheme's ZOO, [read more](https://github.com/rvalitov/widgetkit-map-ex/wiki/Using-MapEx-with-ZOO). 
+* **Compatible with ZOO** - you can use MapEx with Yootheme's ZOO, [read more](https://github.com/rvalitov/widgetkit-map-ex/wiki/Using-MapEx-with-ZOO).
+* **Compatible with Yootheme Pro** - you can use MapEx with [Yootheme Pro](https://yootheme.com/pro/).
 
 ### Unique Features
 The new features that the MapEx has and that are not available in the original Map widget:
@@ -40,7 +41,7 @@ The new features that the MapEx has and that are not available in the original M
 * **Access to the original [Google Map object](https://developers.google.com/maps/documentation/javascript/reference#Map)** - Javascript object that is used in creation of the map. So, the user may change and/or modify the object as he needs from any web page using Javascript which provides vast opportunities for Javascript programmers to customize the map using native [Google Map API](https://developers.google.com/maps/documentation/javascript/tutorial), [read more](https://github.com/rvalitov/widgetkit-map-ex/wiki/Working-with-Google-Map-object-(for-Javascript-programmers)).
 
 # Supported platforms
-* The latest code is based on Widgetkit 2.5.3, however it should work with any Widgetkit 2.4.x and later (recommended 2.5.0+). Tested on Widgetkit 2.6.x, 2.7.x and 2.8.x too.
+* The core code is based on Widgetkit 2.5.3 and was updated since accordingly. This widget should work with any Widgetkit 2.4.x and later (recommended 2.5.0+). Tested with Widgetkit 2.6.x, 2.7.x, 2.8.x, 2.9.x too.
 * PHP5 and PHP7 compatible
 * Joomla 3.4.x or later. Tested on Joomla 3.4.x, 3.5.x, 3.6.x.
 * Wordpress 4.4.x or later

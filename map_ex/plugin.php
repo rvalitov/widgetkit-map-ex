@@ -17,9 +17,9 @@ return array(
 
     'main' => 'YOOtheme\\Widgetkit\\Widget\\Widget',
 
-	'plugin_version' => 'v1.5.3',
+	'plugin_version' => 'v1.5.4',
 	
-	'plugin_date' => '10/11/2016',
+	'plugin_date' => '26/12/2016',
 	
 	'plugin_logo' => 'https://raw.githubusercontent.com/wiki/rvalitov/widgetkit-map-ex/images/mapex-logo.png',
 	
@@ -146,7 +146,9 @@ return array(
     'events' => array(
 
         'init.site' => function($event, $app) {
-            $app['scripts']->add('widgetkit-map-ex', 'plugins/widgets/map_ex/assets/maps.js', array('uikit2'));
+			$plugin=new WidgetkitExMapPlugin($app);
+			$uikit=($plugin->getCSSPrefix($app)=='uk') ? 'uikit' : 'uikit2';
+            $app['scripts']->add('widgetkit-map-ex', 'plugins/widgets/map_ex/assets/maps.js', array($uikit));
         },
 
         'init.admin' => function($event, $app) {
