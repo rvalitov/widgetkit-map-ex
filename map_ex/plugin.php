@@ -146,14 +146,13 @@ return array(
     'events' => array(
 
         'init.site' => function($event, $app) {
-			$plugin=new WidgetkitExMapPlugin($app);
-			$uikit=($plugin->getCSSPrefix($app)=='uk') ? 'uikit' : 'uikit2';
+			$uikit=(WidgetkitExMapPlugin::getCSSPrefix($app)=='uk') ? 'uikit' : 'uikit2';
             $app['scripts']->add('widgetkit-map-ex', 'plugins/widgets/map_ex/assets/maps.js', array($uikit));
         },
 
         'init.admin' => function($event, $app) {
 			$plugin=new WidgetkitExMapPlugin($app);
-			$uikit=($plugin->getCSSPrefix($app)=='uk') ? 'uikit' : 'uikit2';
+			$uikit=(WidgetkitExMapPlugin::getCSSPrefix($app)=='uk') ? 'uikit' : 'uikit2';
 			//Adding our own translations:
 			$app['translator']->addResource('plugins/widgets/map_ex/languages/'.$app['locale'].'.json');
 			//Edit template:

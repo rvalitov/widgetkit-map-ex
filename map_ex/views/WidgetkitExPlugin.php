@@ -257,7 +257,7 @@ class WidgetkitExPlugin{
 			return null;
 	}
 	
-	public function getCSSPrefix($appWK){
+	public static function getCSSPrefix($appWK){
 		return $appWK['config']->get('theme.support') === 'noconflict' ? 'wk' : 'uk';
 	}
 	
