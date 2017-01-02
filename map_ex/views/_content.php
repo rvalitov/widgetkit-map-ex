@@ -1,4 +1,15 @@
 <?php
+/*
+MapEx plugin for Widgetkit 2.
+Author: Ramil Valitov
+E-mail: ramilvalitov@gmail.com
+Web: http://www.valitov.me/
+Git: https://github.com/rvalitov/widgetkit-map-ex
+*/
+
+require_once(__DIR__.'/WidgetkitExPlugin.php');
+use WidgetkitEx\MapEx\WidgetkitExPlugin;
+$cssprefix=WidgetkitExPlugin::getCSSPrefix($app);
 
 // Media Width
 $media_width = '{wk}-width-' . $settings['media_breakpoint'] . '-' . $settings['media_width'];
@@ -157,7 +168,7 @@ if ($socials && $settings['media_overlay'] == 'social-buttons') {
     $media .= '</div></div>';
     $media .= '</div>';
 }
-$media = str_replace('{wk}', $cssprefix, media);
+$media = str_replace('{wk}', $cssprefix, $media);
 ?>
 
 <div class="<?php echo $cssprefix?>-text-<?php echo $settings['text_align']; ?>">
@@ -168,7 +179,7 @@ $media = str_replace('{wk}', $cssprefix, media);
 
     <?php if ($item['media'] && $settings['media'] && in_array($settings['media_align'], array('left', 'right'))) : ?>
     <div class="<?php echo $cssprefix?>-grid" data-<?php echo $cssprefix?>-grid-margin>
-        <div class="<?php echo $media_width ?><?php if ($settings['media_align'] == 'right') echo ' '. $cssprefix. '-float-right .' $cssprefix. '-flex-order-last-' . $settings['media_breakpoint'] ?>">
+        <div class="<?php echo $media_width ?><?php if ($settings['media_align'] == 'right') echo ' '. $cssprefix. '-float-right .' .$cssprefix. '-flex-order-last-' . $settings['media_breakpoint'] ?>">
             <?php echo $media; ?>
         </div>
         <div class="<?php echo $content_width ?>">
