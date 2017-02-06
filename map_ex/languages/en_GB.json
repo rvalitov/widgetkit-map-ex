@@ -177,6 +177,7 @@
 	"Overlay": "Overlay",
 	"Path to an image file that will be used as a cluster's icon. PNG and SVG image formats are recommended.": "Path to an image file that will be used as a cluster's icon. PNG and SVG image formats are recommended.",
 	"Path to an image file that will be used as a custom pin icon. PNG and SVG image formats are recommended. This setting sets the default icon for all map markers (elements). If this field is left empty, then a default icon will be used. You can set a unique icon for any map marker: you can do this by setting a 'Custom Pin Image' field in the 'Content Settings' tab. This field is visible and available only if you use 'Custom' content source type. The 'Custom Pin Image' field has a higher priority and if set will override the value of this setting.": "Path to an image file that will be used as a custom pin icon. PNG and SVG image formats are recommended. This setting sets the default icon for all map markers (elements). If this field is left empty, then a default icon will be used. You can set a unique icon for any map marker: you can do this by setting a 'Custom Pin Image' field in the 'Content Settings' tab. This field is visible and available only if you use 'Custom' content source type. The 'Custom Pin Image' field has a higher priority and if set will override the value of this setting.",
+	"Payment methods:": "Payment methods:",
 	"PayPal": "PayPal",
 	"Phone Landscape": "Phone Landscape",
 	"Phone Portrait": "Phone Portrait",

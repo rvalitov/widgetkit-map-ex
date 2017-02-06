@@ -177,6 +177,7 @@
 	"Overlay": "Наложенный слой",
 	"Path to an image file that will be used as a cluster's icon. PNG and SVG image formats are recommended.": "Путь к файлу изображения, который будет использоваться в качестве иконки кластера. Рекомендуется использовать изображения в формате PNG и SVG.",
 	"Path to an image file that will be used as a custom pin icon. PNG and SVG image formats are recommended. This setting sets the default icon for all map markers (elements). If this field is left empty, then a default icon will be used. You can set a unique icon for any map marker: you can do this by setting a 'Custom Pin Image' field in the 'Content Settings' tab. This field is visible and available only if you use 'Custom' content source type. The 'Custom Pin Image' field has a higher priority and if set will override the value of this setting.": "Путь к файлу изображения, который будет использоваться в качестве иконки значка. Рекомендуется использовать изображения в формате PNG и SVG. Эта опция устанавливает иконку по умолчанию для всех маркеров (элементов) карты. Вы можете задать уникальную иконку для каждого маркера: для этого используйте опцию 'Custom Pin Image' на вкладке 'Настройки содержания'. Опция 'Custom Pin Image' имеет более высокий приоритет, и если она задана, то она переопределяет значение текущей опции.",
+	"Payment methods:": "Способы оплаты:",
 	"PayPal": "PayPal",
 	"Phone Landscape": "Телефон, альбомный режим",
 	"Phone Portrait": "Телефон, портретный режим",
