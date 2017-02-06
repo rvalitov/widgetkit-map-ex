@@ -22,9 +22,11 @@ class WidgetkitExMapPlugin extends WidgetkitExPlugin{
 		$js = <<< EOT
 jQuery(document).ready(function(\$){
 	\$('div.uk-form-controls > field input[ng-model="latlng.marker"]').waitUntilExists(function(){
-		\$(this).prop('disabled', true);
-		\$(this).attr('placeholder',"{$appWK['translator']->trans('Field disabled by MapEx widget')}");
-		\$(this).attr('title',"{$appWK['translator']->trans('Field disabled by MapEx widget')}");
+		if(\$("#nav-content-map td#name-mapex").length){
+			\$(this).prop('disabled', true);
+			\$(this).attr('placeholder',"{$appWK['translator']->trans('Field disabled by MapEx widget')}");
+			\$(this).attr('title',"{$appWK['translator']->trans('Field disabled by MapEx widget')}");
+		}
 	});
 });
 
