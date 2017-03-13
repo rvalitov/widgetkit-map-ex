@@ -185,7 +185,7 @@ if ($settings['markercluster']=='custom'){
 }
 	
 ?>
-
+<div class="<?php echo $cssprefix; ?>-hidden" id="<?php echo $map_id;?>-d" data-uk-check-display></div>
 <?php
 	//We must print the contents in HTML, not in JS. Such approach allows to use SEF urls.
 	for ($i=0; $i<sizeof($markers); $i++)
@@ -287,11 +287,18 @@ jQuery(document).ready(function($){
 			<?php endif; ?>
 			
 			<?php if (!empty($settings['map_center'])):?>
-			jQuery(document).on(
+			jQuery('#<?php echo $map_id; ?>-d').on(
 				"display.uk.check",
 				function(event) {
-					var self = jQuery(event.target);
+					var self = jQuery(document);
 					var map = self.find('#<?php echo $map_id; ?>');
+					if (!map.length){
+						<?php if ($settings['debug_output']) : ?>
+						console.error('<?php echo '['.$info['name'].'] ';?>On display.uk.check failed to find map #<?php echo $map_id; ?>');
+						<?php endif; ?>
+						return;
+					}
+
 					if(map.is(':visible')) {
 						map.each(
 							function() {
@@ -320,6 +327,11 @@ jQuery(document).ready(function($){
 							}
 						);
 					}
+					<?php if ($settings['debug_output']) : ?>
+					else{
+						console.info('<?php echo '['.$info['name'].'] ';?>On display.uk.check map #<?php echo $map_id; ?> skipped, because it\'s not visible');
+					}
+					<?php endif; ?>
 				}
 			);
 			<?php else: ?>
