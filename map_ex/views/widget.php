@@ -153,6 +153,15 @@ if ($settings['markercluster']=='custom'){
 		if ( (isset($settings['clusters'][$i]['icon'])) && ($settings['clusters'][$i]['icon']) ){
 			$cstyle=[];
 			$cstyle['url']=$settings['clusters'][$i]['icon'];
+			//Checking for absolute URL
+			if ( (substr($cstyle['url'], 0, 7) != 'http://') && (substr($cstyle['url'], 0, 8) != 'https://') && (substr($cstyle['url'], 0, 2) != '//') && (strlen($cstyle['url'])>2) ){
+				$markerurl;
+				if (substr($cstyle['url'], 0, 1) != '/')
+					$markerurl=$cstyle['url'];
+				else
+					$markerurl=substr($cstyle['url'], 1);
+				$cstyle['url']=$debug->getWebsiteRootURL().$markerurl;
+			}
 			
 			if (!is_numeric($settings['clusters'][$i]['width']))
 				$cstyle['width']=($settings['clusters'][$i]['options']['width'] > 0) ? intval($settings['clusters'][$i]['options']['width']) : 53;
@@ -217,28 +226,28 @@ echo 'var mapexGoogleApiKey=mapexGoogleApiKey || "'.$gapikey.'";';
 function getMapZoom<?php echo $map_id2;?>(){
 	if (window.outerWidth<=767)
 		if (Math.abs(window.orientation) === 90){
-			<?php if ($settings['debug_output'])
-			$debug->addInfoString('Detected Phone Landscape mode');
-			?>
+			<?php if ($settings['debug_output']) : ?>
+			console.info('<?php echo '['.$info['name'].'] ';?>Detected Phone Landscape mode');
+			<?php endif;?>
 			return <?php echo $zoom_phone_landscape;?>;
 		}
 		else{
-			<?php if ($settings['debug_output'])
-			$debug->addInfoString('Detected Phone Portrait mode');
-			?>
+			<?php if ($settings['debug_output']) : ?>
+			console.info('<?php echo '['.$info['name'].'] ';?>Detected Phone Portrait mode');
+			<?php endif;?>
 			return <?php echo $zoom_phone_portrait;?>;
 		}
 	else
 		if (window.outerWidth<=959){
-			<?php if ($settings['debug_output'])
-			$debug->addInfoString('Detected Tablet mode');
-			?>
+			<?php if ($settings['debug_output']) : ?>
+			console.info('<?php echo '['.$info['name'].'] ';?>Detected Tablet mode');
+			<?php endif;?>
 			return <?php echo $zoom_tablet;?>;
 		}
 		else{
-			<?php if ($settings['debug_output'])
-			$debug->addInfoString('Detected Large Screen mode');
-			?>
+			<?php if ($settings['debug_output']) : ?>
+			console.info('<?php echo '['.$info['name'].'] ';?>Detected Large Screen mode');
+			<?php endif;?>
 			return <?php echo $zoom_large;?>;
 		}
 }
@@ -246,43 +255,43 @@ function getMapZoom<?php echo $map_id2;?>(){
 function updateMap<?php echo $map_id2;?>(item){
 	<?php if (!empty($settings['map_center'])):?>
 	item.panTo(new google.maps.LatLng(<?php echo $settings['map_center']?>));
-	<?php if ($settings['debug_output'])
-		$debug->addInfoString('Auto pan performed to '.$settings['map_center']);
-	?>
+	<?php if ($settings['debug_output']) : ?>
+	console.info('<?php echo '['.$info['name'].'] ';?>Auto pan performed to <?php echo $settings['map_center']; ?>, map #<?php echo $map_id; ?>');
+	<?php endif;?>
 	<?php endif;?>
 
 	item.setZoom(getMapZoom<?php echo $map_id2;?>());
-	<?php if ($settings['debug_output'])
-		$debug->addInfoString('Auto zoom performed to level '.$settings['zoom']);
-	?>
+	<?php if ($settings['debug_output']) : ?>
+	console.info('<?php echo '['.$info['name'].'] ';?>Auto zoom performed to level <?php echo $settings['zoom']; ?>, map #<?php echo $map_id; ?>');
+	<?php endif;?>
 }
 
 jQuery(document).ready(function($){
-	function checkWidgetkitMaps() {
+	function checkWidgetkitMap<?php echo $map_id2;?>() {
 		var item=getWidgetkitMap("<?php echo $map_id?>");
 		if (item) {
 			google.maps.event.addDomListener(window, 'resize', function(){
-				<?php if ($settings['debug_output'])
-					$debug->addInfoString('Window resize event captured, updating the map...');
-				?>
+				<?php if ($settings['debug_output']) : ?>
+				console.info('<?php echo '['.$info['name'].'] ';?>Window resize event captured, updating the map #<?php echo $map_id; ?>');
+				<?php endif; ?>
 				updateMap<?php echo $map_id2;?>(item);
 			});
 			window.addEventListener("orientationchange", function () {
-				<?php if ($settings['debug_output'])
-					$debug->addInfoString('Screen orientation changed, updating the map...');
-				?>
+				<?php if ($settings['debug_output']) : ?>
+				console.info('<?php echo '['.$info['name'].'] ';?>Screen orientation changed, updating the map #<?php echo $map_id; ?>');
+				<?php endif; ?>
 				updateMap<?php echo $map_id2;?>(item);
 			});
-			<?php if ($settings['debug_output'])
-				$debug->addInfoString('Responsive setup performed');
-			?>
+			<?php if ($settings['debug_output']) : ?>
+			console.info('<?php echo '['.$info['name'].'] ';?>Responsive setup performed for map #<?php echo $map_id; ?>');
+			<?php endif; ?>
 			
 			<?php if (!empty($settings['map_center'])):?>
 			jQuery(document).on(
 				"display.uk.check",
 				function(event) {
 					var self = jQuery(event.target);
-					var map = self.find('[id^="wk-map-ex"]');
+					var map = self.find('#<?php echo $map_id; ?>');
 					if(map.is(':visible')) {
 						map.each(
 							function() {
@@ -293,22 +302,34 @@ jQuery(document).ready(function($){
 									var sub_id = id.substring(9);
 									if(typeof window['updateMap' + sub_id] === 'function') {
 										window['updateMap' + sub_id](item);
-										<?php if ($settings['debug_output'])
-											$debug->addInfoString('Map updated on display.uk.check event.');
-										?>
+										<?php if ($settings['debug_output']) : ?>
+										console.info('<?php echo '['.$info['name'].'] ';?>On display.uk.check event updated map #<?php echo $map_id; ?>');
+										<?php endif; ?>
 									}
+									<?php if ($settings['debug_output']) : ?>
+									else{
+										console.error('<?php echo '['.$info['name'].'] ';?>On display.uk.check failed to find updateMap function for map #<?php echo $map_id; ?>');
+									}
+									<?php endif; ?>
 								}
+								<?php if ($settings['debug_output']) : ?>
+								else{
+									console.error('<?php echo '['.$info['name'].'] ';?>On display.uk.check failed to find map #<?php echo $map_id; ?>');
+								}
+								<?php endif; ?>
 							}
 						);
 					}
 				}
 			);
+			<?php else: ?>
+			console.error('<?php echo '['.$info['name'].'] ';?>On display.uk.check event listening is disabled, because center point is not defined for map #<?php echo $map_id; ?>');
 			<?php endif;//uikit fix?>
-	   }
-	   else
-		   setTimeout(checkWidgetkitMaps,1000);
+		}
+		else
+		   setTimeout(checkWidgetkitMap<?php echo $map_id2;?>,1000);
 	}
-	setTimeout(checkWidgetkitMaps,1000);
+	setTimeout(checkWidgetkitMap<?php echo $map_id2;?>,1000);
 });
 
 <?php if ($settings['debug_output']):?>
