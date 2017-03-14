@@ -350,6 +350,7 @@ class WidgetkitExPlugin{
 		if (!$f)
 			return "";
 		
+		$v='';
 		if (preg_match_all("@.*\\\$wp_version\s*=\s*'.+';@",$f,$matches))
 			$v.=explode("'",$matches[0][0],3)[1];
 		return trim($v);
