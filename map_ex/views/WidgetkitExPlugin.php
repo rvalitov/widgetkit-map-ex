@@ -767,6 +767,7 @@ EOT;
 			</div>
 			<div id="update-problem-{$this->plugin_info['safe_name']}" class="uk-panel uk-panel-box uk-alert-danger uk-text-center update-info-{$this->plugin_info['safe_name']} uk-hidden">
 				<i class="uk-icon uk-icon-warning uk-margin-small-right"></i>{{ 'Failed to retrieve information about available updates.' |trans}}
+				<div id="update-problem-text-{$this->plugin_info['safe_name']}"></div>
 			</div>
 		</div>
 	</div>
@@ -1171,10 +1172,20 @@ jQuery(document).ready(function(\$){
 		}
 		return ('0' + MyDate.getDate()).slice(-2) + dateSeparator + ('0' + (MyDate.getMonth()+1)).slice(-2) + dateSeparator + MyDate.getFullYear();
 	}
-	function failedToUpdate(){
-		$(widget_update_tag).waitUntilExists(function(){
+	function failedToUpdate(info){
+		if (sessionStorage){
+			var d = new Date();
+			sessionStorage.setItem('date-{$this->plugin_info['safe_name']}', d.getTime());
+			sessionStorage.setItem('version-{$this->plugin_info['safe_name']}', '{$this->plugin_info['version']}');
+			sessionStorage.setItem('status-{$this->plugin_info['safe_name']}', -1);
+			sessionStorage.setItem('error-{$this->plugin_info['safe_name']}', info);
+		}
+		\$('#update-{$this->plugin_info['safe_name']}').waitUntilExists(function(){
 			\$('div.update-info-{$this->plugin_info['safe_name']}').addClass('uk-hidden');
 			\$('#update-problem-{$this->plugin_info['safe_name']}').removeClass('uk-hidden');
+			\$('#update-problem-text-{$this->plugin_info['safe_name']}').empty();
+			if (info)
+				\$('#update-problem-text-{$this->plugin_info['safe_name']}').html(info);
 		});
 	}
 	
@@ -1182,6 +1193,68 @@ jQuery(document).ready(function(\$){
 	if (!( (window.location.href.indexOf('com_widgetkit')>0) || (window.location.href.indexOf('page=widgetkit')>0) ))
 		return;
 	
+	//Checking the cache
+	if (sessionStorage){
+		//Borwser supports cache
+		var dataStatus = sessionStorage.getItem('status-{$this->plugin_info['safe_name']}');
+		var dataDate = sessionStorage.getItem('date-{$this->plugin_info['safe_name']}');
+		var dataVersion = sessionStorage.getItem('version-{$this->plugin_info['safe_name']}');
+		var dataBody = sessionStorage.getItem('body-{$this->plugin_info['safe_name']}');
+		var dataDateRemote = sessionStorage.getItem('date-remote-{$this->plugin_info['safe_name']}');
+		var dataTagName = sessionStorage.getItem('tag-name-{$this->plugin_info['safe_name']}');
+		var dataURL = sessionStorage.getItem('url-{$this->plugin_info['safe_name']}');
+		var dataError = sessionStorage.getItem('error-{$this->plugin_info['safe_name']}');
+		var d = new Date();
+		if ( (dataDate) && (dataVersion) && (dataVersion=='{$this->plugin_info['version']}') && (dataDate - d.getTime() < 35*60*1000) ){
+			//We have a cached value
+			if (dataStatus == 1){
+				//Update is available
+				\$('#update-{$this->plugin_info['safe_name']}').waitUntilExists(function(){
+					\$('div.update-info-{$this->plugin_info['safe_name']}').addClass('uk-hidden');
+					\$('#update-available-{$this->plugin_info['safe_name']}').removeClass('uk-hidden');
+					
+					\$('#version-local-{$this->plugin_info['safe_name']}').empty();
+					\$('#version-local-{$this->plugin_info['safe_name']}').append('{$settings['version']}');
+					
+					\$('#version-remote-{$this->plugin_info['safe_name']}').empty();
+					\$('#version-remote-{$this->plugin_info['safe_name']}').append(dataTagName);
+					
+					\$('#date-local-{$this->plugin_info['safe_name']}').empty();
+					\$('#date-local-{$this->plugin_info['safe_name']}').append('{$settings['date']}');
+					
+					\$('#date-remote-{$this->plugin_info['safe_name']}').empty();
+					if ( (dataDateRemote) && (dataDateRemote.length) )
+						\$('#date-remote-{$this->plugin_info['safe_name']}').append(dataDateRemote);
+					
+					\$('#release-info-{$this->plugin_info['safe_name']}').empty();
+					\$('#release-info-{$this->plugin_info['safe_name']}').append(dataBody);
+					
+					\$('#update-logo-{$this->plugin_info['safe_name']}').attr('src','{$settings['logo']}');
+					
+					\$('#download-{$this->plugin_info['safe_name']}').attr('href',dataURL);
+					
+					\$('#instructions-{$this->plugin_info['safe_name']}').attr('href','{$settings['wiki']}');
+					
+					\$('#update-details-{$this->plugin_info['safe_name']}').click(function(){
+						showUpdateInfo(dataURL,dataDateRemote,dataTagName,dataBody);
+					});
+				});
+			}
+			if (dataStatus == 0){
+				//No updates available
+				\$('#update-{$this->plugin_info['safe_name']}').waitUntilExists(function(){
+					\$('div.update-info-{$this->plugin_info['safe_name']}').addClass('uk-hidden');
+					\$('#update-ok-{$this->plugin_info['safe_name']}').removeClass('uk-hidden');
+				});
+			}
+			if (dataStatus < 0){
+				//Failed to recieve updates
+				failedToUpdate(dataError);
+			}
+			return;
+		}
+	}
+
 	\$.ajax({
 			'url': '{$settings['api']}{$settings['distr_name']}/releases/latest',
 			'type' : "GET",
@@ -1189,6 +1262,11 @@ jQuery(document).ready(function(\$){
 			'dataType' : 'json',
 			success: function (data, textStatus, jqXHR){
 				if (data){
+					if (sessionStorage){
+						var d = new Date();
+						sessionStorage.setItem('date-{$this->plugin_info['safe_name']}', d.getTime());
+						sessionStorage.setItem('version-{$this->plugin_info['safe_name']}', '{$this->plugin_info['version']}');
+					}
 					if (versioncompare('{$settings['version']}',data.tag_name)<0){
 						var date_remote = Date.parse(data.published_at);
 						if (date_remote>0){
@@ -1200,8 +1278,18 @@ jQuery(document).ready(function(\$){
 						var infotext='<div class="wk-noconflict"><p class="uk-margin-remove"><i class="uk-icon-info-circle uk-margin-small-right"></i>{$appWK['translator']->trans('New release of plugin %name% is available!',array('%name%' => $settings['name']))} {$appWK['translator']->trans('Version')} '+data.tag_name+'.</p><p class="uk-text-center uk-margin-remove"><button class="uk-button uk-button-mini uk-button-success" id="info-{$settings['distr_name']}">{$appWK['translator']->trans('Update details')}</button></p></div>';
 						
 						UIkit.notify(infotext, {'timeout':{$settings['infotimeout']},'pos':'top-center','status':'warning'});
+						
+						var dataBody = marked(data.body);
+						if (sessionStorage){
+							sessionStorage.setItem('body-{$this->plugin_info['safe_name']}', dataBody);
+							sessionStorage.setItem('status-{$this->plugin_info['safe_name']}', 1);
+							sessionStorage.setItem('date-remote-{$this->plugin_info['safe_name']}', date_remote);
+							sessionStorage.setItem('tag-name-{$this->plugin_info['safe_name']}', data.tag_name);
+							sessionStorage.setItem('url-{$this->plugin_info['safe_name']}', data.html_url);
+						}
+		
 						\$('#info-{$settings['distr_name']}').click(function(){
-								showUpdateInfo(data.html_url,date_remote,data.tag_name,marked(data.body));
+								showUpdateInfo(data.html_url,date_remote,data.tag_name,dataBody);
 						});
 						\$('#update-{$this->plugin_info['safe_name']}').waitUntilExists(function(){
 							\$('div.update-info-{$this->plugin_info['safe_name']}').addClass('uk-hidden');
@@ -1221,7 +1309,7 @@ jQuery(document).ready(function(\$){
 								\$('#date-remote-{$this->plugin_info['safe_name']}').append(date_remote);
 							
 							\$('#release-info-{$this->plugin_info['safe_name']}').empty();
-							\$('#release-info-{$this->plugin_info['safe_name']}').append(marked(data.body));
+							\$('#release-info-{$this->plugin_info['safe_name']}').append(dataBody);
 							
 							\$('#update-logo-{$this->plugin_info['safe_name']}').attr('src','{$settings['logo']}');
 							
@@ -1230,11 +1318,14 @@ jQuery(document).ready(function(\$){
 							\$('#instructions-{$this->plugin_info['safe_name']}').attr('href','{$settings['wiki']}');
 							
 							\$('#update-details-{$this->plugin_info['safe_name']}').click(function(){
-								showUpdateInfo(data.html_url,date_remote,data.tag_name,marked(data.body));
+								showUpdateInfo(data.html_url,date_remote,data.tag_name,dataBody);
 							});
 						});
 					}
 					else{
+						if (sessionStorage){
+							sessionStorage.setItem('status-{$this->plugin_info['safe_name']}', 0);
+						}
 						\$('#update-{$this->plugin_info['safe_name']}').waitUntilExists(function(){
 							\$('div.update-info-{$this->plugin_info['safe_name']}').addClass('uk-hidden');
 							\$('#update-ok-{$this->plugin_info['safe_name']}').removeClass('uk-hidden');
@@ -1246,7 +1337,7 @@ jQuery(document).ready(function(\$){
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown ){
-				failedToUpdate();
+				failedToUpdate(jqXHR.status + ' ' + jqXHR.statusText);
 			}
 		});
 });

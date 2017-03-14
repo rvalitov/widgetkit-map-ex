@@ -153,7 +153,7 @@ return array(
         'init.admin' => function($event, $app) {
 			$plugin=new WidgetkitExMapPlugin($app);
 			$uikit=(WidgetkitExMapPlugin::getCSSPrefix($app)=='uk') ? 'uikit' : 'uikit2';
-			//Shared styles for the Ex widgets
+			//Backend CSS
 			$app['styles']->add('map_ex_edit', 'plugins/widgets/map_ex/css/mapex.edit.css', array('widgetkit-application'));
 			//Adding our own translations:
 			$app['translator']->addResource('plugins/widgets/map_ex/languages/'.$app['locale'].'.json');
