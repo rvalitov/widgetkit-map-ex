@@ -185,7 +185,7 @@ if ($settings['markercluster']=='custom'){
 }
 	
 ?>
-<div class="<?php echo $cssprefix; ?>-hidden" id="<?php echo $map_id;?>-d" data-uk-check-display></div>
+<div class="<?php echo $cssprefix; ?>-hidden widgetkit-map-ex" id="<?php echo $map_id;?>-d" data-uk-check-display></div>
 <?php
 	//We must print the contents in HTML, not in JS. Such approach allows to use SEF urls.
 	for ($i=0; $i<sizeof($markers); $i++)

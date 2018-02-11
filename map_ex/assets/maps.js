@@ -1,7 +1,24 @@
 /*
 This code is using a minfied version of https://github.com/googlemaps/js-marker-clusterer
 */
+
+//List of Map widgets on current page
 var WidgetkitMaps = WidgetkitMaps || [];
+
+if (!String.prototype.endsWith) {
+    Object.defineProperty(String.prototype, 'endsWith', {
+        value: function(searchString, position) {
+            var subjectString = this.toString();
+            if (position === undefined || position > subjectString.length) {
+                position = subjectString.length;
+            }
+            position -= searchString.length;
+            var lastIndex = subjectString.indexOf(searchString, position);
+            return lastIndex !== -1 && lastIndex === position;
+        }
+    });
+}
+
 ! function(t) {
     "use strict";
 
@@ -174,7 +191,11 @@ var WidgetkitMaps = WidgetkitMaps || [];
                 });
                 i.mapTypes.set("STYLED", u), "STYLED" == s.maptypeid.toUpperCase() && i.setMapTypeId("STYLED")
             })
-        })
+        });
+        o().then(function() {
+            /* We send event, when the Google Maps is loaded */
+            jQuery(document).trigger("MapExInit");
+        });
     }), e.prototype.MARKER_CLUSTER_IMAGE_PATH_ = "https://raw.githubusercontent.com/rvalitov/cluster-markers/master/images/standard/m", e.prototype.MARKER_CLUSTER_IMAGE_EXTENSION_ = "png", e.prototype.extend = function(t, e) {
         return function(t) {
             for (var e in t.prototype) this.prototype[e] = t.prototype[e];
@@ -452,39 +473,80 @@ var WidgetkitMaps = WidgetkitMaps || [];
     }
 }(jQuery);
 
+/**
+ * Object that stores information about MapEx instance
+ * @param {string} id - the id of the widget
+ * @param {google.maps.Map} map - the Google map object
+ * @constructor
+ */
 function WidgetkitMapsObj(id, map) {
     this.id = id;
     this.map = map;
-	this.infowindow=null;
+    this.infowindow = null;
 }
-function WidgetkitMapsAdd(id, map){
-	if (id)
-		WidgetkitMaps.push(new WidgetkitMapsObj(id,map));
+
+/**
+ * Adds new MapEx instance to the list
+ * @param {string} id - the id of the widget
+ * @param {google.maps.Map} map - the Google map object
+ * @constructor
+ */
+function WidgetkitMapsAdd(id, map) {
+    if (id)
+        WidgetkitMaps.push(new WidgetkitMapsObj(id, map));
 }
-function getWidgetkitMap(id){
-	if (!WidgetkitMaps)
-		return null;
-	for (var i=0; i<WidgetkitMaps.length; i++)
-		if (WidgetkitMaps[i].id==id){
-			return WidgetkitMaps[i].map;
-		}
-	return null;
+
+/**
+ * Searches the list of active MapEx instances for instance by id and returns its index in the list
+ * @param {string} id - the id of the widget of HTML id of the widget container
+ * @returns {null|int}
+ */
+function getWidgetkitMapIndex(id){
+    if (!WidgetkitMaps || typeof id !== "string")
+        return null;
+    if (id.endsWith("-d"))
+        //It's HTML id, not widget id. We can convert it to widget id by removing the "-d" ending
+        id = id.substr(0, id.length - 2);
+    for (var i = 0; i < WidgetkitMaps.length; i++)
+        if (WidgetkitMaps[i].id === id)
+            return i;
+    return null;
 }
-function getWidgetkitMapInfoWindow(id){
-	if (!WidgetkitMaps)
-		return null;
-	for (var i=0; i<WidgetkitMaps.length; i++)
-		if (WidgetkitMaps[i].id==id){
-			return WidgetkitMaps[i].infowindow;
-		}
-	return null;
+
+/**
+ * Returns Google Map object by id
+ * @param {string} id - the id of the widget of HTML id of the widget container
+ * @returns {null|google.maps.Map}
+ */
+function getWidgetkitMap(id) {
+    var index = getWidgetkitMapIndex(id);
+    if (index === null)
+        return null;
+    return WidgetkitMaps[index].map;
 }
-function setWidgetkitMapInfoWindow(id,infowindow){
-	if (!WidgetkitMaps)
-		return null;
-	for (var i=0; i<WidgetkitMaps.length; i++)
-		if (WidgetkitMaps[i].id==id){
-			WidgetkitMaps[i].infowindow=infowindow;
-			return;
-		}
+
+/**
+ * Returns info window by id
+ * @param {string} id - the id of the widget of HTML id of the widget container
+ * @returns {null|google.maps.InfoWindow}
+ */
+function getWidgetkitMapInfoWindow(id) {
+    var index = getWidgetkitMapIndex(id);
+    if (index === null)
+        return null;
+    return WidgetkitMaps[index].infowindow;
+}
+
+/**
+ * Sets or updates the info window object
+ * @param {string} id - the id of the widget of HTML id of the widget container
+ * @param {google.maps.InfoWindow} infowindow
+ * @returns {boolean} true if success
+ */
+function setWidgetkitMapInfoWindow(id, infowindow) {
+    var index = getWidgetkitMapIndex(id);
+    if (index === null)
+        return false;
+    WidgetkitMaps[index].infowindow = infowindow;
+    return true;
 }
