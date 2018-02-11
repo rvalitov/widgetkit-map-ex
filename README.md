@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/Release-v1.5.8-green.svg?style=flat) ![Widgetkit](https://img.shields.io/badge/Widgetkit-v2.4.x+-green.svg?style=flat) ![Joomla](https://img.shields.io/badge/Joomla!-v3.4.x+-yellow.svg?style=flat) ![Wordpress](https://img.shields.io/badge/Wordpress-v4.4.x+-yellow.svg?style=flat) ![PHP7](https://img.shields.io/badge/PHP7-compatible-blue.svg?style=flat) ![YoothemePro](https://img.shields.io/badge/YoothemePro-compatible-blue.svg?style=flat)
+![Version](https://img.shields.io/badge/Release-v1.5.9-green.svg?style=flat) ![Widgetkit](https://img.shields.io/badge/Widgetkit-v2.4.x+-green.svg?style=flat) ![Joomla](https://img.shields.io/badge/Joomla!-v3.4.x+-yellow.svg?style=flat) ![Wordpress](https://img.shields.io/badge/Wordpress-v4.4.x+-yellow.svg?style=flat) ![PHP7](https://img.shields.io/badge/PHP7-compatible-blue.svg?style=flat) ![YoothemePro](https://img.shields.io/badge/YoothemePro-compatible-blue.svg?style=flat)
 
 ![MapEx widget logo](https://raw.githubusercontent.com/wiki/rvalitov/widgetkit-map-ex/images/mapex-logo.png)
 
@@ -43,7 +43,7 @@ The new features that the MapEx has and that are not available in the original M
 # Supported platforms
 * The core code is based on Widgetkit 2.5.3 and was updated since accordingly. This widget should work with any Widgetkit 2.4.x and later (recommended 2.5.0+). Tested with Widgetkit 2.6.x, 2.7.x, 2.8.x, 2.9.x too.
 * PHP5 and PHP7 compatible
-* Joomla 3.4.x or later. Tested on Joomla 3.4.x, 3.5.x, 3.6.x.
+* Joomla 3.4.x or later. Tested on Joomla 3.4.x, 3.5.x, 3.6.x, 3.7.x, 3.8.x.
 * Wordpress 4.4.x or later
 
 **Read full system requirements [here](https://github.com/rvalitov/widgetkit-map-ex/wiki/System-requirements).** 
