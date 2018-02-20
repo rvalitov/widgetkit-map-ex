@@ -14,9 +14,12 @@ use WidgetkitEx\MapEx\WidgetkitExMapPlugin;
 $map_id  = uniqid('wk-map-ex');
 $map_id2 = substr($map_id,9);
 
+/** @var object $app */
 $debug=new WidgetkitExMapPlugin($app,$map_id);
 $cssprefix=WidgetkitExPlugin::getCSSPrefix($app);
 $info=$debug->getInfo();
+
+/** @var array $settings */
 if ($settings['debug_output']){
 	$debug->addInfoString("Plugin info:");
 	$debug->addInfoString($info);
@@ -39,9 +42,11 @@ $item_id=0;
 $debug_items=array();
 if ($settings['debug_output'])
 	$debug->addInfoString('Content items:');
+
+/** @var array $items */
 foreach ($items as $i => $item) {
 	$item_id++;
-	$debug_item;
+    $debug_item = [];
 	if ($settings['debug_output']){
 		$debug_item=WidgetkitExPlugin::intersectArrayItems($item,array(
 			'location',
@@ -71,7 +76,8 @@ foreach ($items as $i => $item) {
         if (($item['title'] && $settings['title']) ||
             ($item['content'] && $settings['content']) ||
             ($item['media'] && $settings['media'])) {
-                $marker['content'] = $app->convertUrls($this->render('plugins/widgets/' . $widget->getConfig('name')  . '/views/_content.php', compact('item', 'settings')));
+            /** @var object $widget */
+            $marker['content'] = $app->convertUrls($this->render('plugins/widgets/' . $widget->getConfig('name')  . '/views/_content.php', compact('item', 'settings')));
         }
 		if ($settings['pin_type']==''){
 			$pinoverride=false;
@@ -88,7 +94,6 @@ foreach ($items as $i => $item) {
 			if (strlen($marker['pin'])>0){
 				//Checking for absolute URL
 				if ( (substr($marker['pin'], 0, 7) != 'http://') && (substr($marker['pin'], 0, 8) != 'https://') && (substr($marker['pin'], 0, 2) != '//') && (strlen($marker['pin'])>2) ){
-					$markerurl;
 					if (substr($marker['pin'], 0, 1) != '/')
 						$markerurl=$marker['pin'];
 					else
@@ -155,7 +160,6 @@ if ($settings['markercluster']=='custom'){
 			$cstyle['url']=$settings['clusters'][$i]['icon'];
 			//Checking for absolute URL
 			if ( (substr($cstyle['url'], 0, 7) != 'http://') && (substr($cstyle['url'], 0, 8) != 'https://') && (substr($cstyle['url'], 0, 2) != '//') && (strlen($cstyle['url'])>2) ){
-				$markerurl;
 				if (substr($cstyle['url'], 0, 1) != '/')
 					$markerurl=$cstyle['url'];
 				else
@@ -205,22 +209,22 @@ if ($settings['markercluster']=='custom'){
     <?php echo json_encode($settings) ?>
 </script>
 
+<!--suppress Annotator, JSUnresolvedFunction, UnnecessaryReturnStatementJS -->
 <script>
 <?php
-$gapikey;
-if ($debug->isWKAPIKeySupported($app)){
-	$gapikey=$app['config']->get('googlemapseapikey');
-	if (!$gapikey)
-		$gapikey="";
+if ($debug->isWKAPIKeySupported($app)) {
+    /** @noinspection PhpUndefinedMethodInspection */
+    $gapikey = $app['config']->get('googlemapseapikey');
+    if (!$gapikey)
+        $gapikey = "";
+} else {
+    if (!isset($global_settings['apikey']))
+        $global_settings['apikey'] = "";
+    else
+        $global_settings['apikey'] = trim($global_settings['apikey']);
+    $gapikey = $global_settings['apikey'];
 }
-else{
-if (!isset($global_settings['apikey']))
-	$global_settings['apikey']="";
-else
-	$global_settings['apikey']=trim($global_settings['apikey']);
-$gapikey=$global_settings['apikey'];
-}
-echo 'var mapexGoogleApiKey=mapexGoogleApiKey || "'.$gapikey.'";';
+echo 'var mapexGoogleApiKey=mapexGoogleApiKey || "' . $gapikey . '";';
 ?>
 
 function getMapZoom<?php echo $map_id2;?>(){
@@ -266,7 +270,7 @@ function updateMap<?php echo $map_id2;?>(item){
 	<?php endif;?>
 }
 
-jQuery(function($){
+jQuery(function(){
 	function checkWidgetkitMap<?php echo $map_id2;?>() {
 		var item=getWidgetkitMap("<?php echo $map_id?>");
 		if (item) {
@@ -289,7 +293,7 @@ jQuery(function($){
 			<?php if (!empty($settings['map_center'])):?>
 			jQuery('#<?php echo $map_id; ?>-d').on(
 				"display.uk.check",
-				function(event) {
+				function() {
 					var self = jQuery(document);
 					var map = self.find('#<?php echo $map_id; ?>');
 					if (!map.length){
