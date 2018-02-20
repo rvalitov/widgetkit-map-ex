@@ -120,6 +120,8 @@ if (!String.prototype.endsWith) {
 					var mapOptions={
                         position: new google.maps.LatLng(t.lat, t.lng),
                         map: i,
+                        /* Correct z order of the icons */
+                        zIndex: e,
                         title: t.title
                     };
 					/*adding custom pin image*/
