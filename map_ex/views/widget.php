@@ -224,6 +224,9 @@ if ($debug->isWKAPIKeySupported($app)) {
         $global_settings['apikey'] = trim($global_settings['apikey']);
     $gapikey = $global_settings['apikey'];
 }
+$gapikey = filter_var($gapikey, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH | FILTER_FLAG_STRIP_BACKTICK);
+if ($gapikey === false)
+    $gapikey = "";
 echo 'var mapexGoogleApiKey=mapexGoogleApiKey || "' . $gapikey . '";';
 ?>
 
