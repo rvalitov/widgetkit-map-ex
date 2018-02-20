@@ -266,7 +266,7 @@ function updateMap<?php echo $map_id2;?>(item){
 	<?php endif;?>
 }
 
-jQuery(document).ready(function($){
+jQuery(function($){
 	function checkWidgetkitMap<?php echo $map_id2;?>() {
 		var item=getWidgetkitMap("<?php echo $map_id?>");
 		if (item) {
@@ -348,7 +348,7 @@ jQuery(document).ready(function($){
 	<?php
 	$debug->printDebugStrings();
 	?>
-	jQuery(document).ready(function($){
+	jQuery(function($){
 		if (typeof window.functionCheckMapExWidget === 'undefined') {
 			window.functionCheckMapExWidget = function() {
 				var countAPILoaded=0;
@@ -358,7 +358,7 @@ jQuery(document).ready(function($){
 					var srcAPI=$(this).attr("src");
 					if ( (srcAPI) && (srcAPI.indexOf('/maps.google.com/')>0) ) {
 						console.info('<?php echo '['.$info['name'].'] ';?>Found Google Maps API loading script: '+srcAPI);
-						if (countAPILoaded==0)
+                        if (countAPILoaded === 0)
 							srcFirstAPI=srcAPI;
 						countAPILoaded++;
 					}
@@ -384,7 +384,7 @@ jQuery(document).ready(function($){
 							console.error('<?php echo '['.$info['name'].'] ';?>Multiple scripts detected that try to load Google Maps API. This may cause unexpected behaviour or malfunction of the widget. Please, turn of other plugins that use Goolge Maps API to fix this error.');
 						break;
 				}
-			}
+			};
 			functionCheckMapExWidget();
 		}
 	});
