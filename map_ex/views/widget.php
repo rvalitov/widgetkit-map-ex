@@ -211,25 +211,6 @@ if ($settings['markercluster']=='custom'){
 
 <!--suppress Annotator, JSUnresolvedFunction, UnnecessaryReturnStatementJS -->
 <script>
-<?php
-if ($debug->isWKAPIKeySupported($app)) {
-    /** @noinspection PhpUndefinedMethodInspection */
-    $gapikey = $app['config']->get('googlemapseapikey');
-    if (!$gapikey)
-        $gapikey = "";
-} else {
-    if (!isset($global_settings['apikey']))
-        $global_settings['apikey'] = "";
-    else
-        $global_settings['apikey'] = trim($global_settings['apikey']);
-    $gapikey = $global_settings['apikey'];
-}
-$gapikey = filter_var($gapikey, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH | FILTER_FLAG_STRIP_BACKTICK);
-if ($gapikey === false)
-    $gapikey = "";
-echo 'var mapexGoogleApiKey=mapexGoogleApiKey || "' . $gapikey . '";';
-?>
-
 function getMapZoom<?php echo $map_id2;?>(){
 	if (window.outerWidth<=767) {
         var orientation = screen.orientation || screen.mozOrientation || screen.msOrientation || null;

@@ -147,12 +147,44 @@ return array(
 
         'init.site' => function($event, $app) {
 			$uikit=(WidgetkitExMapPlugin::getCSSPrefix($app)=='uk') ? 'uikit' : 'uikit2';
+
+            //Adding native key from Widgetkit
+            $key = $app['config']->get('googlemapseapikey');
+            $key = ($key && strlen($key) > 0) ? filter_var(trim($key), FILTER_SANITIZE_URL) : "";
+            if ($key === false)
+                $key="";
+            $app['scripts']->add('googlemapsapi', 'GOOGLE_MAPS_API_KEY = "' . $key . '";', array(), 'string');
+
+            //Adding key from MapEx settings
+            $plugin = new WidgetkitExMapPlugin($app);
+            $global_settings = $plugin->readGlobalSettings();
+            $key = (isset($global_settings['apikey'])) ? filter_var(trim($global_settings['apikey']), FILTER_SANITIZE_URL) : "";
+            if ($key === false)
+                $key = "";
+            $app['scripts']->add('widgetkit-map-ex-google-key', 'mapexGoogleApiKey = "' . $key . '";', array(), 'string');
+
             $app['scripts']->add('widgetkit-map-ex', 'plugins/widgets/map_ex/assets/maps.js', array($uikit));
         },
 
         'init.admin' => function($event, $app) {
 			$plugin=new WidgetkitExMapPlugin($app);
 			$uikit=(WidgetkitExMapPlugin::getCSSPrefix($app)=='uk') ? 'uikit' : 'uikit2';
+
+            //Adding native key from Widgetkit
+            $key = $app['config']->get('googlemapseapikey');
+            $key = ($key && strlen($key) > 0) ? filter_var(trim($key), FILTER_SANITIZE_URL) : "";
+            if ($key === false)
+                $key="";
+            $app['scripts']->add('googlemapsapi', 'GOOGLE_MAPS_API_KEY = "' . $key . '";', array(), 'string');
+
+            //Adding key from MapEx settings
+            $plugin = new WidgetkitExMapPlugin($app);
+            $global_settings = $plugin->readGlobalSettings();
+            $key = (isset($global_settings['apikey'])) ? filter_var(trim($global_settings['apikey']), FILTER_SANITIZE_URL) : "";
+            if ($key === false)
+                $key = "";
+            $app['scripts']->add('widgetkit-map-ex-google-key', 'mapexGoogleApiKey = "' . $key . '";', array(), 'string');
+
 			//Backend CSS
 			$app['styles']->add('map_ex_edit', 'plugins/widgets/map_ex/css/mapex.edit.css', array('widgetkit-application'));
 			//Adding our own translations:

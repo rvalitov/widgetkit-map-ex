@@ -43,7 +43,7 @@ if (!String.prototype.endsWith) {
         t.getMarkerClusterer().extend(r, google.maps.OverlayView), this.styles_ = e, this.padding_ = i || 0, this.cluster_ = t, this.center_ = null, this.map_ = t.getMap(), this.div_ = null, this.sums_ = null, this.visible_ = false, this.setMap(this.map_)
     }
     var s, o = function() {
-        return s || (s = t.Deferred(), window.wkInitializeGoogleMapsEx = s.resolve,t.getScript("//maps.google.com/maps/api/js?callback=wkInitializeGoogleMapsEx"+((mapexGoogleApiKey)?("&key="+mapexGoogleApiKey):""))), s.promise()
+        return s || (s = t.Deferred(), window.wkInitializeGoogleMapsEx = s.resolve,t.getScript("//maps.google.com/maps/api/js?callback=wkInitializeGoogleMapsEx&key="+(window.GOOGLE_MAPS_API_KEY||window.mapexGoogleApiKey||"") )), s.promise()
     };
     t(function() {
         t('script[type="widgetkit/mapex"]').each(function() {
