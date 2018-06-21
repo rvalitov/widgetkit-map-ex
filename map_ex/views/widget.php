@@ -214,7 +214,17 @@ if ($settings['markercluster']=='custom'){
 function getMapZoom<?php echo $map_id2;?>(){
 	if (window.outerWidth<=767) {
         var orientation = screen.orientation || screen.mozOrientation || screen.msOrientation || null;
-        var landscape = (typeof orientation === 'object' && typeof orientation.type === 'string') ? (orientation.type.indexOf("landscape") >= 0) : (Math.abs(Number(window.orientation)) === 90);
+        var landscape = false;
+        if (typeof orientation === 'object' && orientation && typeof orientation.type === 'string') {
+            landscape = (orientation.type.indexOf("landscape") >= 0);
+        }
+        else {
+            if (typeof window.orientation !== "undefined") {
+                landscape = (Math.abs(Number(window.orientation)) === 90);
+            }
+            else
+                landscape = (window.innerWidth > window.innerHeight);
+        }
         if (landscape) {
             <?php if ($settings['debug_output']) : ?>
             console.info('<?php echo '[' . $info['name'] . '] ';?>Detected Phone Landscape mode');
