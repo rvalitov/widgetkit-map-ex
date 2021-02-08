@@ -30,7 +30,7 @@ return array(
         'name'  => 'map_ex',
         'label' => 'MapEx',
         'core'  => true,
-        'icon'  => 'plugins/widgets/map_ex/widget.svg',
+        'icon'  => 'plugins/widgets/map_ex/widget.png',
         'view'  => 'plugins/widgets/map_ex/views/widget.php',
         'item'  => array('title', 'content', 'media'),
         'fields' => array(
