@@ -24,7 +24,7 @@ class WKDiskItem{
 	public $hash;
 	public $is_file;
 	public $contents;//Other items inside the directory, empty if it's a file
-	
+
 	//$relpath - relative path of the root item, used for filling the $relativename fields
 	//$githash - if true, then SHA1 hash of Git style is calculated, else SHA1 of the file.
 	public function AnalyzeItem($fullname,$relpath="",$githash=true){
@@ -55,14 +55,13 @@ class WKDiskItem{
 					$item->AnalyzeItem($fullname . DIRECTORY_SEPARATOR . $value,$this->relativename. DIRECTORY_SEPARATOR);
 					array_push($result,$item);
 				}
-			$this->contents=$result; 
+			$this->contents=$result;
 		}
 	}
-	
+
 	private static function printDiskItem($value){
 		if (is_object(!$value))
 			return '';
-		$color;
 		$list='';
 		if ($value->is_writable)
 			$color='<span class="uk-text-success"><i class="uk-icon-check uk-margin-small-right"></i>';
@@ -81,7 +80,7 @@ class WKDiskItem{
 		}
 		return $list;
 	}
-	
+
 	//Makes a beautiful output of directory structure
 	private static function printStructureInt($array,$nested=false){
 		$list='';
@@ -96,12 +95,12 @@ class WKDiskItem{
 			$list.='</ul>';
 		return $list;
 	}
-	
+
 	//Makes a beautiful output of directory structure
 	public function printStructure(){
 		return WKDiskItem::printStructureInt($this);
 	}
-	
+
 	public function hasWriteAccessProblems(){
 		if (!$this->is_writable)
 			return true;
@@ -111,13 +110,13 @@ class WKDiskItem{
 					return true;
 		return false;
 	}
-	
+
 	public function toArrayItem(){
 		if (!$this->is_file)
 			return false;
 		return array('name'=>$this->relativename,'size'=>$this->size,'hash'=>$this->hash);
 	}
-	
+
 	//Returns all the information about files in a single array
 	public function toArray(){
 		$l=array();
@@ -135,12 +134,12 @@ class WKDiskItem{
 }
 
 class WidgetkitExPlugin{
-	
+
 	private $plugin_info;
-	
+
 	private $isWidget=false;
 	private $isContentProvider=false;
-	
+
 	//Below are the versions of PHP and Widgetkit that are OK
 	const minPHPVersion='5.3';
 	const stablePHPVersion='5.6';
@@ -150,36 +149,36 @@ class WidgetkitExPlugin{
 
 	//Unique id of the plugin, usually this id is used as HTML id
 	private $id;
-	
+
 	//The 3 arrays below contain strings that will be used for console log (JS) output, see usage example in the MapEx widget.
 	private $debug_info = array();
 	private $debug_warning = array();
 	private $debug_error = array();
-	
+
 	//true, if current CMS is Joomla
 	private $isJoomla;
-	
+
 	//Version of CMS
 	private $CMSVersion;
-	
+
 	private $CMS;
-	
+
 	//true or false if installation path is correct
-	private $pathCorrect = false;
-	
+	private $pathCorrect;
+
 	//Use {wk} or uk prefix for CSS classes. Old Widgetkit uses uk prefix for UIkit, latest Widgetkits use {wk}
 	private $useWKPrefix;
-	
+
 	//Version of UIkit installed
 	private $UIkitVersion;
-	
+
 	public function __construct($appWK,$id=0){
 		$this->id=$id;
-		
+
 		$this->isJoomla=self::IsJoomlaInstalled();
-		
+
 		$this->plugin_info=$this->getWKPluginInfo($appWK);
-		
+
 		if ($this->isJoomla){
 			$this->CMSVersion=$this->getJoomlaVersion();
 			$this->CMS="Joomla";
@@ -188,7 +187,7 @@ class WidgetkitExPlugin{
 			$this->CMSVersion=$this->getWPVersion();
 			$this->CMS="WordPress";
 		}
-		
+
 		$wk_version=$this->getWKVersion();
 		$php_version=@phpversion();
 		array_push($this->debug_info,'Processing widget '.$this->plugin_info['name'].' (version '.$this->plugin_info['version'].') on '.$this->CMS.' '.$this->CMSVersion.' with Widgetkit '.$wk_version.' and PHP '.$php_version.'('.@php_sapi_name().')');
@@ -197,7 +196,7 @@ class WidgetkitExPlugin{
 		else
 			if (version_compare(self::stablePHPVersion,$php_version)>0)
 				array_push($this->debug_warning,'Your PHP is quite old. Although this widget can work with your version of PHP, upgrade is recommended to the latest stable version of PHP.');
-			
+
 		if (version_compare(self::minWKVersion,$wk_version)>0)
 			array_push($this->debug_warning,"Your Widgetkit version is quite old. Although this widget may work with your version of Widgetkit, upgrade is recommended to the latest stable version of Widgetkit. Besides, you may experience some issues of missing options in the settings of this widget if you don't upgrade.");
 
@@ -226,7 +225,7 @@ class WidgetkitExPlugin{
 			array_push($this->debug_info,'Detected CMS: Joomla');
 		else
 			array_push($this->debug_info,'Detected CMS: WordPress');
-		
+
 		$this->useWKPrefix=false;
 		$this->UIkitVersion=null;
 		if ($this->pathCorrect){
@@ -242,12 +241,12 @@ class WidgetkitExPlugin{
 			}
 		}
 	}
-	
+
 	//Reads UIkit version from specified uikit.min.js file
 	private static function readUIKitVersion($filename){
 		if ( (!file_exists($filename)) || (!is_file($filename)) || (!is_readable($filename)) )
 			return null;
-		
+
 		$file_contents=file_get_contents($filename,false,null,0,30);
 		if ($file_contents===false)
 			return null;
@@ -259,11 +258,11 @@ class WidgetkitExPlugin{
 		else
 			return null;
 	}
-	
+
 	public static function getCSSPrefix($appWK){
 		return $appWK['config']->get('theme.support') === 'noconflict' ? 'wk' : 'uk';
 	}
-	
+
 	public function getUIkitVersion(){
 		return ($this->UIkitVersion!='') ? $this->UIkitVersion : '2.26.3';
 	}
@@ -288,7 +287,6 @@ class WidgetkitExPlugin{
 				return $current_user->user_lastname;
 		}
 		//For Joomla:
-		$name;
 		$user=\JFactory::getUser($widgetkit_user->getId());
 		if ($user)
 			$name=$user->name;
@@ -306,16 +304,16 @@ class WidgetkitExPlugin{
 	public function isCMSJoomla(){
 		return $this->isJoomla;
 	}
-	
+
 	public function isCMSWordPress(){
 		return !$this->isJoomla;
 	}
-	
+
 	//Returns CMS version
 	public function getCMSVersion(){
 		return $this->CMSVersion;
 	}
-	
+
 	//Returns CMS name (Joomla or WordPress)
 	public function getCMSName(){
 		return $this->CMS;
@@ -349,7 +347,7 @@ class WidgetkitExPlugin{
 		$f=@file_get_contents($this->getRootDirectory().'/wp-includes/version.php',false,null,0,1400);
 		if (!$f)
 			return "";
-		
+
 		$v='';
 		if (preg_match_all("@.*\\\$wp_version\s*=\s*'.+';@",$f,$matches))
 			$v.=explode("'",$matches[0][0],3)[1];
@@ -367,21 +365,21 @@ class WidgetkitExPlugin{
 	public function getInfo($htmlencode=true){
 		if (!$htmlencode)
 			return $this->plugin_info;
-		
+
 		$result=array();
 		foreach ($this->plugin_info as $key => $value)
 			$result[$key]=htmlspecialchars($value);
 		return $result;
 	}
-	
+
 	public function isWidget(){
 		return $this->isWidget;
 	}
-	
+
 	public function isContentProvider(){
 		return $this->isContentProvider;
 	}
-	
+
 	public function isJoomla(){
 		return $this->isJoomla;
 	}
@@ -389,23 +387,23 @@ class WidgetkitExPlugin{
 	public function getPluginDirectory(){
 		return $this->plugin_info['path'];
 	}
-	
+
 	public function getPluginURL(){
 		return $this->plugin_info['url'];
 	}
-	
+
 	public function getWebsiteRootURL(){
 		return $this->plugin_info['root_url'];
 	}
-	
+
 	public function getWKDirectory(){
 		return $this->plugin_info['wk_path'];
 	}
-	
+
 	public function getRootDirectory(){
 		return $this->plugin_info['root'];
 	}
-	
+
 	//Returns array with info about current plugin (no matter if it's a widget or a content provider). It works only for custom plugins that are created with updater.js file.
 	//The array contains following fields:
 	//name 			- the name of the plugin or empty string if unknown.
@@ -427,7 +425,6 @@ class WidgetkitExPlugin{
 			'name'=>'',
 			'version'=>'',
 			'codename'=>'',
-			'version'=>'',
 			'date'=>'',
 			'logo'=>'',
 			'wiki'=>'',
@@ -440,11 +437,8 @@ class WidgetkitExPlugin{
 			'url'=>'',
 			'safe_name'=>'',
 		];
-		
-		//We perform a sequental scan of parent directories of the current script to find the plugin install directory
-		$widgetkit_dir_name;
-		$baseurl;
 
+		//We perform a sequental scan of parent directories of the current script to find the plugin install directory
 		if ($this->isCMSJoomla()){
 			$widgetkit_dir_name=DIRECTORY_SEPARATOR."administrator".DIRECTORY_SEPARATOR."components".DIRECTORY_SEPARATOR."com_widgetkit";
 			$baseurl=\JURI::base();
@@ -456,7 +450,7 @@ class WidgetkitExPlugin{
 		if ( ($baseurl) && ($baseurl[strlen($baseurl)-1]!='/') )
 			$baseurl.='/';
 		$info['root_url']=$baseurl;
-		
+
 		$needle=$widgetkit_dir_name.DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."widgets".DIRECTORY_SEPARATOR;
 		$pos=strrpos(__DIR__,$needle);
 		if (!$pos){
@@ -471,7 +465,7 @@ class WidgetkitExPlugin{
 				$info['path']=__DIR__;
 			else
 				$info['path']=substr(__DIR__,0,$pos2);
-			
+
 			$pos=strrpos($info['path'],$widgetkit_dir_name);
 			if ($pos)
 				$info['relativepath']=substr($info['path'],$pos+strlen($widgetkit_dir_name));
@@ -479,7 +473,7 @@ class WidgetkitExPlugin{
 		if ($info['root']){
 			$info['wk_path']=$info['root'].$widgetkit_dir_name;
 		}
-		
+
 		if ($info['path']){
 			$f=@file_get_contents($info['path'].DIRECTORY_SEPARATOR.'plugin.php',false,null,0,2400);
 			if ( ($f) && (preg_match_all("@^\s*'config'\s*=>\s*array\s*\(.*$@m",$f,$matches,PREG_OFFSET_CAPTURE)) ){
@@ -523,14 +517,13 @@ class WidgetkitExPlugin{
 		$info['safe_name'] = preg_replace('/[^A-Za-z]/', '', $info['codename']);
 		return $info;
 	}
-	
+
 	//Prints information for the "About" section of the plugin
 	//$appWK - is parameter that must be set to $app upon call.
 	public function printAboutInfo($appWK){
 		$versionWK=htmlspecialchars((isset($appWK['version']))?$appWK['version']:'Unknown');
 		$versionDB=htmlspecialchars((isset($appWK['db_version']))?$appWK['db_version']:'Unknown');
 		$php_version=htmlspecialchars(@phpversion());
-		$phpinfo;
 		if (version_compare(self::minPHPVersion,$php_version)>0)
 			$phpinfo='<span data-uk-tooltip="\'cls\':\'uk-' . $this->plugin_info['safe_name'] . '-tooltip\'" class="uk-text-danger" style="margin-top: 5px;" title="{{ \'Your PHP is too old! Upgrade is strongly recommended! This plugin may not work with your version of PHP.\' |trans}}"><i class="uk-icon-warning  uk-margin-small-right"></i>'.$php_version.'</span>';
 		else
@@ -539,18 +532,17 @@ class WidgetkitExPlugin{
 		else
 			$phpinfo='<span data-uk-tooltip="\'cls\':\'uk-' . $this->plugin_info['safe_name'] . '-tooltip\'" class="uk-text-success" style="margin-top: 5px;" title="{{ \'Your PHP version is OK.\' |trans}}"><i class="uk-icon-check uk-margin-small-right"></i>'.$php_version.' ('.@php_sapi_name().')</span>';
 
-		$wkinfo;
 		if (version_compare(self::minWKVersion,$versionWK)>0)
 			$wkinfo='<span data-uk-tooltip="\'cls\':\'uk-' . $this->plugin_info['safe_name'] . '-tooltip\'" class="uk-text-danger" style="margin-top: 5px;" title="{{ \'Your Widgetkit version is too old. Upgrade is strongly recommended. Although this plugin may work with your version of Widgetkit, upgrade is recommended to the latest stable version of Widgetkit.\' |trans}}"><i class="uk-icon-warning uk-margin-small-right"></i>'.$versionWK.'</span>';
-		if (version_compare(self::stableWKVersion,$versionWK)>0)
-			$wkinfo='<span data-uk-tooltip="\'cls\':\'uk-' . $this->plugin_info['safe_name'] . '-tooltip\'" class="uk-text-warning" style="margin-top: 5px;" title="{{ \'Your Widgetkit version is quite old. Although this plugin may work with your version of Widgetkit, upgrade is recommended to the latest stable version of Widgetkit.\' |trans}}"><i class="uk-icon-warning uk-margin-small-right"></i>'.$versionWK.'</span>';
-		else
-			$wkinfo='<span data-uk-tooltip="\'cls\':\'uk-' . $this->plugin_info['safe_name'] . '-tooltip\'" class="uk-text-success" style="margin-top: 5px;" title="{{ \'Your Widgetkit version is OK.\' |trans}}"><i class="uk-icon-check uk-margin-small-right"></i>'.$versionWK.'</span>';
-		
+		else {
+            if (version_compare(self::stableWKVersion, $versionWK) > 0)
+                $wkinfo = '<span data-uk-tooltip="\'cls\':\'uk-' . $this->plugin_info['safe_name'] . '-tooltip\'" class="uk-text-warning" style="margin-top: 5px;" title="{{ \'Your Widgetkit version is quite old. Although this plugin may work with your version of Widgetkit, upgrade is recommended to the latest stable version of Widgetkit.\' |trans}}"><i class="uk-icon-warning uk-margin-small-right"></i>' . $versionWK . '</span>';
+            else
+                $wkinfo = '<span data-uk-tooltip="\'cls\':\'uk-' . $this->plugin_info['safe_name'] . '-tooltip\'" class="uk-text-success" style="margin-top: 5px;" title="{{ \'Your Widgetkit version is OK.\' |trans}}"><i class="uk-icon-check uk-margin-small-right"></i>' . $versionWK . '</span>';
+        }
+
 		$cmsinfo=$this->CMS.' '.$this->CMSVersion;
-		
-		$accessinfo;
-		$accessok=false;
+
 		$item=new WKDiskItem();
 		$item->AnalyzeItem($this->plugin_info['path']);
 		//Making it beautiful:
@@ -560,23 +552,23 @@ class WidgetkitExPlugin{
 		else
 			$accessinfo='<span class="uk-text-success"><i class="uk-icon uk-icon-success uk-margin-small-right"></i>'.$appWK['translator']->trans('Ok').'</span>';
 		$accessinfo.='<a href="#write-check-'.$this->plugin_info['safe_name'].'" data-uk-modal="{center:true}" class="uk-margin-small-left"><i class="uk-icon-info-circle"></i></a>';
-		
+
 		$files=json_encode($item->toArray());
-		
+
 		if ($this->pathCorrect)
 			$installpath='<span class="uk-text-success" style="word-break:break-all"><i class="uk-icon uk-icon-check uk-margin-small-right"></i>'.$this->plugin_info['path'].'</span>';
 		else
 			$installpath='<span class="uk-text-danger" style="word-break:break-all"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>'.$this->plugin_info['path'].'</span>';
 
 		$YoothemeProCompatible=($this->useWKPrefix) ? '<span class="uk-text-success"><i class="uk-icon-check uk-margin-small-right"></i>{{ "Yes" |trans}}</span>' : '<span class="uk-text-success"><i class="uk-icon-check uk-margin-small-right"></i>{{ "No" |trans}}</span>';
-		
+
 		if (!isset($this->plugin_info['safe_name'])){
 			echo <<< EOT
 <div class="uk-panel uk-panel-box uk-alert uk-alert-danger"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>{{ 'Failed to retrieve information' |trans}}</div>;
 EOT;
 			return;
 		}
-		
+
 		$canverify=true;
 		$filesintegrity='<button class="uk-button uk-button-small"';
 		if (!$canverify)
@@ -584,7 +576,7 @@ EOT;
 		else
 			$filesintegrity.=' onclick="verifyFiles'.$this->plugin_info['safe_name'].'()"';
 		$filesintegrity.='>'.$appWK['translator']->trans('Verify files').'</button>';
-	
+
 		echo <<< EOT
 <div id="write-check-{$this->plugin_info['safe_name']}" class="uk-modal">
     <div class="uk-modal-dialog">
@@ -784,14 +776,14 @@ EOT;
 		$cms=htmlspecialchars($this->getCMSName());
 		$origin=htmlspecialchars($appWK['request']->getBaseUrl());
 		$locale=htmlspecialchars($appWK['locale']);
-		
+
 		if (!isset($this->plugin_info['safe_name'])){
 			echo <<< EOT
 <div class="uk-panel uk-panel-box uk-alert uk-alert-danger"><i class="uk-icon uk-icon-warning uk-margin-small-right"></i>{{ 'Failed to retrieve information' |trans}}</div>;
 EOT;
 			return;
 		}
-		
+
 		echo <<< EOT
 <div class="uk-panel uk-panel-box uk-alert">
 	<p>
@@ -940,7 +932,7 @@ EOT;
 
 EOT;
 	}
-	
+
 	//Generates and returns Javascript code (without <script> tags) used for checking updates
 	//$appWK - is parameter that must be set to $app upon call.
 	//$settings - array that contains info about the installed plugin. Meaning of the keys:
@@ -1002,12 +994,10 @@ EOT;
 			$settings['website']=$settings['git'].$settings['distr_name'];
 		else
 			$settings['website']=htmlspecialchars($settings['website']);
-		
-		$plugin_update_tag='#update-'.$settings['distr_name'];
-		
+
 		//For JS we must espace single quote character:
 		$modal=addcslashes($this->generateUpdateInfoDialog($appWK),"'");
-		
+
 		$configfile=$this->getPluginURL().'/config.json';
 		$minUIkitVersion=self::minUIkitVersion;
 		$js = <<< EOT
@@ -1360,7 +1350,7 @@ EOT;
 <div class="uk-overflow-container">
 	<div class="uk-grid">
 		<div class="uk-width-1-3 uk-text-center">
-			<img src="{$this->plugin_info['logo']}">
+			<img src="{$this->plugin_info['logo']}" alt="Plugin logo">
 		</div>
 		<div class="uk-width-2-3">
 			<table class="uk-table">
@@ -1488,7 +1478,7 @@ EOT;
 
 		return $output;
 	}
-	
+
 	//Returns an array with items from $array that have keys listed in $list.
 	public static function intersectArrayItems($array,$list){
 		if (!is_array($list))
@@ -1498,7 +1488,7 @@ EOT;
 			$s[$list[$i]]=(isset($array[$list[$i]])?($array[$list[$i]]):null);
 		return $s;
 	}
-	
+
 	//Reads global settings for this plugin
 	public function readGlobalSettings(){
 		$path=$this->getPluginDirectory();
@@ -1515,7 +1505,7 @@ EOT;
 			return array();
 		return $data;
 	}
-	
+
 	//Saves global settings for this plugin
 	public function saveGlobalSettings($settings){
 		if (!is_array($settings))
@@ -1529,22 +1519,22 @@ EOT;
 			return false;
 		return (@file_put_contents($name,$data)!==false);
 	}
-	
+
 	//Adds a string to the list of debug strings with "info" debug level
 	public function addInfoString($s){
 		array_push($this->debug_info,$s);
 	}
-	
+
 	//Adds a string to the list of debug strings with "warning" debug level
 	public function addWarningString($s){
 		array_push($this->debug_warning,$s);
 	}
-	
+
 	//Adds a string to the list of debug strings with "error" debug level
 	public function addErrorString($s){
 		array_push($this->debug_error,$s);
 	}
-	
+
 	public function printDebugStrings(){
 echo <<< EOT
 if (typeof console.groupCollapsed === "function")
@@ -1560,7 +1550,7 @@ if (typeof console.groupEnd === "function")
 	console.groupEnd();
 EOT;
 	}
-	
+
 	/*
 	Returns true, if the data is suitable for output as a table. Used for debug, see the console.table command.
 	*/
@@ -1579,7 +1569,7 @@ EOT;
 		}
 		return true;
 	}
-	
+
 	/*
 	Converts the contents of $value into JSON format that can be later parsed by the browser using Javascript
 	*/
@@ -1595,7 +1585,7 @@ EOT;
 		}
 		return $result;
 	}
-	
+
 	/*
 	Prints debug info string for JS console output
 	$typeid defines the log warning level
@@ -1676,7 +1666,7 @@ EOT;
 			$this->printJSDebugString($s,$typeid);
 		}
 	}
-	
+
 	//UTF8 safe basename function
 	public static function mb_basename($path, $suffix = null) {
 		$split = preg_split('/\\'.DIRECTORY_SEPARATOR.'/', rtrim($path, DIRECTORY_SEPARATOR.' '));
@@ -1685,4 +1675,3 @@ EOT;
 }
 
 }
-?>
