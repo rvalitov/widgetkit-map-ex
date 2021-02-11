@@ -1,0 +1,126 @@
+<div class="uk-alert">
+    <p>
+        <span uk-icon="icon: info"></span>
+        {{ 'We have different free products that extend functionality of the Widgetkit. Please, subscribe for a newsletter to get notifications about new releases of the current plugin, other widgets that we create, and news when a completely new product for the Widgetkit becomes available.' | trans}}
+    </p>
+</div>
+
+<div class="uk-text-center">
+    <button class="uk-button uk-button-secondary" uk-toggle="target: #__WK_SAFE_NAME__-subscribe" type="button">
+        <span uk-icon="icon: mail"></span> {{ 'Subscribe' |trans}}
+    </button>
+</div>
+
+<div id="__WK_SAFE_NAME__-subscribe" uk-modal="container: div[data-app='widgetkit']" class="uk-flex-top">
+    <div class="uk-modal-dialog  uk-margin-auto-vertical">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-modal-header">
+            <h2 class="uk-modal-title">{{ 'Subscription form' |trans}}</h2>
+        </div>
+        <div class="uk-modal-body" uk-overflow-auto>
+            <div class="uk-alert">
+                <span uk-icon="icon: info"></span>
+                {{ 'Please, fill in all the fields below, then click Submit button' |trans}}
+            </div>
+            <form class="uk-form uk-form-horizontal" action="https://valitov.us11.list-manage.com/subscribe/post?u=13280b8048b58d2be207f1dd5&id=52d79713c6" method="post" id="form-__WK_SAFE_NAME__-subscribe" target="_blank">
+                <fieldset>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="form-first-name">{{ 'First name' |trans}}</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input" type="text" id="form-first-name" name="FNAME" value="__WK_FIRST_NAME__" required="required">
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="form-last-name">{{ 'Last name' |trans}}</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input" type="text" id="form-last-name" name="LNAME" value="__WK_LAST_NAME__" required="required">
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="form-email">{{ 'E-mail' |trans}}</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input" type="email" id="form-email" name="EMAIL" value="__WK_EMAIL__" required="required">
+                        </div>
+                    </div>
+                    <div style="position: absolute; left: -5000px;" class="uk-hidden">
+                        <!--suppress HtmlFormInputWithoutLabel -->
+                        <input type="text" name="b_13280b8048b58d2be207f1dd5_52d79713c6" tabindex="-1" value="">
+                        <!--suppress HtmlFormInputWithoutLabel -->
+                        <input type="text" name="CMS" value="__WK_CMS__">
+                        <!--suppress HtmlFormInputWithoutLabel -->
+                        <input type="text" name="ORIGIN" value="__WK_ORIGIN__">
+                        <!--suppress HtmlFormInputWithoutLabel -->
+                        <input type="text" name="PRODUCT" value="__WK_NAME__">
+                        <!--suppress HtmlFormInputWithoutLabel -->
+                        <input type="text" name="LOCALE" value="__WK_LOCALE__">
+                        <!--suppress HtmlFormInputWithoutLabel -->
+                        <input type="text" id="country_code-__WK_SAFE_NAME__" name="COUNTRYID" value="">
+                        <!--suppress HtmlFormInputWithoutLabel -->
+                        <input type="text" id="country_name-__WK_SAFE_NAME__" name="COUNTRY" value="">
+                        <!--suppress HtmlFormInputWithoutLabel -->
+                        <input type="text" id="region_code-__WK_SAFE_NAME__" name="REGIONID" value="">
+                        <!--suppress HtmlFormInputWithoutLabel -->
+                        <input type="text" id="region_name-__WK_SAFE_NAME__" name="REGION" value="">
+                        <!--suppress HtmlFormInputWithoutLabel -->
+                        <input type="text" id="city-__WK_SAFE_NAME__" name="CITY" value="">
+                        <!--suppress HtmlFormInputWithoutLabel -->
+                        <input type="text" id="time_zone-__WK_SAFE_NAME__" name="TIMEZONE" value="">
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="uk-modal-footer uk-text-right">
+            <button type="button" class="uk-button uk-button-default uk-modal-close">{{'Close'|trans}}</button>
+            <button type="submit" class="uk-button uk-button-primary validate">{{'Subscribe'|trans}}</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    try {
+        jQuery('#form-__WK_SAFE_NAME__-subscribe').formchimp();
+
+        /*Geolocation if necessary*/
+        jQuery('#__WK_SAFE_NAME__-subscribe').on({
+            'show.uk.modal': function () {
+                if (!jQuery("#country_code-__WK_SAFE_NAME__").val()) {
+                    jQuery.ajax({
+                        'url': 'http://ip-api.com/json',
+                        'type': "GET",
+                        'dataType': 'json',
+                        /**
+                         * @typedef {Object} IPInfo
+                         * @property {string} status
+                         * @property {string} country
+                         * @property {string} countryCode
+                         * @property {string} region
+                         * @property {string} regionName
+                         * @property {string} city
+                         * @property {string} zip
+                         * @property {number} lat
+                         * @property {number} lon
+                         * @property {string} timezone
+                         * @property {string} isp
+                         * @property {string} org
+                         * @property {as} org
+                         * @property {query} org
+                         * @param {IPInfo} data
+                         */
+                        success: function (data) {
+                            if (data) {
+                                jQuery("#country_code-__WK_SAFE_NAME__").val(data.countryCode);
+                                jQuery("#country_name-__WK_SAFE_NAME__").val(data.country);
+                                jQuery("#region_code-__WK_SAFE_NAME__").val(data.region);
+                                jQuery("#region_name-__WK_SAFE_NAME__").val(data.regionName);
+                                jQuery("#city-__WK_SAFE_NAME__").val(data.city);
+                                jQuery("#time_zone-__WK_SAFE_NAME__").val(data.timezone);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    } catch (e) {
+        console.error("Failed to init Mailchimp for WidgetkitEx", e);
+    }
+</script>

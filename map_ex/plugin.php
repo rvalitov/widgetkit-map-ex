@@ -18,15 +18,16 @@ return array(
     'main' => 'YOOtheme\\Widgetkit\\Widget\\Widget',
 
 	'plugin_version' => 'v1.6.1',
-	
+
 	'plugin_date' => '21/06/2018',
-	
+
 	'plugin_logo' => 'https://raw.githubusercontent.com/wiki/rvalitov/widgetkit-map-ex/images/mapex-logo.png',
-	
+
 	'plugin_wiki' => 'https://github.com/rvalitov/widgetkit-map-ex/wiki',
-	
+
     'config' => array(
 
+        //Must match the name of the parent folder of this widget. Allowed symbols: [A-Za-z_]
         'name'  => 'map_ex',
         'label' => 'MapEx',
         'core'  => true,
@@ -56,15 +57,15 @@ return array(
             'height'                  => 400,
             'maptypeid'               => 'styled',
             'maptypecontrol'          => false,
-			
+
 			//Global settings, shared between all instances of the plugin
 			'global' => array(
 						'apikey'=>''
 					),
-					
+
 			//Left for backward compatibility with original Yootheme's Map widget:
             'mapctrl'                 => true,
-			
+
             'zoom'                    => 9,
             'marker'                  => 2,
             'markercluster'           => '',
@@ -73,7 +74,7 @@ return array(
             'draggable'               => true,
             'directions'              => false,
             'disabledefaultui'        => false,
-			
+
 			//Extra parameters:
 			'autohide'					=> false,
 			'zoom_phone_h'				=> '',
@@ -168,6 +169,7 @@ return array(
 
         'init.admin' => function($event, $app) {
 			$plugin=new WidgetkitExMapPlugin($app);
+			$version=($plugin->getInfo(false))['version'];
 			$uikit=(WidgetkitExMapPlugin::getCSSPrefix($app)=='uk') ? 'uikit' : 'uikit2';
 
             //Adding native key from Widgetkit
@@ -186,14 +188,11 @@ return array(
             $app['scripts']->add('widgetkit-map-ex-google-key', 'mapexGoogleApiKey = "' . $key . '";', array(), 'string');
 
 			//Backend CSS
-			$app['styles']->add('map_ex_edit', 'plugins/widgets/map_ex/css/mapex.edit.css', array('widgetkit-application'));
+            $app['styles']->add('map_ex_edit', 'plugins/widgets/map_ex/css/mapex.edit.css?v=' . $version, array('widgetkit-application'));
 			//Adding our own translations:
 			$app['translator']->addResource('plugins/widgets/map_ex/languages/'.$app['locale'].'.json');
 			//Edit template:
             $app['angular']->addTemplate('map_ex.edit', 'plugins/widgets/map_ex/views/edit.php', true);
-			//Adding tooltip:
-			$app['scripts']->add($uikit.'-tooltip', 'vendor/assets/uikit/js/components/tooltip.min.js', array($uikit));
-			$app['styles']->add($uikit.'-tooltip', 'https://cdnjs.cloudflare.com/ajax/libs/uikit/'.$plugin->getUIkitVersion().'/css/components/tooltip.min.css', array($uikit));
 			//jQuery wait plugin:
 			$app['scripts']->add('jquery.wait', 'plugins/widgets/map_ex/assets/jquery.wait.min.js', array($uikit));
 			//Marked:
@@ -211,7 +210,7 @@ return array(
 			//Generating dynamic MapEx script:
 			$app['scripts']->add('map_ex.dynamic-custom', $plugin->generateMapExJS($app), array(), 'string');
         },
-				
+
 		'request' => function($event, $app) {
 			$global=null;
 			if ( (isset($app['request'])) && (isset($app['request']->request)) ) {
@@ -219,7 +218,7 @@ return array(
 				if (isset($content['data']['_widget']['data']['global']))
 					$global=$content['data']['_widget']['data']['global'];
 			}
-				
+
 			if ($global){
 				//Global is set for valid requests like "Save" and "Save & Close"
 				$plugin=new WidgetkitExPlugin($app);
