@@ -177,9 +177,9 @@ namespace WidgetkitEx\MapEx {
         //Below are the versions of PHP and Widgetkit that are OK
         const minPHPVersion = '5.3';
         const stablePHPVersion = '5.6';
-        const minWKVersion = '2.5.0';
-        const stableWKVersion = '2.6.0';
-        const minUIkitVersion = '2.20.0';
+        const minWKVersion = '3.0.0';
+        const stableWKVersion = '3.0.3';
+        const minUIkitVersion = '3.0.0';
 
         //Unique id of the plugin, usually this id is used as HTML id
         private $id;
