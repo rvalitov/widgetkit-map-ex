@@ -11,7 +11,15 @@ use WidgetkitEx\MapEx\WidgetkitExMapPlugin;
 
 $plugin = new WidgetkitExMapPlugin($app);
 $is_api_key_supported = $plugin->isWKAPIKeySupported($app);
+$wk_version = $plugin->getWKVersion();
 ?>
+
+<?php if (version_compare($plugin::minWKVersion, $wk_version) > 0):?>
+<h1 class="uk-text-center">
+    {{'This widget requires Widgetkit 3.0 or higher. You have an older version of Widgetkit installed. Please, update the Widgetkit or downgrade to an earlier version of this widget.' | trans}}
+</h1>
+<?php endif ?>
+
 <div class="uk-grid uk-grid-divider uk-form-horizontal uk-mapex" uk-grid id="map_ex_container">
     <div class="uk-width-1-4@m">
 
