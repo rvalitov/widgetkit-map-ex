@@ -22,3 +22,5 @@ Thumbs.db
 config.json
 
 node_modules
+
+/.idea/deployment.xml
