@@ -1,5 +1,5 @@
 /*
-This code is using a minfied version of https://github.com/googlemaps/js-marker-clusterer
+This code is using a minified version of https://github.com/googlemaps/js-marker-clusterer
 */
 
 //List of Map widgets on current page
@@ -71,7 +71,7 @@ if (!String.prototype.endsWith) {
 					mTypes.push(google.maps.MapTypeId.HYBRID);
 				if (typeof s.show_terrain === 'boolean' ? s.show_terrain : false)
 					mTypes.push(google.maps.MapTypeId.TERRAIN);
-				
+
                 Object.keys(s).forEach(function(t) {
                     isNaN(s[t]) || (s[t] = Number(s[t]))
                 }), n = ((typeof s.center_lat != 'undefined') && (typeof s.center_lng != 'undefined')) ? new google.maps.LatLng(s.center_lat, s.center_lng) : (p.length ? new google.maps.LatLng(p[0].lat, p[0].lng) : new google.maps.LatLng(-34.397, 150.644)), o = {
@@ -166,8 +166,8 @@ if (!String.prototype.endsWith) {
 						});
                     }
 					0 === e && (3 === s.marker && html_content && r.open(i, o), a && (a.setHref(t.lat, t.lng), a.show()));
-                }), i.panTo(n)), s.markercluster && (this.markerCluster = new e(i, l, (s.markercluster=='custom') ? 
-					{ 
+                }), i.panTo(n)), s.markercluster && (this.markerCluster = new e(i, l, (s.markercluster=='custom') ?
+					{
 						'gridSize' : s.cluster_gridSize,
 						'maxZoom' : s.cluster_maxZoom,
 						'minimumClusterSize' : s.cluster_minimumClusterSize,
@@ -456,7 +456,7 @@ if (!String.prototype.endsWith) {
 			if (typeof this.anchor_[0] === 'number' && this.anchor_[0] > 0 && this.anchor_[0] < this.height_)
 				/*Small trick: we add line-height normal here because otherwise it may inherit css of the website template*/
 				e.push('height:' + (this.height_ - this.anchor_[0]) + 'px; padding-top:' + this.anchor_[0] + 'px;line-height:normal;');
-			else 
+			else
 				if (typeof this.anchor_[0] === 'number' && this.anchor_[0] < 0 && - this.anchor_[0] < this.height_)
 					e.push('height:' + this.height_ + 'px; line-height:' + (this.height_ + this.anchor_[0]) + 'px;');
 				else
@@ -465,7 +465,7 @@ if (!String.prototype.endsWith) {
 				e.push('width:' + (this.width_ - this.anchor_[1]) + 'px; padding-left:' + this.anchor_[1] + 'px;');
 			else
 				e.push('width:' + this.width_ + 'px; text-align:center;');
-		} 
+		}
 		else
 			e.push('height:' + this.height_ + 'px; line-height:' + this.height_ + 'px; width:' + this.width_ + 'px; text-align:center;');
 
