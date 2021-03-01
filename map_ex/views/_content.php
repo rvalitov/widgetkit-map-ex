@@ -7,13 +7,8 @@ Web: http://www.valitov.me/
 Git: https://github.com/rvalitov/widgetkit-map-ex
 */
 
-require_once(__DIR__.'/WidgetkitExPlugin.php');
-use WidgetkitEx\MapEx\WidgetkitExPlugin;
-$cssprefix=WidgetkitExPlugin::getCSSPrefix($app);
-
 // Media Width
 $media_width = '{wk}-width-' . $settings['media_breakpoint'] . '-' . $settings['media_width'];
-$media_width = str_replace('{wk}', $cssprefix, $media_width);
 
 switch ($settings['media_width']) {
     case '1-5':
@@ -37,7 +32,6 @@ switch ($settings['media_width']) {
 }
 
 $content_width = '{wk}-width-' . $settings['media_breakpoint'] . '-' . $content_width;
-$content_width = str_replace('{wk}', $cssprefix, $content_width);
 
 // Title Size
 switch ($settings['title_size']) {
@@ -47,7 +41,6 @@ switch ($settings['title_size']) {
     default:
         $title_size = '{wk}-' . $settings['title_size'] . ' {wk}-margin-top-remove';
 }
-$title_size = str_replace('{wk}', $cssprefix, $title_size);
 
 // Link Style
 switch ($settings['link_style']) {
@@ -69,15 +62,12 @@ switch ($settings['link_style']) {
     default:
         $link_style = '';
 }
-$link_style = str_replace('{wk}', $cssprefix, $link_style);
 
 // Media Border
 $border = ($settings['media_border'] != 'none') ? '{wk}-border-' . $settings['media_border'] : '';
-$border = str_replace('{wk}', $cssprefix, $border);
 
 // Link Target
 $link_target = ($settings['link_target']) ? ' target="_blank"' : '';
-$link_target = str_replace('{wk}', $cssprefix, $link_target);
 
 // Social Buttons
 $socials = '';
@@ -87,7 +77,6 @@ if ($settings['social_buttons']) {
     $socials .= $item['google-plus'] ? '<div><a class="{wk}-icon-button {wk}-icon-google-plus" href="'. $item->escape('google-plus') .'"></a></div>': '';
     $socials .= $item['email'] ? '<div><a class="{wk}-icon-button {wk}-icon-envelope-o" href="mailto:'. $item->escape('email') .'"></a></div>': '';
 }
-$socials = str_replace('{wk}', $cssprefix, $socials);
 
 // Second Image as Overlay
 $media2 = '';
@@ -126,7 +115,6 @@ if ($item->type('media') == 'iframe') {
 
 $attrs['width']  = ($width) ? $width : '';
 $attrs['height'] = ($height) ? $height : '';
-$attrs['class'] = str_replace('{wk}', $cssprefix, $attrs['class']);
 
 if (($item->type('media') == 'image') && ($settings['image_width'] != 'auto' || $settings['image_height'] != 'auto')) {
     $media = $item->thumbnail('media', $width, $height, $attrs);
@@ -139,7 +127,6 @@ if ($media2) {
 
     $attrs['class'] .= ' {wk}-overlay-panel {wk}-overlay-image';
     $attrs['class'] .= ($settings['media_animation'] != 'none') ? ' {wk}-overlay-' . $settings['media_animation'] : '';
-	$attrs['class'] = str_replace('{wk}', $cssprefix, $attrs['class']);
 
     $media2 = $item->thumbnail($media2, $width, $height, $attrs);
 }
@@ -168,22 +155,21 @@ if ($socials && $settings['media_overlay'] == 'social-buttons') {
     $media .= '</div></div>';
     $media .= '</div>';
 }
-$media = str_replace('{wk}', $cssprefix, $media);
 ?>
 
-<div class="<?php echo $cssprefix?>-text-<?php echo $settings['text_align']; ?>">
+<div class="{wk}-text-<?php echo $settings['text_align']; ?>">
 
     <?php if ($item['media'] && $settings['media'] && $settings['media_align'] == 'top') : ?>
-    <div class="<?php echo $cssprefix?>-margin <?php echo $cssprefix?>-text-center"><?php echo $media; ?></div>
+    <div class="{wk}-margin {wk}-text-center"><?php echo $media; ?></div>
     <?php endif; ?>
 
     <?php if ($item['media'] && $settings['media'] && in_array($settings['media_align'], array('left', 'right'))) : ?>
-    <div class="<?php echo $cssprefix?>-grid" data-<?php echo $cssprefix?>-grid-margin>
-        <div class="<?php echo $media_width ?><?php if ($settings['media_align'] == 'right') echo ' '. $cssprefix. '-float-right .' .$cssprefix. '-flex-order-last-' . $settings['media_breakpoint'] ?>">
+    <div class="{wk}-grid" data-{wk}-grid-margin>
+        <div class="<?php echo $media_width ?><?php if ($settings['media_align'] == 'right') echo ' {wk}-float-right {wk}-flex-order-last-' . $settings['media_breakpoint'] ?>">
             <?php echo $media; ?>
         </div>
         <div class="<?php echo $content_width ?>">
-            <div class="<?php echo $cssprefix?>-panel">
+            <div class="{wk}-panel">
     <?php endif; ?>
 
     <?php if ($item['title'] && $settings['title']) : ?>
@@ -191,15 +177,15 @@ $media = str_replace('{wk}', $cssprefix, $media);
     <?php endif; ?>
 
     <?php if ($item['media'] && $settings['media'] && $settings['media_align'] == 'bottom') : ?>
-    <div class="<?php echo $cssprefix?>-margin <?php echo $cssprefix?>-text-center"><?php echo $media; ?></div>
+    <div class="{wk}-margin {wk}-text-center"><?php echo $media; ?></div>
     <?php endif; ?>
 
     <?php if ($item['content'] && $settings['content']) : ?>
-    <div class="<?php echo $cssprefix?>-margin"><?php echo $item['content']; ?></div>
+    <div class="{wk}-margin"><?php echo $item['content']; ?></div>
     <?php endif; ?>
 
     <?php if ($socials && ($settings['media_overlay'] != 'social-buttons')) : ?>
-    <div class="<?php echo $cssprefix?>-grid <?php echo $cssprefix?>-grid-small <?php echo $cssprefix?>-flex-<?php echo $settings['text_align']; ?>" data-<?php echo $cssprefix?>-grid-margin><?php echo $socials; ?></div>
+    <div class="{wk}-grid {wk}-grid-small {wk}-flex-<?php echo $settings['text_align']; ?>" data-{wk}-grid-margin><?php echo $socials; ?></div>
     <?php endif; ?>
 
     <?php if ($item['link'] && $settings['link']) : ?>
