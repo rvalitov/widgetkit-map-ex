@@ -1017,7 +1017,7 @@ EOT;
 
         /**
          * Adds a string to the list of debug strings with "info" debug level
-         * @param string $s
+         * @param string|array $s
          */
         public function addInfoString($s)
         {
