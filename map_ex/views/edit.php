@@ -510,9 +510,10 @@ $wk_version = $plugin->getWKVersion();
                         <p class="uk-form-controls-condensed" ng-if="widget.data.media_align == 'left' || widget.data.media_align == 'right'">
                             <label>
                                 <select class="uk-select uk-form-width-small" ng-model="widget.data['media_breakpoint']">
-                                    <option value="small">{{'Phone Landscape' | trans}}</option>
-                                    <option value="medium">{{'Tablet' | trans}}</option>
-                                    <option value="large">{{'Desktop' | trans}}</option>
+                                    <option value="s">{{'Phone Landscape' | trans}}</option>
+                                    <option value="m">{{'Tablet Landscape' | trans}}</option>
+                                    <option value="l">{{'Desktop' | trans}}</option>
+                                    <option value="xl">{{'Large Screens' | trans}}</option>
                                 </select>
                                 {{'Breakpoint' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{'Defines screen size when the columns will stack.'|trans}}"></span>
                             </label>
@@ -563,10 +564,8 @@ $wk_version = $plugin->getWKVersion();
                     <div class="uk-form-controls">
                         <select id="wk-thumbnail-animation" class="uk-select uk-form-width-medium" ng-model="widget.data['media_animation']">
                             <option value="none">{{'None' | trans}}</option>
-                            <option value="fade">{{'Fade' | trans}}</option>
-                            <option value="scale">{{'Scale' | trans}}</option>
-                            <option value="spin">{{'Spin' | trans}}</option>
-                            <option value="grayscale">{{'Grayscale' | trans}}</option>
+                            <option value="scale-up">{{'Scale Up' | trans}}</option>
+                            <option value="scale-down">{{'Scale Down' | trans}}</option>
                         </select>
                     </div>
                 </div>
@@ -770,7 +769,23 @@ $wk_version = $plugin->getWKVersion();
                             <option value="h2">H2</option>
                             <option value="h3">H3</option>
                             <option value="h4">H4</option>
+                            <option value="medium">{{'Heading Medium' | trans}}</option>
                             <option value="large">{{'Extra Large' | trans}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="wk-title-element">{{'Title Element' | trans}}</label>
+                    <div class="uk-form-controls">
+                        <select id="wk-title-element" class="uk-select uk-form-width-medium" ng-model="widget.data['title_element']">
+                            <option value="h1">h1</option>
+                            <option value="h2">h2</option>
+                            <option value="h3">h3</option>
+                            <option value="h4">h4</option>
+                            <option value="h5">h5</option>
+                            <option value="h6">h6</option>
+                            <option value="div">div</option>
                         </select>
                     </div>
                 </div>
