@@ -208,16 +208,16 @@ if ($settings['debug_output']) {
     function MapEx_info(text) {
         <?php if ($settings['debug_output']) : ?>
         console.info('<?= '[' . $info['name'] . '] ' ?>' + text);
-        <? endif; ?>
+        <?php endif; ?>
     }
 
     function MapEx_error(text) {
         <?php if ($settings['debug_output']) : ?>
         console.error('<?= '[' . $info['name'] . '] ' ?>' + text);
-        <? endif; ?>
+        <?php endif; ?>
     }
 
-    function getMapZoom<?= $map_id2;?>() {
+    function getMapZoom<?= $map_id2 ?>() {
         var viewportWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
         var viewportHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
         if (viewportWidth <= 767) {
@@ -233,42 +233,42 @@ if ($settings['debug_output']) {
             }
             if (landscape) {
                 MapEx_info('Detected Phone Landscape mode, ' + viewportWidth + 'x' + viewportHeight);
-                return <?= $zoom_phone_landscape;?>;
+                return <?= $zoom_phone_landscape ?>;
             } else {
                 MapEx_info('Detected Phone Portrait mode, ' + viewportWidth + 'x' + viewportHeight);
-                return <?= $zoom_phone_portrait;?>;
+                return <?= $zoom_phone_portrait ?>;
             }
         } else if (viewportWidth <= 959) {
             MapEx_info('Detected Tablet mode, ' + viewportWidth + 'x' + viewportHeight);
-            return <?= $zoom_tablet;?>;
+            return <?= $zoom_tablet ?>;
         } else {
             MapEx_info('Detected Large Screen mode, ' + viewportWidth + 'x' + viewportHeight);
-            return <?= $zoom_large;?>;
+            return <?= $zoom_large ?>;
         }
     }
 
-    function updateMap<?= $map_id2;?>(item) {
+    function updateMap<?= $map_id2 ?>(item) {
         <?php if (!empty($settings['map_center'])):?>
-        item.panTo(new google.maps.LatLng(<?= $settings['map_center']?>));
-        MapEx_info('Auto pan performed to <?= $settings['map_center']; ?>, map #<?= $map_id ?>');
+        item.panTo(new google.maps.LatLng(<?= $settings['map_center'] ?>));
+        MapEx_info('Auto pan performed to <?= $settings['map_center'] ?>, map #<?= $map_id ?>');
         <?php endif;?>
 
-        var zoom_level=getMapZoom<?= $map_id2;?>();
+        var zoom_level=getMapZoom<?= $map_id2 ?>();
         item.setZoom(zoom_level);
         MapEx_info('Auto zoom performed to level ' + zoom_level + ', map #<?= $map_id ?>');
     }
 
     jQuery(function () {
-        function checkWidgetkitMap<?= $map_id2;?>() {
-            var item = getWidgetkitMap("<?= $map_id?>");
+        function checkWidgetkitMap<?= $map_id2 ?>() {
+            var item = getWidgetkitMap("<?= $map_id ?>");
             if (item) {
                 google.maps.event.addDomListener(window, 'resize', function () {
                     MapEx_info('Window resize event captured, updating the map #<?= $map_id ?>');
-                    updateMap<?= $map_id2;?>(item);
+                    updateMap<?= $map_id2 ?>(item);
                 });
                 window.addEventListener("orientationchange", function () {
                     MapEx_info('Screen orientation changed, updating the map #<?= $map_id ?>');
-                    updateMap<?= $map_id2;?>(item);
+                    updateMap<?= $map_id2 ?>(item);
                 });
                 MapEx_info('Responsive setup performed for map #<?= $map_id ?>');
 
@@ -311,10 +311,10 @@ if ($settings['debug_output']) {
                 MapEx_error('On display.uk.check event listening is disabled, because center point is not defined for map #<?= $map_id ?>');
                 <?php endif;//uikit fix?>
             } else
-                setTimeout(checkWidgetkitMap<?= $map_id2;?>, 1000);
+                setTimeout(checkWidgetkitMap<?= $map_id2 ?>, 1000);
         }
 
-        setTimeout(checkWidgetkitMap<?= $map_id2;?>, 1000);
+        setTimeout(checkWidgetkitMap<?= $map_id2 ?>, 1000);
     });
 
     <?php if ($settings['debug_output']):?>
