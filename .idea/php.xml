@@ -6,4 +6,5 @@
       <path value="$PROJECT_DIR$/../wordrpess-5.x" />
     </include_path>
   </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="7" />
 </project>
