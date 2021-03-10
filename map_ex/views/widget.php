@@ -25,9 +25,33 @@ if ($settings['debug_output']) {
 }
 $global_settings = $debug->readGlobalSettings();
 
+/**
+ * @param string|numeric $value
+ * @param string $auto
+ * @return string
+ */
+function getMapSize($value, $auto)
+{
+    if ($value === 'auto')
+        return $auto;
+    if (is_numeric($value))
+        return (int)$value . 'px';
+    return $value;
+}
+
 $markers = array();
-$width = $settings['width'] == 'auto' ? 'auto' : ((int)$settings['width']) . 'px';
-$height = $settings['height'] == 'auto' ? '300px' : ((int)$settings['height']) . 'px';
+$width = getMapSize($settings['width'], 'auto');
+$height = getMapSize($settings['height'], '300px');
+$width_xs = empty($settings['width_xs']) ? $width : getMapSize($settings['width_xs'], 'auto');
+$height_xs = empty($settings['height_xs']) ? $height : getMapSize($settings['height_xs'], '300px');
+$width_s = empty($settings['width_s']) ? $width_xs : getMapSize($settings['width_s'], 'auto');
+$height_s = empty($settings['height_s']) ? $height_xs : getMapSize($settings['height_s'], '300px');
+$width_m = empty($settings['width_m']) ? $width_s : getMapSize($settings['width_m'], 'auto');
+$height_m = empty($settings['height_m']) ? $height_s : getMapSize($settings['height_m'], '300px');
+$width_l = empty($settings['width_l']) ? $width_m : getMapSize($settings['width_l'], 'auto');
+$height_l = empty($settings['height_l']) ? $height_m : getMapSize($settings['height_l'], '300px');
+$width_xl = empty($settings['width_xl']) ? $width_l : getMapSize($settings['width_xl'], 'auto');
+$height_xl = empty($settings['height_xl']) ? $height_l : getMapSize($settings['height_xl'], '300px');
 
 $zoom_phone_portrait = $settings['zoom'];
 $zoom_phone_landscape = is_numeric($settings['zoom_phone_h']) ? $settings['zoom_phone_h'] : $zoom_phone_portrait;
@@ -217,25 +241,25 @@ if ($settings['debug_output']) {
         <?php endif; ?>
     }
 
-    function getMapZoom<?= $map_id2 ?>() {
+    function getMapResponsiveInfo<?= $map_id2 ?>() {
         var viewportWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
         var viewportHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
         if (viewportWidth < 640) {
             MapEx_info('Detected Phone Portrait mode, ' + viewportWidth + 'x' + viewportHeight);
-            return <?= $zoom_phone_portrait ?>;
+            return {zoom: <?= $zoom_phone_portrait ?>, width: '<?= $width_xs ?>', height: '<?= $height_xs ?>'};
         }
         else if (viewportWidth < 960) {
             MapEx_info('Detected Phone Landscape mode, ' + viewportWidth + 'x' + viewportHeight);
-            return <?= $zoom_phone_landscape ?>;
+            return {zoom: <?= $zoom_phone_landscape ?>, width: '<?= $width_s ?>', height: '<?= $height_s ?>'};
         } else if (viewportWidth < 1200) {
             MapEx_info('Detected Tablet mode, ' + viewportWidth + 'x' + viewportHeight);
-            return <?= $zoom_tablet ?>;
+            return {zoom: <?= $zoom_tablet ?>, width: '<?= $width_m ?>', height: '<?= $height_m ?>'};
         } else if (viewportWidth < 1600) {
             MapEx_info('Detected Desktop mode, ' + viewportWidth + 'x' + viewportHeight);
-            return <?= $zoom_desktop ?>;
+            return {zoom: <?= $zoom_desktop ?>, width: '<?= $width_l ?>', height: '<?= $height_l ?>'};
         } else {
             MapEx_info('Detected Large Screen mode, ' + viewportWidth + 'x' + viewportHeight);
-            return <?= $zoom_large ?>;
+            return {zoom: <?= $zoom_large ?>, width: '<?= $width_xl ?>', height: '<?= $height_xl ?>'};
         }
     }
 
@@ -245,9 +269,11 @@ if ($settings['debug_output']) {
         MapEx_info('Auto pan performed to <?= $settings['map_center'] ?>, map #<?= $map_id ?>');
         <?php endif;?>
 
-        var zoom_level=getMapZoom<?= $map_id2 ?>();
-        item.setZoom(zoom_level);
-        MapEx_info('Auto zoom performed to level ' + zoom_level + ', map #<?= $map_id ?>');
+        var info = getMapResponsiveInfo<?= $map_id2 ?>();
+        item.setZoom(info.zoom);
+        MapEx_info('Auto zoom performed to level ' + info.zoom + ', map #<?= $map_id ?>');
+        jQuery('#<?= $map_id ?>').css({width: info.width, height: info.height});
+        MapEx_info('Auto size performed, width: ' + info.width + ', height: ' + info.height + ', map #<?= $map_id ?>');
     }
 
     jQuery(function () {

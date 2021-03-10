@@ -45,16 +45,52 @@ $wk_version = $plugin->getWKVersion();
                 <h3 class="uk-heading-divider">{{'Map' | trans}}</h3>
 
                 <div class="uk-margin">
-                    <label class="uk-form-label" for="wk-width">{{'Width (px)' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{ 'The width of the widget in pixels or \'auto\'.' | trans}}"></span></label>
+                    <label class="uk-form-label">{{'Phone Portrait' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{'Define map size for device widths %operator% %width%px.'| trans: {width:640, operator:'<'} }}"></span></label>
                     <div class="uk-form-controls">
-                        <input id="wk-width" class="uk-input uk-form-width-medium" type="text" ng-model="widget.data['width']">
+                        <label><input class="uk-input uk-form-width-small" type="text" ng-model="widget.data['width_xs']"> {{'Width (px)' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{ 'The width of the widget in pixels or \'auto\'.' | trans}}"></span></label>
+                        <p class="uk-form-controls-condensed">
+                            <label><input class="uk-input uk-form-width-small" type="text" ng-model="widget.data['height_xs']"> {{'Height (px)' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{ 'The height of the widget in pixels.' |trans}}"></span></label>
+                        </p>
                     </div>
                 </div>
 
                 <div class="uk-margin">
-                    <label class="uk-form-label" for="wk-height">{{'Height (px)' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{ 'The height of the widget in pixels.' |trans}}"></span></label>
+                    <label class="uk-form-label">{{'Phone Landscape' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{'Define map size for device widths %operator% %width%px.'| trans: {width:640, operator:'>='} }}"></span></label>
                     <div class="uk-form-controls">
-                        <input id="wk-height" class="uk-input uk-form-width-medium" type="text" ng-model="widget.data['height']">
+                        <label><input class="uk-input uk-form-width-small" type="text" ng-model="widget.data['width_s']"> {{'Width (px)' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{ 'The width of the widget in pixels or \'auto\'.' | trans}}"></span></label>
+                        <p class="uk-form-controls-condensed">
+                            <label><input class="uk-input uk-form-width-small" type="text" ng-model="widget.data['height_s']"> {{'Height (px)' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{ 'The height of the widget in pixels.' |trans}}"></span></label>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label class="uk-form-label">{{'Tablet Landscape' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{'Define map size for device widths %operator% %width%px.'| trans: {width:960, operator:'>='} }}"></span></label>
+                    <div class="uk-form-controls">
+                        <label><input class="uk-input uk-form-width-small" type="text" ng-model="widget.data['width_m']"> {{'Width (px)' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{ 'The width of the widget in pixels or \'auto\'.' | trans}}"></span></label>
+                        <p class="uk-form-controls-condensed">
+                            <label><input class="uk-input uk-form-width-small" type="text" ng-model="widget.data['height_m']"> {{'Height (px)' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{ 'The height of the widget in pixels.' |trans}}"></span></label>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label class="uk-form-label">{{'Desktop' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{'Define map size for device widths %operator% %width%px.'| trans: {width:1200, operator:'>='} }}"></span></label>
+                    <div class="uk-form-controls">
+                        <label><input class="uk-input uk-form-width-small" type="text" ng-model="widget.data['width_l']"> {{'Width (px)' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{ 'The width of the widget in pixels or \'auto\'.' | trans}}"></span></label>
+                        <p class="uk-form-controls-condensed">
+                            <label><input class="uk-input uk-form-width-small" type="text" ng-model="widget.data['height_l']"> {{'Height (px)' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{ 'The height of the widget in pixels.' |trans}}"></span></label>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label class="uk-form-label">{{'Large Screen' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{'Define map size for device widths %operator% %width%px.'| trans: {width:1600, operator:'>='} }}"></span></label>
+                    <div class="uk-form-controls">
+                        <label><input class="uk-input uk-form-width-small" type="text" ng-model="widget.data['width_xl']"> {{'Width (px)' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{ 'The width of the widget in pixels or \'auto\'.' | trans}}"></span></label>
+                        <p class="uk-form-controls-condensed">
+                            <label><input class="uk-input uk-form-width-small" type="text" ng-model="widget.data['height_xl']"> {{'Height (px)' | trans}} <span uk-icon="icon: info" uk-tooltip data-title="{{ 'The height of the widget in pixels.' |trans}}"></span></label>
+                        </p>
                     </div>
                 </div>
 

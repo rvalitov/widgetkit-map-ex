@@ -55,6 +55,18 @@ return array(
         'settings' => array(
             'width'                   => 'auto',
             'height'                  => 400,
+
+            'width_xs'                => '',
+            'height_xs'               => '',
+            'width_s'                 => '',
+            'height_s'                => '',
+            'width_m'                 => '',
+            'height_m'                => '',
+            'width_l'                 => '',
+            'height_l'                => '',
+            'width_xl'                => '',
+            'height_xl'               => '',
+
             'maptypeid'               => 'styled',
             'maptypecontrol'          => false,
 

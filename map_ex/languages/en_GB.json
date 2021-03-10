@@ -44,6 +44,7 @@
 	"Database version": "Database version",
 	"Debug output": "Debug output",
 	"Default": "Default",
+	"Define map size for device widths %operator% %width%px.": "Define map size for device widths %operator% %width%px.",
 	"Defines how clustering will work. If enabled, there are 2 modes: 'Simple' mode mimics the standard behaviour of standard Map widget; 'Advanced' - is a superior mode that gives a full control of the clustering.": "Defines how clustering will work. If enabled, there are 2 modes: 'Simple' mode mimics the standard behaviour of standard Map widget; 'Advanced' - is a superior mode that gives a full control of the clustering.",
 	"Defines screen size when the columns will stack.": "Defines screen size when the columns will stack.",
 	"Defines the size of the column for the image. Another width that is left will be used to display the content.": "Defines the size of the column for the image. Another width that is left will be used to display the content.",
