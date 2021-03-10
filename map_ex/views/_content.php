@@ -17,9 +17,6 @@ switch ($settings['media_width']) {
     case '1-4':
         $content_width = '3-4';
         break;
-    case '3-10':
-        $content_width = '7-10';
-        break;
     case '1-3':
         $content_width = '2-3';
         break;

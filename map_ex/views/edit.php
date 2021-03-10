@@ -499,7 +499,6 @@ $wk_version = $plugin->getWKVersion();
                                 <select class="uk-select uk-form-width-mini" ng-model="widget.data['media_width']">
                                     <option value="1-5">20%</option>
                                     <option value="1-4">25%</option>
-                                    <option value="3-10">30%</option>
                                     <option value="1-3">33%</option>
                                     <option value="2-5">40%</option>
                                     <option value="1-2">50%</option>
