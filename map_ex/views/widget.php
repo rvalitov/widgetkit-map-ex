@@ -220,27 +220,19 @@ if ($settings['debug_output']) {
     function getMapZoom<?= $map_id2 ?>() {
         var viewportWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
         var viewportHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
-        if (viewportWidth <= 767) {
-            var orientation = screen.orientation || screen.mozOrientation || screen.msOrientation || null;
-            var landscape = false;
-            if (typeof orientation === 'object' && orientation && typeof orientation.type === 'string') {
-                landscape = (orientation.type.indexOf("landscape") >= 0);
-            } else {
-                if (typeof window.orientation !== "undefined") {
-                    landscape = (Math.abs(Number(window.orientation)) === 90);
-                } else
-                    landscape = (viewportWidth > viewportHeight);
-            }
-            if (landscape) {
-                MapEx_info('Detected Phone Landscape mode, ' + viewportWidth + 'x' + viewportHeight);
-                return <?= $zoom_phone_landscape ?>;
-            } else {
-                MapEx_info('Detected Phone Portrait mode, ' + viewportWidth + 'x' + viewportHeight);
-                return <?= $zoom_phone_portrait ?>;
-            }
-        } else if (viewportWidth <= 959) {
+        if (viewportWidth < 640) {
+            MapEx_info('Detected Phone Portrait mode, ' + viewportWidth + 'x' + viewportHeight);
+            return <?= $zoom_phone_portrait ?>;
+        }
+        else if (viewportWidth < 960) {
+            MapEx_info('Detected Phone Landscape mode, ' + viewportWidth + 'x' + viewportHeight);
+            return <?= $zoom_phone_landscape ?>;
+        } else if (viewportWidth < 1200) {
             MapEx_info('Detected Tablet mode, ' + viewportWidth + 'x' + viewportHeight);
             return <?= $zoom_tablet ?>;
+        } else if (viewportWidth < 1600) {
+            MapEx_info('Detected Desktop mode, ' + viewportWidth + 'x' + viewportHeight);
+            return <?= $zoom_desktop ?>;
         } else {
             MapEx_info('Detected Large Screen mode, ' + viewportWidth + 'x' + viewportHeight);
             return <?= $zoom_large ?>;
