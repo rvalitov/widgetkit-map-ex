@@ -46,5 +46,19 @@ namespace WidgetkitEx\MapEx {
             }
             return $js;
         }
+
+        /**
+         * @param string|numeric $value
+         * @param string $auto
+         * @return string
+         */
+        public static function getMapSize($value, $auto)
+        {
+            if ($value === 'auto')
+                return $auto;
+            if (is_numeric($value))
+                return (int)$value . 'px';
+            return $value;
+        }
     }
 }

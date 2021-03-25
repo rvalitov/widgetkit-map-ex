@@ -25,33 +25,19 @@ if ($settings['debug_output']) {
 }
 $global_settings = $debug->readGlobalSettings();
 
-/**
- * @param string|numeric $value
- * @param string $auto
- * @return string
- */
-function getMapSize($value, $auto)
-{
-    if ($value === 'auto')
-        return $auto;
-    if (is_numeric($value))
-        return (int)$value . 'px';
-    return $value;
-}
-
 $markers = array();
-$width = getMapSize($settings['width'], 'auto');
-$height = getMapSize($settings['height'], '300px');
-$width_xs = empty($settings['width_xs']) ? $width : getMapSize($settings['width_xs'], 'auto');
-$height_xs = empty($settings['height_xs']) ? $height : getMapSize($settings['height_xs'], '300px');
-$width_s = empty($settings['width_s']) ? $width_xs : getMapSize($settings['width_s'], 'auto');
-$height_s = empty($settings['height_s']) ? $height_xs : getMapSize($settings['height_s'], '300px');
-$width_m = empty($settings['width_m']) ? $width_s : getMapSize($settings['width_m'], 'auto');
-$height_m = empty($settings['height_m']) ? $height_s : getMapSize($settings['height_m'], '300px');
-$width_l = empty($settings['width_l']) ? $width_m : getMapSize($settings['width_l'], 'auto');
-$height_l = empty($settings['height_l']) ? $height_m : getMapSize($settings['height_l'], '300px');
-$width_xl = empty($settings['width_xl']) ? $width_l : getMapSize($settings['width_xl'], 'auto');
-$height_xl = empty($settings['height_xl']) ? $height_l : getMapSize($settings['height_xl'], '300px');
+$width = WidgetkitExMapPlugin::getMapSize($settings['width'], 'auto');
+$height = WidgetkitExMapPlugin::getMapSize($settings['height'], '300px');
+$width_xs = empty($settings['width_xs']) ? $width : WidgetkitExMapPlugin::getMapSize($settings['width_xs'], 'auto');
+$height_xs = empty($settings['height_xs']) ? $height : WidgetkitExMapPlugin::getMapSize($settings['height_xs'], '300px');
+$width_s = empty($settings['width_s']) ? $width_xs : WidgetkitExMapPlugin::getMapSize($settings['width_s'], 'auto');
+$height_s = empty($settings['height_s']) ? $height_xs : WidgetkitExMapPlugin::getMapSize($settings['height_s'], '300px');
+$width_m = empty($settings['width_m']) ? $width_s : WidgetkitExMapPlugin::getMapSize($settings['width_m'], 'auto');
+$height_m = empty($settings['height_m']) ? $height_s : WidgetkitExMapPlugin::getMapSize($settings['height_m'], '300px');
+$width_l = empty($settings['width_l']) ? $width_m : WidgetkitExMapPlugin::getMapSize($settings['width_l'], 'auto');
+$height_l = empty($settings['height_l']) ? $height_m : WidgetkitExMapPlugin::getMapSize($settings['height_l'], '300px');
+$width_xl = empty($settings['width_xl']) ? $width_l : WidgetkitExMapPlugin::getMapSize($settings['width_xl'], 'auto');
+$height_xl = empty($settings['height_xl']) ? $height_l : WidgetkitExMapPlugin::getMapSize($settings['height_xl'], '300px');
 
 $zoom_phone_portrait = $settings['zoom'];
 $zoom_phone_landscape = is_numeric($settings['zoom_phone_h']) ? $settings['zoom_phone_h'] : $zoom_phone_portrait;
