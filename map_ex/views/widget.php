@@ -276,6 +276,9 @@ if ($settings['debug_output']) {
                 });
                 MapEx_info('Responsive setup performed for map #<?= $map_id ?>');
 
+                //Update map on first display
+                updateMap<?= $map_id2 ?>(item);
+
                 <?php if (!empty($settings['map_center'])):?>
                 jQuery('#<?= $map_id ?>-d').on(
                     "display.uk.check",
@@ -315,10 +318,10 @@ if ($settings['debug_output']) {
                 MapEx_error('On display.uk.check event listening is disabled, because center point is not defined for map #<?= $map_id ?>');
                 <?php endif;//uikit fix?>
             } else
-                setTimeout(checkWidgetkitMap<?= $map_id2 ?>, 1000);
+                setTimeout(checkWidgetkitMap<?= $map_id2 ?>, 300);
         }
 
-        setTimeout(checkWidgetkitMap<?= $map_id2 ?>, 1000);
+        setTimeout(checkWidgetkitMap<?= $map_id2 ?>, 100);
     });
 
     <?php if ($settings['debug_output']):?>
