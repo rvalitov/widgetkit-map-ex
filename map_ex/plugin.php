@@ -19,7 +19,7 @@ return array(
 
 	'plugin_version' => 'v3.0.0',
 
-	'plugin_date' => '28/02/2021',
+	'plugin_date' => '10/03/2021',
 
 	'plugin_logo' => 'https://raw.githubusercontent.com/wiki/rvalitov/widgetkit-map-ex/images/mapex-logo.png',
 
