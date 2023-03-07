@@ -60,7 +60,7 @@ namespace WidgetkitEx\MapEx {
                     if (!in_array($value, array(".", ".."))) {
                         $item = new WKDiskItem();
                         $item->AnalyzeItem($fullName . DIRECTORY_SEPARATOR . $value, $this->relativeName . DIRECTORY_SEPARATOR);
-                        array_push($result, $item);
+                        $result[] = $item;
                     }
                 $this->contents = $result;
             }
@@ -229,37 +229,37 @@ namespace WidgetkitEx\MapEx {
 
             $wk_version = $this->getWKVersion();
             $php_version = @phpversion();
-            array_push($this->debug_info, 'Processing widget ' . $this->plugin_info['name'] . ' (version ' . $this->plugin_info['version'] . ') on ' . $this->CMS . ' ' . $this->CMSVersion . ' with Widgetkit ' . $wk_version . ' and PHP ' . $php_version . '(' . @php_sapi_name() . ')');
+            $this->debug_info[] = 'Processing widget ' . $this->plugin_info['name'] . ' (version ' . $this->plugin_info['version'] . ') on ' . $this->CMS . ' ' . $this->CMSVersion . ' with Widgetkit ' . $wk_version . ' and PHP ' . $php_version . '(' . @php_sapi_name() . ')';
             if (version_compare(self::minPHPVersion, $php_version) > 0)
-                array_push($this->debug_error, 'Your PHP is too old! Upgrade is strongly required! This widget may not work with your version of PHP.');
+                $this->debug_error[] = 'Your PHP is too old! Upgrade is strongly required! This widget may not work with your version of PHP.';
             else
                 if (version_compare(self::stablePHPVersion, $php_version) > 0)
-                    array_push($this->debug_warning, 'Your PHP is quite old. Although this widget can work with your version of PHP, upgrade is recommended to the latest stable version of PHP.');
+                    $this->debug_warning[] = 'Your PHP is quite old. Although this widget can work with your version of PHP, upgrade is recommended to the latest stable version of PHP.';
 
             if (version_compare(self::minWKVersion, $wk_version) > 0)
-                array_push($this->debug_warning, "Your Widgetkit version is quite old. Although this widget may work with your version of Widgetkit, upgrade is recommended to the latest stable version of Widgetkit. Besides, you may experience some issues of missing options in the settings of this widget if you don't upgrade.");
+                $this->debug_warning[] = "Your Widgetkit version is quite old. Although this widget may work with your version of Widgetkit, upgrade is recommended to the latest stable version of Widgetkit. Besides, you may experience some issues of missing options in the settings of this widget if you don't upgrade.";
 
-            array_push($this->debug_info, 'Host: ' . @php_uname());
+            $this->debug_info[] = 'Host: ' . @php_uname();
             $installPath = $this->plugin_info['path'];
-            array_push($this->debug_info, 'Widget installation path: ' . $installPath);
+            $this->debug_info[] = 'Widget installation path: ' . $installPath;
             $this->pathCorrect = false;
             if ($this->isJoomla)
                 if (preg_match_all('@.*' . preg_quote('/administrator/components/com_widgetkit/plugins/' . ($this->isWidget ? 'widgets' : 'content') . '/') . '.+@', $installPath)) {
-                    array_push($this->debug_info, 'Installation path is correct');
+                    $this->debug_info[] = 'Installation path is correct';
                     $this->pathCorrect = true;
                 } else
-                    array_push($this->debug_error, 'Installation path is not correct, please fix it. Read more in the Wiki.');
+                    $this->debug_error[] = 'Installation path is not correct, please fix it. Read more in the Wiki.';
             else
                 if (preg_match_all('@.*' . preg_quote('/wp-content/plugins/widgetkit/plugins/' . ($this->isWidget ? 'widgets' : 'content') . '/') . '.+@', $installPath)) {
-                    array_push($this->debug_info, 'Installation path is correct');
+                    $this->debug_info[] = 'Installation path is correct';
                     $this->pathCorrect = true;
                 } else
-                    array_push($this->debug_warning, 'Installation path is not correct, please fix it. Read more in the Wiki.');
+                    $this->debug_warning[] = 'Installation path is not correct, please fix it. Read more in the Wiki.';
 
             if ($this->isJoomla)
-                array_push($this->debug_info, 'Detected CMS: Joomla');
+                $this->debug_info[] = 'Detected CMS: Joomla';
             else
-                array_push($this->debug_info, 'Detected CMS: WordPress');
+                $this->debug_info[] = 'Detected CMS: WordPress';
 
             $this->useWKPrefix = false;
             $this->UIkitVersion = null;
@@ -327,7 +327,7 @@ namespace WidgetkitEx\MapEx {
             //$name=trim($widgetkit_user->getName());
             //There is a bug in Widgetkit - it doesn't get the name of the user, so the code above is obsolete
             if (!$this->isCMSJoomla()) {
-                //For Wordpress:
+                //For WordPress:
                 $current_user = wp_get_current_user();
                 if (!$current_user)
                     return "";
@@ -825,7 +825,7 @@ EOT;
             else
                 $settings['website'] = htmlspecialchars($settings['website']);
 
-            //For JS we must escape single quote character:
+            //For JS, we must escape single quote character:
             $modal = addcslashes($this->generateUpdateInfoDialog($appWK, $settings), "'");
 
             $replacements = array(
@@ -1021,7 +1021,7 @@ EOT;
          */
         public function addInfoString($s)
         {
-            array_push($this->debug_info, $s);
+            $this->debug_info[] = $s;
         }
 
         /**
@@ -1030,7 +1030,7 @@ EOT;
          */
         public function addWarningString($s)
         {
-            array_push($this->debug_warning, $s);
+            $this->debug_warning[] = $s;
         }
 
         /**
@@ -1040,7 +1040,7 @@ EOT;
          */
         public function addErrorString($s)
         {
-            array_push($this->debug_error, $s);
+            $this->debug_error[] = $s;
         }
 
         public function printDebugStrings()
