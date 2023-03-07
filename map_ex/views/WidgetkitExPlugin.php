@@ -8,8 +8,8 @@ In order to use this class in your plugin you need to rename the namespace of th
 If you need extra unique functions that are plugin-specific, then you should declare your own class that extends this class, see usage example for the WidgetkitExMapPlugin in the MapEx widget.
 
 Author: Ramil Valitov
-E-mail: ramilvalitov@gmail.com
-Web: http://www.valitov.me/
+E-mail: ramil@walitoff.com
+Web: https://walitoff.com/
 */
 
 namespace WidgetkitEx\MapEx {
@@ -56,7 +56,7 @@ namespace WidgetkitEx\MapEx {
             } else {
                 $result = array();
                 $dirItems = scandir($fullName);
-                foreach ($dirItems as $key => $value)
+                foreach ($dirItems as $value)
                     if (!in_array($value, array(".", ".."))) {
                         $item = new WKDiskItem();
                         $item->AnalyzeItem($fullName . DIRECTORY_SEPARATOR . $value, $this->relativeName . DIRECTORY_SEPARATOR);
@@ -401,8 +401,7 @@ namespace WidgetkitEx\MapEx {
          */
         public static function url_exists($url)
         {
-            if (!$fp = curl_init($url)) return false;
-            return true;
+            return !((curl_init($url) === false));
         }
 
         /**

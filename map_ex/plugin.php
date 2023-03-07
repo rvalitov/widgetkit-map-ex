@@ -2,8 +2,8 @@
 /*
 MapEx plugin for Widgetkit 2.
 Author: Ramil Valitov
-E-mail: ramilvalitov@gmail.com
-Web: http://www.valitov.me/
+E-mail: ramil@walitoff.com
+Web: https://walitoff.com/
 Git: https://github.com/rvalitov/widgetkit-map-ex
 */
 
