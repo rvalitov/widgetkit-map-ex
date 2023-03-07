@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="b2b64e72-d143-49e0-b03f-09cff97b3dd6" name="ram.analytiques.fr" url="http://eva.analytiques.fr">
+        <fileTransfer accessType="FTPS" host="eva.analytiques.fr" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Clear" passiveMode="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
